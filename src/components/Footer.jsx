@@ -1,0 +1,107 @@
+import React from "react";
+import styled from "styled-components";
+
+const FooterContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40px 5%;
+    color: #000;
+    font-family: "Bebas Neue", sans-serif;
+`;
+
+const SubscriptionWrapper = styled.div`
+    flex: 1;
+    max-width: 50%;
+`;
+
+const Title = styled.h2`
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+`;
+
+const Subtitle = styled.p`
+    font-size: 14px;
+    font-weight: 300;
+    margin-bottom: 20px;
+    color: #555;
+`;
+
+const Form = styled.form`
+    display: flex;
+    width: 100%;
+    max-width: 500px;
+`;
+
+const Input = styled.input`
+    flex: 1;
+    padding: 12px 15px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    color: #000;
+
+    &::placeholder {
+        color: #aaa;
+    }
+`;
+
+const SubmitButton = styled.button`
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #000;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+        background-color: #333;
+    }
+`;
+
+const LinksWrapper = styled.div`
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+`;
+
+const FooterLink = styled.a`
+    font-size: 14px;
+    color: #000;
+    text-decoration: none;
+    margin-left: 15px;
+    transition: color 0.3s ease;
+
+    &:hover {
+        color: #333;
+    }
+`;
+
+const Footer = () => {
+    return (
+        <FooterContainer>
+            <SubscriptionWrapper>
+                <Title>Subscribe to Our Newsletter</Title>
+                <Subtitle>Be the first to know about new collections, releases, and exclusive offers.</Subtitle>
+                <Form>
+                    <Input type="email" placeholder="Enter your email" required />
+                    <SubmitButton type="submit">Subscribe</SubmitButton>
+                </Form>
+            </SubscriptionWrapper>
+            <LinksWrapper>
+                <FooterLink href="#">United States (USD $)</FooterLink>
+                <FooterLink href="#">Contact</FooterLink>
+                <FooterLink href="#">Client Services</FooterLink>
+                <FooterLink href="#">Legal Notices</FooterLink>
+                <FooterLink href="#">Social</FooterLink>
+            </LinksWrapper>
+        </FooterContainer>
+    );
+};
+
+export default Footer;
