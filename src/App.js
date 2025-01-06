@@ -6,7 +6,8 @@ import Contact from "./Pages/contact";
 import ProductPage from "./Pages/products"
 import Cart from "./Pages/CartPage";
 import CheckoutPage from "./Pages/Checkout";
-
+import {SignUp, Login} from "./components/Signup";
+import Account from "./components/Account";
 import './App.css';
 
 export default function App() {
@@ -19,6 +20,9 @@ export default function App() {
         <Route path="/products" element={<ProductPage/>}/>
         <Route path="/Cart" element={<Cart/>}/>
         <Route path="/Checkout" element={<CheckoutPage/>}/>
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/Account" element={<Account/>}/>
       </Routes>
     </Router>
   );

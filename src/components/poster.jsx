@@ -37,7 +37,7 @@ const TextOverlay = styled.div`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-family: "Bebas Neue", sans-serif;
+    font-family: "Yeezy", sans-serif;
     color: white;
     font-size: 50px;
     font-weight: bold;

@@ -47,3 +47,9 @@ input::-webkit-inner-spin-button {
 input[type=number]{
     -moz-appearance: textfield;
 }
+
+@font-face {
+  font-family: "Yeezy";   /*Can be any text*/
+  src: local("Yeezy_tstar-bold-webfont"),
+    url("../src/assets/fonts/yeezy_tstar-bold-webfont.ttf") format("truetype");
+}

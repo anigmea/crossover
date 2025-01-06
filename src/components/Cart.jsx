@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { useHref } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import styled from "styled-components";
 
 // Styled Components
 const CartWrapper = styled.div`
-font-family: "Bebas Neue", sans-serif;
+  font-family: "Yeezy", sans-serif;
   padding: 20px;
 `;
 
@@ -106,24 +106,45 @@ const CheckoutButton = styled.button`
 
 // Main Component
 const CartPage = () => {
-  const [cartItems, setCartItems] = useState([
-    { id: 1, title: "Jersey Pocket T-Shirt", price: 59.5, quantity: 1, image: "https://via.placeholder.com/100" },
-    { id: 2, title: "Classic Polo Shirt", price: 89.99, quantity: 2, image: "https://via.placeholder.com/100" },
-  ]);
+  const [cartItems, setCartItems] = useState([]);  // Initialize with an empty array
 
-  const updateQuantity = (id, delta) => {
+  useEffect(() => {
+    // Fetch data from the backend API
+    axios.get('http://localhost:8080/api/cart_items?Customer_id=1')
+      .then((response) => {
+        console.log(response.data);  // Log the response to check the data structure
+        if (Array.isArray(response.data)) {
+          setCartItems(response.data);
+        } else if (typeof response.data === 'object') {
+          // If it's an object, wrap it in an array
+          setCartItems([response.data]);
+        } else {
+          console.error('Unexpected response format:', response.data);
+          setCartItems([]);  // Set empty array in case of unexpected data format
+        }
+      })
+      .catch((error) => {
+        console.error('There was an error fetching the data!', error);
+        setCartItems([]);  // Set empty array in case of error
+      });
+  }, []);
+  
+  
+  
+
+  const updateQuantity = (Pid, delta) => {
     setCartItems((prevItems) =>
       prevItems.map((item) =>
-        item.id === id ? { ...item, quantity: Math.max(1, item.quantity + delta) } : item
+        item.Pid === Pid ? { ...item, qty: Math.max(1, item.qty + delta) } : item
       )
     );
   };
 
-  const removeItem = (id) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
+  const removeItem = (Pid) => {
+    setCartItems((prevItems) => prevItems.filter((item) => item.Pid !== Pid));
   };
 
-  const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2);
+  const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.qty, 0).toFixed(2);
 
   return (
     <CartWrapper>
@@ -133,21 +154,21 @@ const CartPage = () => {
       {/* Cart Items */}
       <CartItems>
         {cartItems.map((item) => (
-          <CartItem key={item.id}>
-            <ProductImage src={item.image} alt={item.title} />
+          <CartItem key={item.Pid}>
+            <ProductImage src={`/images/${item.image}`} alt={item.Name} />
             <ProductDetails>
-              <ProductTitle>{item.title}</ProductTitle>
+              <ProductTitle>{item.Name}</ProductTitle>
               <ProductPrice>${item.price.toFixed(2)}</ProductPrice>
 
               {/* Quantity Controls */}
               <QuantityControls>
-                <button onClick={() => updateQuantity(item.id, -1)}>-</button>
-                <input type="text" value={item.quantity} readOnly />
-                <button onClick={() => updateQuantity(item.id, 1)}>+</button>
+                <button onClick={() => updateQuantity(item.Pid, -1)}>-</button>
+                <input type="text" value={item.qty} readOnly />
+                <button onClick={() => updateQuantity(item.Pid, 1)}>+</button>
               </QuantityControls>
 
               {/* Remove Button */}
-              <RemoveButton onClick={() => removeItem(item.id)}>Remove</RemoveButton>
+              <RemoveButton onClick={() => removeItem(item.Pid)}>Remove</RemoveButton>
             </ProductDetails>
           </CartItem>
         ))}
@@ -156,11 +177,12 @@ const CartPage = () => {
       {/* Cart Summary */}
       <CartSummary>
         <Subtotal>Subtotal ({cartItems.length} items): ${subtotal}</Subtotal>
-        <a href = "/#/Checkout"><CheckoutButton>Proceed to Checkout</CheckoutButton></a>
+        <a href="/#/Checkout">
+          <CheckoutButton>Proceed to Checkout</CheckoutButton>
+        </a>
       </CartSummary>
     </CartWrapper>
   );
 };
 
 export default CartPage;
- 

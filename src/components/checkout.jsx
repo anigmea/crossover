@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 
 // Styled Components
 
 const PageWrapper = styled.div`
-  font-family: "Bebas Neue", sans-serif;
+  font-family: "Yeezy", sans-serif;
   max-width: 800px;
   margin: 20px auto;
   padding: 20px;
@@ -128,18 +129,32 @@ const Checkout = () => {
     contact: '',
   });
 
-  useEffect(() => {
-    // Mock data: Replace with real API call
-    const mockCart = [
-      { id: 1, name: 'Polo Shirt', price: 89.99 },
-      { id: 2, name: 'Slim Fit Jeans', price: 120.99 },
-    ];
 
-    const calculatedTotal = mockCart.reduce((acc, item) => acc + item.price, 0);
-    setCartItems(mockCart);
-    setBaseTotal(calculatedTotal);
-    setTotal(calculatedTotal);
+  useEffect(() => {
+    // Fetch data from the backend API
+    axios.get('http://localhost:8080/api/cart_items?Customer_id=1')
+      .then((response) => {
+        console.log(response.data);  // Log the response to check the data structure
+        if (Array.isArray(response.data)) {
+          setCartItems(response.data);
+        } else if (typeof response.data === 'object') {
+          // If it's an object, wrap it in an array
+          setCartItems([response.data]);
+        } else {
+          console.error('Unexpected response format:', response.data);
+          setCartItems([]);  // Set empty array in case of unexpected data format
+        }
+      })
+      .catch((error) => {
+        console.error('There was an error fetching the data!', error);
+        setCartItems([]);  // Set empty array in case of error
+      });
+
+      const calculatedTotal = cartItems.reduce((acc, item) => acc + item.price, 0);
+      setBaseTotal(calculatedTotal);
+      setTotal(calculatedTotal);
   }, []);
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -225,7 +240,7 @@ const Checkout = () => {
         <SectionTitle>Order Summary</SectionTitle>
         {cartItems.map((item) => (
           <SummaryItem key={item.id}>
-            <span>{item.name}</span>
+            <span>{item.Name}</span>
             <span>${item.price.toFixed(2)}</span>
           </SummaryItem>
         ))}
@@ -253,6 +268,7 @@ const Checkout = () => {
             onChange={handleInputChange}
             placeholder="First Name"
             style={{ gridArea: 'firstName' }}
+            required
           />
         </FormField>
         <FormField>
@@ -263,6 +279,7 @@ const Checkout = () => {
             onChange={handleInputChange}
             placeholder="Last Name"
             style={{ gridArea: 'lastName' }}
+            required
           />
         </FormField>
         <FormField>
@@ -273,6 +290,7 @@ const Checkout = () => {
             onChange={handleInputChange}
             placeholder="Email"
             style={{ gridArea: 'email' }}
+            required
           />
         </FormField>
         <FormField>
@@ -283,6 +301,7 @@ const Checkout = () => {
             onChange={handleInputChange}
             placeholder="Contact No."
             style={{ gridArea: 'contact' }}
+            required
           />
         </FormField>
         <FormField>
@@ -293,6 +312,7 @@ const Checkout = () => {
             onChange={handleInputChange}
             placeholder="Street Address"
             style={{ gridArea: 'address' }}
+            required
           />
         </FormField>
         <FormField>

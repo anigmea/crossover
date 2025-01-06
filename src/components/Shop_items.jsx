@@ -3,10 +3,12 @@ import styled from "styled-components";
 import axios from "axios";
 
 // Sample image placeholders (Replace with actual image imports or URLs)
-import img2 from "../assets/images/img2.jpeg";
+// import img2 from "../assets/images/img2.jpeg";
+// import Carousel3 from "../assets/images/Carousel3.jpeg";
+
 
 const PageWrapper = styled.div`
-    font-family: "Bebas Neue", sans-serif;
+    font-family: "Yeezy", sans-serif;
     display: flex;
 `;
 
@@ -32,7 +34,7 @@ const Banner = styled.div`
 
 const ProductGrid = styled.div`
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     grid-gap: 20px;
     padding-top: 20px;
 `;
@@ -43,12 +45,12 @@ const ProductCard = styled.div`
     overflow: hidden;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     text-align: center;
-    font-family: "Bebas Neue", sans-serif;
+    font-family: "Yeezy", sans-serif;
 `;
 
 const ProductImage = styled.img`
     width: 100%;
-    height: 200px;
+    height: 500px;
     object-fit: cover;
 `;
 
@@ -96,10 +98,10 @@ const ShopPage = () => {
                     {data.map((item) => (
                         <ProductLink href={`#/products?Pid=${item.Pid}`}>
                         <ProductCard key={item.Pid}>
-                            <ProductImage src={img2} alt={item.Name} />
+                        <ProductImage src={`/images/${item.image}`} alt={item.Name} />
                             <ProductInfo>
                                 <ProductName>{item.Name}</ProductName>
-                                <ProductPrice>{item.Price}</ProductPrice>
+                                <ProductPrice>₹{item.Price}</ProductPrice>
                             </ProductInfo>
                         </ProductCard>
                         </ProductLink>

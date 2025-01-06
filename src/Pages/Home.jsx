@@ -10,7 +10,7 @@ const DivWrapper = styled.div``;
 const Home = () => {
     return (
         <DivWrapper className="App">
-          <Navbar />
+          <Navbar style={{"position": "absolute", "color": "white"}} />
           <Carousel />
           <POSTER />
           <Footer />

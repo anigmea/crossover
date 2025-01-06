@@ -1,74 +1,98 @@
 import React from "react";
 import styled from "styled-components";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCartShopping, faUser } from "@fortawesome/free-solid-svg-icons";
+import { useLocation } from "react-router-dom";
 
+
+
+  
 const NavbarWrapper = styled.div`
-    width: 94%;
-    max-height: 200px;
-    display: flex;
-    color: white;
-    align_items: center;
-    justify-content: space-between;
-    background-color: black;
-    padding: 3%;
+  width: 94%;
+  max-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3%;
+  background-color: ${(props) => (props.isHome ? "transparent" : "#f4f4f4")};
+  color: ${(props) => (props.isHome ? "white" : "black")};
+  box-shadow: ${(props) => (props.isHome ? "none" : "0px 2px 5px rgba(0, 0, 0, 0.1)")};
+  position: ${(props) => (props.isHome ? "absolute" : "relative")};
+  z-index: 10;
+
 `;
 
-const LOGO = styled.a`    
-color: white;
-font-size: 24px;
-font-family: "Bebas Neue", sans-serif;
-margin-right: 2%;`;
-
+const LOGO = styled.a`
+  color: ${(props) => (props.isHome ? "white" : "black")};
+  font-size: 40px;
+  font-family: "Yeezy", sans-serif;
+  text-decoration: none;
+`;
 
 const LINK_DIV = styled.div`
-    width: 60%;
-    display: flex;
-    align_items: center;
-    justify-content: center;
+  width: 15%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 15px;
 `;
 
 const LINK = styled.a`
-font-family: "Bebas Neue", sans-serif;
-padding-left: 5%;
-font-size: 18px;
-text-decoration: none;
-color: white;
+  font-family: "Yeezy", sans-serif;
+  padding-left: 5%;
+  font-size: 18px;
+  text-decoration: none;
+  color: ${(props) => (props.isHome ? "white" : "black")};
 
-&:hover{
+  &:hover {
     text-decoration: underline;
-}
-
+  }
 `;
 
 const SIGNIN_DIV = styled.div`
-    width: 10%;
-    display: flex;
-    align_items: center;
-    justify-content: space-between;
+  width: 10%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: left;
+  padding-top: 15px;
 `;
-// const JOINUS = styled.a`
-// font-family: "Bebas Neue", sans-serif;
-// font-size: 18px;
 
-// `;
+const IconWrapper = styled.div`
+  color: ${(props) => (props.isHome ? "white" : "black")};
+  font-size: 20px;
+`;
+
 const Navbar = () => {
-    return(
-        <NavbarWrapper>
-            <LOGO href="#">CROSSOVER</LOGO>
-            <LINK_DIV>
-                <LINK href="#/Shop">Shop</LINK>
-                <LINK>New Drops</LINK>
-                <LINK>Best Sellers</LINK>
-                {/* <LINK>About us</LINK> */}
-                <LINK href="#/contact">Contact</LINK>
-            </LINK_DIV> 
-            <SIGNIN_DIV>
-            {/* <JOINUS>Join Us</JOINUS> */}
-            <LINK href="/#/Cart"><FontAwesomeIcon  icon= {faCartShopping} style={{color: "#ffffff",}} /></LINK>
-            </SIGNIN_DIV>
-        </NavbarWrapper>
-    );
+  const location = useLocation();
+  const isHome = location.pathname === "/" || location.pathname === "/#/Home";
+
+  return (
+    <NavbarWrapper isHome={isHome}>
+      <LINK_DIV>
+        <LINK href="#/Shop" isHome={isHome}>
+          Shop
+        </LINK>
+        <LINK href="#/contact" isHome={isHome}>
+          Contact
+        </LINK>
+      </LINK_DIV>
+      <LOGO href="#" isHome={isHome}>
+        CROSSOVER
+      </LOGO>
+      <SIGNIN_DIV>
+        <IconWrapper isHome={isHome}>
+          <a href="/#/Cart">
+            <FontAwesomeIcon icon={faCartShopping} />
+          </a>
+        </IconWrapper>
+        <IconWrapper isHome={isHome}>
+          <a href="/#/SignUp">
+            <FontAwesomeIcon icon={faUser} />
+          </a>
+        </IconWrapper>
+      </SIGNIN_DIV>
+    </NavbarWrapper>
+  );
 };
 
 export default Navbar;

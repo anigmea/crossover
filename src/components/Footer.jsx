@@ -7,7 +7,7 @@ const FooterContainer = styled.div`
     align-items: center;
     padding: 40px 5%;
     color: #000;
-    font-family: "Bebas Neue", sans-serif;
+    font-family: "Yeezy", sans-serif;
 `;
 
 const SubscriptionWrapper = styled.div`
@@ -95,7 +95,7 @@ const Footer = () => {
             </SubscriptionWrapper>
             <LinksWrapper>
                 <FooterLink href="#">United States (USD $)</FooterLink>
-                <FooterLink href="#">Contact</FooterLink>
+                <FooterLink href="/#/Contact">Contact</FooterLink>
                 <FooterLink href="#">Client Services</FooterLink>
                 <FooterLink href="#">Legal Notices</FooterLink>
                 <FooterLink href="#">Social</FooterLink>

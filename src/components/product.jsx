@@ -8,7 +8,7 @@ import axios from "axios";
 
 // Styled Components
 const PageWrapper = styled.div`
-font-family: "Bebas Neue", sans-serif;  
+font-family: "Yeezy", sans-serif;  
   padding: 20px;
   font-size: 20px;
 `;
@@ -33,7 +33,7 @@ const ProductSection = styled.div`
 `;
 
 const ProductImage = styled.img`
-  width: 50%;
+  width: 30%;
   border-radius: 8px;
   object-fit: cover;
 `;
@@ -99,6 +99,10 @@ const AccordionHeader = styled.div`
   justify-content: space-between;
   padding: 10px;
   border-bottom: 1px solid #ccc;
+
+  &:hover{
+    text-decoration: underline;
+  }
 `;
 
 const AccordionContent = styled.div`
@@ -128,7 +132,7 @@ const Product = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const value = queryParams.get('Pid'); // Retrieve the value of a specific query parameter
-  const [selectedColor, setSelectedColor] = useState("White");
+  // const [selectedColor, setSelectedColor] = useState("White");
   const [selectedSize, setSelectedSize] = useState("Large");
   console.log(selectedSize);
   const [quantity, setQuantity] = useState(1);
@@ -151,21 +155,20 @@ const Product = () => {
     <PageWrapper>
       {/* Breadcrumb Navigation */}
       <Breadcrumbs>
-        <a href="/men">Men</a> > <a href="/men-clothing">Clothing</a> >{data.Name}
+        {/* <a href="/men">Men</a> > <a href="/men-clothing">Clothing</a> >{data.Name} */}
       </Breadcrumbs>
 
       {/* Product Section */}
       <ProductSection>
         {/* Product Image */}
-        <ProductImage src={data.image} alt={data.Name} />
+        <ProductImage src={`/images/${data.image}`} alt={data.Name} />
         {/* Product Details */}
         <ProductDetails>
           <ProductTitle>{data.Name}</ProductTitle>
           <ProductPrice>₹{data.Price}</ProductPrice>
 
           {/* Color Swatches */}
-          <SwatchContainer>
-            {/* {console.log(Arr)} */}
+          {/* <SwatchContainer>
             {["White"].map((color) => (
               <Swatch
                 key={color}
@@ -174,7 +177,7 @@ const Product = () => {
                 onClick={() => setSelectedColor(color)}
               />
             ))}
-          </SwatchContainer>
+          </SwatchContainer> */}
 
           {/* Size Selector */}
           <SizeSelector onChange={(e) => setSelectedSize(e.target.value)}>

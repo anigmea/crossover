@@ -3,9 +3,9 @@ import styled from "styled-components";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import { Pagination } from 'swiper/modules';
-import Carousel1 from "../assets/images/Carousel1.jpg";
-import Carousel2 from "../assets/images/Carousel2.jpg";
-import Carousel3 from "../assets/images/Carousel3.jpg";
+import Carousel1 from "../assets/images/Carousel1.jpeg";
+import Carousel2 from "../assets/images/Carousel2.jpeg";
+import Carousel3 from "../assets/images/Carousel3.jpeg";
 import Carousel4 from "../assets/images/Carousel4.jpg";
 import { Autoplay } from 'swiper/modules';
 
@@ -32,7 +32,7 @@ const Carousel = () => {
         <SwiperSlide><IMAGE src={Carousel1}></IMAGE></SwiperSlide>
         <SwiperSlide><IMAGE src={Carousel2}></IMAGE></SwiperSlide>
         <SwiperSlide><IMAGE src={Carousel3}></IMAGE></SwiperSlide>
-        <SwiperSlide><IMAGE src={Carousel4}></IMAGE></SwiperSlide>
+        {/* <SwiperSlide><IMAGE src={Carousel4}></IMAGE></SwiperSlide> */}
         ...
       </Swiper>
     );
