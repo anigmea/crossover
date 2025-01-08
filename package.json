@@ -29,6 +29,10 @@
     "swiper": "^11.1.14",
     "web-vitals": "^2.1.4"
   },
+
+  "resolutions": {
+    "babel-jest": "24.9.0"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -41,6 +45,7 @@
       "react-app/jest"
     ]
   },
+  
   "browserslist": {
     "production": [
       ">0.2%",
