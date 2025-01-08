@@ -1,4 +1,4 @@
-const conn = require("./db/connection.js");
+const conn = require("./db/connection.mjs");
 const express = require( "express");
 const cors = require("cors");
 const Razorpay = require("razorpay");
