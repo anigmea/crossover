@@ -1,11 +1,11 @@
-import conn from "./db/connection.js";
-import express from "express";
-import cors from "cors";
-import Razorpay from "razorpay";
-import bodyParser from "body-parser";
-import bcrypt from "bcrypt";
+const conn = require("./db/connection.js");
+const express = require( "express");
+const cors = require("cors");
+const Razorpay = require("razorpay");
+const bodyParser = require("body-parser");
+const bcrypt = require("bcrypt");
+const mysql = require("mysql2");
 // import jwt from "jsonwebtoken";
-import mysql from "mysql2";
 
 
 const app = express();
