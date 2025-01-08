@@ -103,4 +103,4 @@ conn.connect(function(err){
         console.log("Database Connected Successfully!");
     }
 });
-export default conn;
+module.exports = conn;
