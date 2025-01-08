@@ -97,23 +97,13 @@ const CardType = styled.div`
   color: #555;
 `;
 
-// Helper function to identify card type
-const identifyCardType = (cardNumber) => {
-  const visaRegex = /^4[0-9]{12}(?:[0-9]{3})?$/;
-  const masterCardRegex = /^5[1-5][0-9]{14}$/;
-
-  if (visaRegex.test(cardNumber)) return 'Visa';
-  if (masterCardRegex.test(cardNumber)) return 'MasterCard';
-  return 'Unknown';
-};
 
 // Main Component
 const Checkout = () => {
   const [cartItems, setCartItems] = useState([]);
   const [baseTotal, setBaseTotal] = useState(0);
-  const [total, setTotal] = useState(0);
+  const [total, setTotal] = useState(0); // Ensure it's a number by default
   const [paymentMethod, setPaymentMethod] = useState('');
-  const [cardType, setCardType] = useState('');
   const CODCharge = 50;
 
   const [formData, setFormData] = useState({
@@ -129,12 +119,11 @@ const Checkout = () => {
     contact: '',
   });
 
-
   useEffect(() => {
     // Fetch data from the backend API
-    axios.get('http://localhost:8080/api/cart_items?Customer_id=1')
+    axios.get('http://localhost:8080/api/cart_items?UserID=1')
       .then((response) => {
-        console.log(response.data);  // Log the response to check the data structure
+        console.log(response.data); // Log the response to check the data structure
         if (Array.isArray(response.data)) {
           setCartItems(response.data);
         } else if (typeof response.data === 'object') {
@@ -142,19 +131,21 @@ const Checkout = () => {
           setCartItems([response.data]);
         } else {
           console.error('Unexpected response format:', response.data);
-          setCartItems([]);  // Set empty array in case of unexpected data format
+          setCartItems([]); // Set empty array in case of unexpected data format
         }
       })
       .catch((error) => {
         console.error('There was an error fetching the data!', error);
-        setCartItems([]);  // Set empty array in case of error
+        setCartItems([]); // Set empty array in case of error
       });
-
-      const calculatedTotal = cartItems.reduce((acc, item) => acc + item.price, 0);
-      setBaseTotal(calculatedTotal);
-      setTotal(calculatedTotal);
   }, []);
-
+  
+  useEffect(() => {
+    const calculatedTotal = cartItems.reduce((acc, item) => acc + (parseFloat(item.product_price * item.Quantity) || 0), 0);
+    setBaseTotal(calculatedTotal);
+    setTotal(calculatedTotal);
+  }, [cartItems]);
+  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -163,9 +154,6 @@ const Checkout = () => {
       [name]: value,
     }));
 
-    if (name === 'cardNumber') {
-      setCardType(identifyCardType(value));
-    }
   };
 
   const handlePaymentMethodChange = (e) => {
@@ -223,11 +211,51 @@ const Checkout = () => {
     }
   };
 
-  const handlePlaceOrder = () => {
+  const handlePlaceOrder = async () => {
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.contact || !formData.address) {
+      alert('Please fill in all the required fields!');
+      return;
+    }
+  
+    // Create the order object
+    const orderData = {
+      userId: 1, // You can replace this with the actual UserID from the logged-in user
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      email: formData.email,
+      contact: formData.contact,
+      address: formData.address,
+      city: formData.city,
+      state: formData.state,
+      zipCode: formData.zipCode,
+      country: formData.country,
+      totalAmount: total,
+      paymentMethod: paymentMethod,
+      cartItems: cartItems.map((item) => ({
+        productSizeID: item.ProductSizeID, // Assuming each cart item has a product_size_id
+        quantity: item.Quantity,
+        price: item.product_price,
+      })),
+    };
+  
+    try {
+      // Send the order data to the backend API
+      const response = await axios.post('http://localhost:8080/api/place-order', orderData);
+  
+      if (response.data.success) {
+        alert('Order placed successfully!');
+        // Optionally redirect to order confirmation page or reset the cart
+      } else {
+        alert('Failed to place the order. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error placing the order:', error);
+      alert('There was an error placing your order. Please try again later.');
+    }
+  
+    // If payment is through Razorpay, initiate the payment
     if (paymentMethod !== 'Cash on Delivery') {
       handleRazorpayPayment();
-    } else {
-      alert('Order placed successfully!');
     }
   };
 
@@ -240,9 +268,10 @@ const Checkout = () => {
         <SectionTitle>Order Summary</SectionTitle>
         {cartItems.map((item) => (
           <SummaryItem key={item.id}>
-            <span>{item.Name}</span>
-            <span>${item.price.toFixed(2)}</span>
-          </SummaryItem>
+          <span>{item.product_name}</span>
+          <span>Qty:{item.Quantity}</span>
+          <span>{(parseFloat(item.product_price * item.Quantity) || 0).toFixed(2)}</span>
+        </SummaryItem>
         ))}
          {paymentMethod === 'Cash on Delivery' && (
     <SummaryItem>

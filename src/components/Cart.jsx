@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
 
-// Styled Components
+// Styled Components (unchanged)
 const CartWrapper = styled.div`
   font-family: "Yeezy", sans-serif;
   padding: 20px;
@@ -110,7 +110,7 @@ const CartPage = () => {
 
   useEffect(() => {
     // Fetch data from the backend API
-    axios.get('http://localhost:8080/api/cart_items?Customer_id=1')
+    axios.get('http://localhost:8080/api/cart_items?UserID=1')
       .then((response) => {
         console.log(response.data);  // Log the response to check the data structure
         if (Array.isArray(response.data)) {
@@ -128,23 +128,30 @@ const CartPage = () => {
         setCartItems([]);  // Set empty array in case of error
       });
   }, []);
-  
-  
-  
 
-  const updateQuantity = (Pid, delta) => {
+  const updateQuantity = (ProductID, delta) => {
     setCartItems((prevItems) =>
       prevItems.map((item) =>
-        item.Pid === Pid ? { ...item, qty: Math.max(1, item.qty + delta) } : item
+        item.ProductID === ProductID ? { ...item, Quantity: Math.max(1, item.Quantity + delta) } : item
       )
     );
   };
 
-  const removeItem = (Pid) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.Pid !== Pid));
+  const removeItem = (ProductID, cartID) => {
+    // Send DELETE request to remove the item from the database
+    axios.delete(`http://localhost:8080/api/cart_items/${cartID}`)
+      .then((response) => {
+        console.log('Item removed from cart:', response.data);
+        // After removing from the database, update the UI by removing the item from the state
+        setCartItems((prevItems) => prevItems.filter((item) => item.cart_id !== cartID));
+      })
+      .catch((error) => {
+        console.error('There was an error removing the item!', error);
+      });
   };
 
-  const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.qty, 0).toFixed(2);
+  // Calculate subtotal
+  const subtotal = cartItems.reduce((acc, item) => acc + parseFloat(item.product_price) * item.Quantity, 0).toFixed(2);
 
   return (
     <CartWrapper>
@@ -154,21 +161,21 @@ const CartPage = () => {
       {/* Cart Items */}
       <CartItems>
         {cartItems.map((item) => (
-          <CartItem key={item.Pid}>
-            <ProductImage src={`/images/${item.image}`} alt={item.Name} />
+          <CartItem key={item.cart_id}>
+            <ProductImage src={`/images/${item.product_image}`} alt={item.product_name} />
             <ProductDetails>
-              <ProductTitle>{item.Name}</ProductTitle>
-              <ProductPrice>${item.price.toFixed(2)}</ProductPrice>
+              <ProductTitle>{item.product_name}</ProductTitle>
+              <ProductPrice>₹{item.product_price}</ProductPrice>
 
               {/* Quantity Controls */}
               <QuantityControls>
-                <button onClick={() => updateQuantity(item.Pid, -1)}>-</button>
-                <input type="text" value={item.qty} readOnly />
-                <button onClick={() => updateQuantity(item.Pid, 1)}>+</button>
+                <button onClick={() => updateQuantity(item.ProductID, -1)}>-</button>
+                <input type="text" value={item.Quantity} readOnly />
+                <button onClick={() => updateQuantity(item.ProductID, 1)}>+</button>
               </QuantityControls>
 
               {/* Remove Button */}
-              <RemoveButton onClick={() => removeItem(item.Pid)}>Remove</RemoveButton>
+              <RemoveButton onClick={() => removeItem(item.ProductID, item.cart_id)}>Remove</RemoveButton>
             </ProductDetails>
           </CartItem>
         ))}
@@ -176,7 +183,7 @@ const CartPage = () => {
 
       {/* Cart Summary */}
       <CartSummary>
-        <Subtotal>Subtotal ({cartItems.length} items): ${subtotal}</Subtotal>
+        <Subtotal>Subtotal ({cartItems.length} items): ₹{subtotal}</Subtotal>
         <a href="/#/Checkout">
           <CheckoutButton>Proceed to Checkout</CheckoutButton>
         </a>

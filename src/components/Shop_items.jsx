@@ -96,9 +96,9 @@ const ShopPage = () => {
 
                 <ProductGrid>
                     {data.map((item) => (
-                        <ProductLink href={`#/products?Pid=${item.Pid}`}>
-                        <ProductCard key={item.Pid}>
-                        <ProductImage src={`/images/${item.image}`} alt={item.Name} />
+                        <ProductLink href={`#/products?ProductID=${item.ProductID}`}>
+                        <ProductCard key={item.ProductID}>
+                        <ProductImage src={`/images/${item.ImageURL}`} alt={item.Name} />
                             <ProductInfo>
                                 <ProductName>{item.Name}</ProductName>
                                 <ProductPrice>₹{item.Price}</ProductPrice>

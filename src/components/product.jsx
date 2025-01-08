@@ -1,14 +1,11 @@
-import {React, useState, useEffect} from "react";
+import { React, useState, useEffect } from "react";
 import { useLocation } from 'react-router-dom';
 import styled from "styled-components";
 import axios from "axios";
 
-
-
-
 // Styled Components
 const PageWrapper = styled.div`
-font-family: "Yeezy", sans-serif;  
+  font-family: "Yeezy", sans-serif;  
   padding: 20px;
   font-size: 20px;
 `;
@@ -53,21 +50,6 @@ const ProductPrice = styled.p`
   margin-bottom: 20px;
 `;
 
-const SwatchContainer = styled.div`
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-`;
-
-const Swatch = styled.button`
-  width: 30px;
-  height: 30px;
-  border: 2px solid ${(props) => (props.active ? "#000" : "#ccc")};
-  border-radius: 50%;
-  background-color: ${(props) => props.color};
-  cursor: pointer;
-`;
-
 const SizeSelector = styled.select`
   margin-bottom: 20px;
   padding: 10px;
@@ -84,6 +66,20 @@ const QuantitySelector = styled.div`
     width: 50px;
     text-align: center;
     font-size: 14px;
+  }
+`;
+
+const AddToCartButton = styled.button`
+  background-color: #0046be;
+  color: white;
+  font-size: 16px;
+  padding: 15px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #003593;
   }
 `;
 
@@ -105,6 +101,21 @@ const AccordionHeader = styled.div`
   }
 `;
 
+const SwatchContainer = styled.div
+`  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;`
+;
+
+const Swatch = styled.button
+`  width: 30px;
+  height: 30px;
+  border: 2px solid ${(props) => (props.active ? "#000" : "#ccc")};
+  border-radius: 50%;
+  background-color: ${(props) => props.color};
+  cursor: pointer;`
+;
+
 const AccordionContent = styled.div`
   padding: 10px;
   display: ${(props) => (props.open ? "block" : "none")};
@@ -112,37 +123,19 @@ const AccordionContent = styled.div`
   color: #555;
 `;
 
-const AddToCartButton = styled.button`
-  background-color: #0046be;
-  color: white;
-  font-size: 16px;
-  padding: 15px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #003593;
-  }
-`;
-
-
 // Main Component
 const Product = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const value = queryParams.get('Pid'); // Retrieve the value of a specific query parameter
-  // const [selectedColor, setSelectedColor] = useState("White");
-  const [selectedSize, setSelectedSize] = useState("Large");
-  console.log(selectedSize);
+  const value = queryParams.get('ProductID'); // Retrieve the value of a specific query parameter
+  const [selectedSize, setSelectedSize] = useState(""); // Storing ProductSizeID
   const [quantity, setQuantity] = useState(1);
-  const [accordionOpen, setAccordionOpen] = useState({ details: false, care: false });
-
   const [data, setData] = useState([]);
+  const [accordionOpen, setAccordionOpen] = useState({ "details": false, care: false });
 
   useEffect(() => {
     // Fetch data from the backend API
-    axios.get(`http://localhost:8080/api/data?Pid=${value}`)
+    axios.get(`http://localhost:8080/api/product?ProductID=${value}`)
       .then((response) => {
         setData(response.data);
       })
@@ -151,56 +144,64 @@ const Product = () => {
       });
   }, []);
 
+  const addItemtoCart = () => {
+    if (!selectedSize) {
+      alert("Please select a size before adding to cart.");
+      return;
+    }
+
+    // Now use selectedSize (ProductSizeID) to add to cart
+    axios.post('http://localhost:8080/api/cart', {
+      ProductSizeID: selectedSize, // Use the selected ProductSizeID
+      Quantity: quantity,
+      UserID: 1 // Assuming UserID is 1 for testing, modify as needed
+    })
+    .then(response => {
+      console.log('Item added to cart:', response);
+    })
+    .catch(error => {
+      console.error('Error adding item to cart:', error);
+    });
+  };
+
   return (
     <PageWrapper>
-      {/* Breadcrumb Navigation */}
       <Breadcrumbs>
-        {/* <a href="/men">Men</a> > <a href="/men-clothing">Clothing</a> >{data.Name} */}
+        {/* Add breadcrumb navigation here */}
       </Breadcrumbs>
 
-      {/* Product Section */}
       <ProductSection>
-        {/* Product Image */}
-        <ProductImage src={`/images/${data.image}`} alt={data.Name} />
-        {/* Product Details */}
+        <ProductImage src={`/images/${data.ImageURL}`} alt={data.Name} />
         <ProductDetails>
           <ProductTitle>{data.Name}</ProductTitle>
           <ProductPrice>₹{data.Price}</ProductPrice>
 
-          {/* Color Swatches */}
-          {/* <SwatchContainer>
-            {["White"].map((color) => (
-              <Swatch
-                key={color}
-                color={color.toLowerCase()}
-                active={selectedColor === color}
-                onClick={() => setSelectedColor(color)}
-              />
-            ))}
-          </SwatchContainer> */}
-
           {/* Size Selector */}
-          <SizeSelector onChange={(e) => setSelectedSize(e.target.value)}>
-            <option value="" disabled selected>
-              Select Size
-            </option>
-            <option value="Small">Small</option>
-            <option value="Medium">Medium</option>
-            <option value="Large">Large</option>
-          </SizeSelector>
+          <SizeSelector 
+  onChange={(e) => {
+    setSelectedSize(1); // Set the ProductSizeID here
+  }} 
+  defaultValue=""
+>
+  <option value="" disabled>Select Size</option>
+  {data.Sizes && data.Sizes.map((size, index) => (
+    <option key={index} value={size.ProductSizeID}>
+      {size.size} {/* Display the size name, but the value is the ProductSizeID */}
+    </option>
+  ))}
+</SizeSelector>
 
           {/* Quantity Selector */}
           <QuantitySelector>
             <span>Quantity:</span>
             <button onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
-            <input type="number" value={quantity} style={{}}readOnly />
+            <input type="number" value={quantity} readOnly />
             <button onClick={() => setQuantity(quantity + 1)}>+</button>
           </QuantitySelector>
 
           {/* Add to Cart */}
-          <AddToCartButton>Add to Cart</AddToCartButton>
+          <AddToCartButton onClick={addItemtoCart}>Add to Cart</AddToCartButton>
 
-          {/* Accordion */}
           <Accordion>
             <AccordionHeader onClick={() => setAccordionOpen((prev) => ({ ...prev, details: !prev.details }))}>
               Product Details
