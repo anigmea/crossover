@@ -1,11 +1,11 @@
 import mysql2 from "mysql2";
 
 const conn = mysql2.createConnection({
-    host: "127.0.0.1",
+    host: "localhost",
     port: "3306",
     user: "root",
     database: "CrossOver",
-    password: "12345678"
+    password: "N3wCrossover@1234"
 });
 
 // CREATE TABLE Users (
