@@ -23,7 +23,7 @@
     "react-dom": "^18.3.1",
     "react-native-razorpay": "^2.3.0",
     "react-router-dom": "^6.28.0",
-    "react-scripts": "^3.0.1",
+    "react-scripts": "^5.0.1",
     "react-swiper": "^0.1.5",
     "styled-components": "^6.1.13",
     "swiper": "^11.1.14",
@@ -57,5 +57,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "babel-jest": "^24.9.0"
   }
 }
