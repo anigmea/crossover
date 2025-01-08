@@ -1,4 +1,4 @@
-const mysql = require("mysql2");
+import mysql2 from "mysql2";
 
 const conn = mysql2.createConnection({
     host: "127.0.0.1",
@@ -103,4 +103,4 @@ conn.connect(function(err){
         console.log("Database Connected Successfully!");
     }
 });
-module.exports = conn;
+export default conn;
