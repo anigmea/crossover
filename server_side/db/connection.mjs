@@ -23,4 +23,5 @@ pool.getConnection()
         console.error("Error connecting to the database:", err.message);
     });
 
+    
 export default pool;

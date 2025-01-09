@@ -1,4 +1,4 @@
-import conn from "./db/connection.mjs";
+import pool from "./db/connection.mjs";
 import express from "express";
 import cors from "cors";
 import Razorpay from "razorpay";
@@ -6,7 +6,8 @@ import bodyParser from "body-parser";
 import bcrypt from "bcrypt";
 // import jwt from "jsonwebtoken";
 
-
+let conn = await pool.getConnection();
+try {
 const app = express();
 
 const queryPromise = (query, values) => {
@@ -393,3 +394,6 @@ const PORT = 8080;
 app.listen(PORT, () => {
   console.log(`Server started at port ${PORT}`);
 });
+} finally {
+  connection.release();
+}
