@@ -41,17 +41,13 @@ const conn = mysql2.createConnection({
 //     ProductID INT NOT NULL,
 //     SizeID INT NOT NULL,
 //     Stock INT NOT NULL DEFAULT 0, -- Stock per size
-//     FOREIGN KEY (ProductID) REFERENCES Products(ProductID) ON DELETE CASCADE,
-//     FOREIGN KEY (SizeID) REFERENCES Sizes(SizeID) ON DELETE CASCADE
 // );
 
 // CREATE TABLE Cart (
 //     CartID INT AUTO_INCREMENT PRIMARY KEY,
 //     UserID INT NOT NULL,
 //     ProductSizeID INT NOT NULL, -- Links to specific product and size
-//     Quantity INT NOT NULL DEFAULT 1,
-//     FOREIGN KEY (UserID) REFERENCES Users(UserID) ON DELETE CASCADE,
-//     FOREIGN KEY (ProductSizeID) REFERENCES ProductSizes(ProductSizeID) ON DELETE CASCADE
+//     Quantity INT NOT NULL DEFAULT 1
 // );
 
 // CREATE TABLE Orders (
@@ -70,9 +66,7 @@ const conn = mysql2.createConnection({
 //     OrderID INT NOT NULL,
 //     ProductSizeID INT NOT NULL, -- Links to specific product and size
 //     Quantity INT NOT NULL,
-//     Price DECIMAL(10, 2) NOT NULL, -- Price per item at the time of purchase
-//     FOREIGN KEY (OrderID) REFERENCES Orders(OrderID) ON DELETE CASCADE,
-//     FOREIGN KEY (ProductSizeID) REFERENCES ProductSizes(ProductSizeID) ON DELETE CASCADE
+//     Price DECIMAL(10, 2) NOT NULL -- Price per item at the time of purchase
 // );
 
 // CREATE TABLE Payments (
@@ -93,6 +87,7 @@ const conn = mysql2.createConnection({
 //     Email VARCHAR(100) NOT NULL, 
 //     Message VARCHAR(200) NOT NULL
 //   );
+  
   
 
 conn.connect(function(err){
