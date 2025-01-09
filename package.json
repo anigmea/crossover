@@ -32,7 +32,6 @@
   "resolutions": {
     "babel-jest": "24.9.0"
   },
-  "type": "module",  
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
