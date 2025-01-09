@@ -16,6 +16,8 @@ const pool = mysql2.createPool({
     queueLimit: 0,
 });
 
+console.log(process.env.DB_DATABASE);
+
 pool.getConnection()
     .then((conn) => {
         console.log("Database Connected Successfully!");
