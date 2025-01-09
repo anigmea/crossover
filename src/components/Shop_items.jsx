@@ -79,7 +79,7 @@ const ShopPage = () => {
 
     useEffect(() => {
       // Fetch data from the backend API
-      axios.get('http://localhost:8080/api/data')
+      axios.get('https://localhost:8080/api/data')
         .then((response) => {
           setData(response.data);
         })
