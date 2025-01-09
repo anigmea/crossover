@@ -77,7 +77,7 @@ const Navbar = () => {
         </LINK>
       </LINK_DIV>
       <LOGO href="#" isHome={isHome}>
-        CROSVER
+        CROSSOVER
       </LOGO>
       <SIGNIN_DIV>
         <IconWrapper isHome={isHome}>
