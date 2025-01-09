@@ -1,6 +1,6 @@
 import mysql2 from "mysql2/promise";
 
-const conn = mysql2.createPool({
+const pool = mysql2.createPool({
     host: "localhost",
     port: "3306",
     user: "root",
@@ -93,7 +93,7 @@ const conn = mysql2.createPool({
   
   
 
-conn.getConnection()
+pool.getConnection()
     .then((conn) => {
         console.log("Database Connected Successfully!");
         conn.release(); // Release the connection back to the pool
@@ -101,5 +101,6 @@ conn.getConnection()
     .catch((err) => {
         console.error("Error connecting to the database:", err.message);
     });
+const conn = pool.promise();
 
 export default conn;
