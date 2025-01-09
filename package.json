@@ -33,10 +33,6 @@
   "resolutions": {
     "babel-jest": "24.9.0"
   },
-<<<<<<< Updated upstream
-=======
-  "type": "module",
->>>>>>> Stashed changes
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
