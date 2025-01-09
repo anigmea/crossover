@@ -1,11 +1,14 @@
-import mysql2 from "mysql2";
+import mysql2 from "mysql2/promise";
 
-const conn = mysql2.createConnection({
+const conn = mysql2.createPool({
     host: "localhost",
     port: "3306",
     user: "root",
+    password: "N3wCrossover@1234",
     database: "CrossOver",
-    password: "N3wCrossover@1234"
+    waitForConnections: true,
+    connectionLimit: 10, // Maximum number of connections
+    queueLimit: 0 // No limit on queueing
 });
 
 // CREATE TABLE Users (
@@ -90,12 +93,13 @@ const conn = mysql2.createConnection({
   
   
 
-conn.connect(function(err){
-    if(err){
-        console.log(err);
-    }
-    else{
+conn.getConnection()
+    .then((conn) => {
         console.log("Database Connected Successfully!");
-    }
-});
+        conn.release(); // Release the connection back to the pool
+    })
+    .catch((err) => {
+        console.error("Error connecting to the database:", err.message);
+    });
+
 export default conn;

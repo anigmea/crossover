@@ -28,11 +28,7 @@ const razorpay = new Razorpay({
 });
 
 // Middleware
-app.use(cors({
-  origin: "https://crossover.in.net", // Allow requests from your frontend domain
-methods: ["GET", "POST", "PUT", "DELETE"],
-credentials: true
-})); // Enable Cross-Origin Resource Sharing
+app.use(cors()); // Enable Cross-Origin Resource Sharing
 app.use(express.json()); // Parse JSON payloads
 
 // Endpoint to fetch product data
