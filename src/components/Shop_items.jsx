@@ -79,7 +79,7 @@ const ShopPage = () => {
 
     useEffect(() => {
       // Fetch data from the backend API
-      axios.get('https://crossover.in.net/api/data')
+      axios.get('https://127.0.0.1:8080/api/data')
         .then((response) => {
           setData(response.data);
         })
