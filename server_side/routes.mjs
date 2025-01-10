@@ -1,12 +1,26 @@
-import pool from "./db/connection.mjs";
+import conn from "./db/connection.js";
 import express from "express";
 import cors from "cors";
 import Razorpay from "razorpay";
 import bodyParser from "body-parser";
 import bcrypt from "bcrypt";
 // import jwt from "jsonwebtoken";
+import mysql from "mysql2";
+
 
 const app = express();
+
+const queryPromise = (query, values) => {
+  return new Promise((resolve, reject) => {
+    conn.query(query, values, (error, results) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+};
 
 // Initialize Razorpay instance
 const razorpay = new Razorpay({
@@ -19,31 +33,39 @@ app.use(cors()); // Enable Cross-Origin Resource Sharing
 app.use(express.json()); // Parse JSON payloads
 
 // Endpoint to fetch product data
-app.get('/api/data', async (req, res) => {
-  const { Pid } = req.query;  // Retrieve Pid from query parameters
+app.get("/api/data", (req, res) => {
+  const { ProductID } = req.query; // Extract `Pid` from query parameters
+  console.log(`Received request to /api/data with ProductID: ${ProductID}`);
 
-  let connection;
-
-  try {
-    // Get a connection from the pool
-    connection = await pool.getConnection();
-
-    // Query to fetch all products if Pid is not provided, else fetch specific product
-    const query = 'SELECT * FROM products WHERE Pid = ? OR ? IS NULL';
-    const [rows] = await connection.execute(query, [Pid || null, Pid || null]);
-
-    if (rows.length === 0) {
-      return res.status(404).json({ message: 'No products found' });
-    }
-
-    // Return the result
-    res.status(200).json(rows);
-  } catch (err) {
-    console.error('Error executing query:', err);
-    res.status(500).json({ message: 'Internal server error' });
-  } finally {
-    // Always release the connection back to the pool
-    if (connection) connection.release();
+  if (!ProductID) {
+    // If no Pid is provided, fetch all products
+    conn.query("SELECT * FROM Products", (err, results) => {
+      if (err) {
+        console.error("Error fetching data:", err);
+        res.status(500).json({ message: "Error fetching data" });
+      } else {
+        console.log("All data fetched:", results);
+        res.status(200).json(results);
+      }
+    });
+  } else if (isNaN(ProductID)) {
+    // Validate that Pid is a number
+    console.warn(`Invalid ProductID provided: ${ProductID}`);
+    res.status(400).json({ message: "Invalid ProductID" });
+  } else {
+    // Fetch product by Pid
+    conn.query("SELECT * FROM Products WHERE ProductID = ?", [ProductID], (err, results) => {
+      if (err) {
+        console.error("Error fetching data:", err);
+        res.status(500).json({ message: "Error fetching data" });
+      } else if (results.length === 0) {
+        console.warn(`No product found for ProductID: ${ProductID}`);
+        res.status(404).json({ message: "Product not found" });
+      } else {
+        console.log("Data fetched for ProductID:", results[0]);
+        res.status(200).json(results[0]);
+      }
+    });
   }
 });
 
