@@ -7,20 +7,23 @@ import bcrypt from "bcrypt";
 // import jwt from "jsonwebtoken";
 import mysql from "mysql2";
 
+const corsOptions = {
+  origin: "*",  // Allow all domains (or specify specific domains instead of '*')
+  credentials: true,
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: [
+    "Content-Type", 
+    "Depth", 
+    "User-Agent", 
+    "X-File-Size", 
+    "X-Requested-With", 
+    "If-Modified-Since", 
+    "X-File-Name", 
+    "Cache-Control"
+  ],
+};
 
 const app = express();
-
-const queryPromise = (query, values) => {
-  return new Promise((resolve, reject) => {
-    conn.query(query, values, (error, results) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(results);
-      }
-    });
-  });
-};
 
 // Initialize Razorpay instance
 const razorpay = new Razorpay({
@@ -29,7 +32,7 @@ const razorpay = new Razorpay({
 });
 
 // Middleware
-app.use(cors()); // Enable Cross-Origin Resource Sharing
+app.use(cors(corsOptions)); // Enable Cross-Origin Resource Sharing
 app.use(express.json()); // Parse JSON payloads
 
 // Endpoint to fetch product data
