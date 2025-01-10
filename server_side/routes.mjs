@@ -392,8 +392,10 @@ app.get("/transactions/:userId", (req, res) => {
   });
 });
 
+app.get('*', () => {})
+
 // Start the server
-const PORT = 8080;
+const PORT = 80;
 app.listen(PORT, () => {
   console.log(`Server started at port ${PORT}`);
 });
