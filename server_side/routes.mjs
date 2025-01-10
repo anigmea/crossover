@@ -2,6 +2,7 @@ import conn from "./db/connection.mjs";
 import express from "express";
 import cors from "cors";
 import Razorpay from "razorpay";
+import path from "path";
 import bodyParser from "body-parser";
 import bcrypt from "bcrypt";
 // import jwt from "jsonwebtoken";
@@ -388,6 +389,10 @@ app.get("/transactions/:userId", (req, res) => {
     }
   });
 });
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, 'static/index.html'));
+})
 
 // Start the server
 const PORT = 8080;
