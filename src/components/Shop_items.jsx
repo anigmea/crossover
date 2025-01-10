@@ -74,16 +74,12 @@ const ProductLink = styled.a`
 text-decoration: None;
 `;
 
-
 const ShopPage = () => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
       // Fetch data from the backend API
-      axios.get('https://127.0.0.1:8080/api/data', {
-        headers: {
-        'Content-Type': 'application/json',
-      }})
+      axios.get('http://localhost:8080/api/data')
         .then((response) => {
           setData(response.data);
         })
