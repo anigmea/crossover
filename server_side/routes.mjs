@@ -7,9 +7,12 @@ import bodyParser from "body-parser";
 import bcrypt from "bcrypt";
 // import jwt from "jsonwebtoken";
 import mysql from "mysql2";
-
+import {dirname} from "path";
+import { fileURLToPath } from 'url';
 
 const app = express();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const queryPromise = (query, values) => {
   return new Promise((resolve, reject) => {
@@ -32,7 +35,7 @@ const razorpay = new Razorpay({
 // Middleware
 app.use(cors()); // Enable Cross-Origin Resource Sharing
 app.use(express.json()); // Parse JSON payloads
-
+app.use(express.static(path.join(__dirname, 'static')));
 // Endpoint to fetch product data
 app.get("/api/data", (req, res) => {
   const { ProductID } = req.query; // Extract `Pid` from query parameters
@@ -391,7 +394,7 @@ app.get("/transactions/:userId", (req, res) => {
 });
 
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, 'static/index.html'));
+  res.sendFile(path.join(__dirname, 'static','index.html'));
 })
 
 // Start the server

@@ -5,7 +5,7 @@ const pool = mysql2.createPool({
     port: "3306",
     user: "root",
     database: "Crossover",
-    password: "12345678",
+    password: "N3wCrossover@1234",
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
@@ -98,7 +98,7 @@ pool.getConnection((err, connection) => {
         console.error("Error connecting to the database:", err);
         return;
     }
-    console.log("Database Connected Successfully!");
+    console.log("Database Connected Successfully!1234567");
     connection.release(); // Release the connection back to the pool
 });
 
