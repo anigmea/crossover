@@ -4,7 +4,7 @@ const pool = mysql2.createPool({
     host: "127.0.0.1",
     port: "3306",
     user: "root",
-    database: "CrossOver",
+    database: "Crossover",
     password: "12345678",
     waitForConnections: true,
     connectionLimit: 10,
@@ -52,7 +52,6 @@ const pool = mysql2.createPool({
 //     UserID INT NOT NULL,
 //     ProductSizeID INT NOT NULL, -- Links to specific product and size
 //     Quantity INT NOT NULL DEFAULT 1,
-//     FOREIGN KEY (UserID) REFERENCES Users(UserID) ON DELETE CASCADE,
 //     FOREIGN KEY (ProductSizeID) REFERENCES ProductSizes(ProductSizeID) ON DELETE CASCADE
 // );
 
@@ -63,8 +62,7 @@ const pool = mysql2.createPool({
 //     Status ENUM('Pending', 'Shipped', 'Delivered', 'Cancelled') DEFAULT 'Pending',
 //     PaymentStatus ENUM('Paid', 'Unpaid') DEFAULT 'Unpaid',
 //     CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-//     UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-//     FOREIGN KEY (UserID) REFERENCES Users(UserID) ON DELETE CASCADE
+//     UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 // );
 
 // CREATE TABLE OrderDetails (
