@@ -35,6 +35,7 @@ const razorpay = new Razorpay({
 // Middleware
 app.use(cors()); // Enable Cross-Origin Resource Sharing
 app.use(express.json()); // Parse JSON payloads
+app.use(express.static('../build'));
 // Endpoint to fetch product data
 app.get("/api/data", (req, res) => {
   const { ProductID } = req.query; // Extract `Pid` from query parameters
@@ -393,7 +394,7 @@ app.get("/transactions/:userId", (req, res) => {
 });
 
 app.get("*", (req, res) => {
-  res.sendFile('../build/index.html');
+  res.sendFile(path.join('../build/index.html'));
 })
 
 // Start the server
