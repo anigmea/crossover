@@ -86,7 +86,7 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8080/signup", formData);
+      const response = await axios.post("http://68.183.92.7:8080/signup", formData);
       alert(response.data.message);
     } catch (error) {
       console.error(error);
@@ -119,7 +119,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8080/login", formData);
+      const response = await axios.post("http://68.183.92.7:8080/login", formData);
       alert(response.data.message);
     } catch (error) {
       console.error(error);

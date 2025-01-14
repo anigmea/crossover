@@ -110,7 +110,7 @@ const CartPage = () => {
 
   useEffect(() => {
     // Fetch data from the backend API
-    axios.get('http://localhost:8080/api/cart_items?UserID=1')
+    axios.get('http://68.183.92.7:8080/api/cart_items?UserID=1')
       .then((response) => {
         console.log(response.data);  // Log the response to check the data structure
         if (Array.isArray(response.data)) {
@@ -139,7 +139,7 @@ const CartPage = () => {
 
   const removeItem = (ProductID, cartID) => {
     // Send DELETE request to remove the item from the database
-    axios.delete(`http://localhost:8080/api/cart_items/${cartID}`)
+    axios.delete(`http://68.183.92.7:8080/api/cart_items/${cartID}`)
       .then((response) => {
         console.log('Item removed from cart:', response.data);
         // After removing from the database, update the UI by removing the item from the state
