@@ -2,7 +2,6 @@ import conn from "./db/connection.mjs";
 import express from "express";
 import cors from "cors";
 import Razorpay from "razorpay";
-import {dirname} from "path";
 import bodyParser from "body-parser";
 import bcrypt from "bcrypt";
 // import jwt from "jsonwebtoken";
