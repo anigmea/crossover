@@ -11,7 +11,6 @@ import { fileURLToPath } from 'url';
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 const queryPromise = (query, values) => {
   return new Promise((resolve, reject) => {
