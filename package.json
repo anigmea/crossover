@@ -16,6 +16,7 @@
     "chokidar": "^4.0.3",
     "cors": "^2.8.5",
     "express": "^4.21.2",
+    "express-session": "^1.18.1",
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.12.0",
@@ -30,6 +31,7 @@
     "react-swiper": "^0.1.5",
     "styled-components": "^6.1.13",
     "swiper": "^11.1.14",
+    "uuid": "^11.0.5",
     "web-vitals": "^2.1.4",
     "webpack-dev-server": "^5.2.0"
   },

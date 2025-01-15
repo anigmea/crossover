@@ -3,19 +3,21 @@ import express from "express";
 import cors from "cors";
 import Razorpay from "razorpay";
 import bodyParser from "body-parser";
+import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcrypt";
-// import jwt from "jsonwebtoken";
-import mysql from "mysql2";
-import {dirname} from "path";
-import { fileURLToPath } from 'url';
+import jwt from "jsonwebtoken";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-const queryPromise = (query, values) => {
+const queryPromise = (query, values = []) => {
   return new Promise((resolve, reject) => {
     conn.query(query, values, (error, results) => {
       if (error) {
+        console.error("Database Error:", error);
         reject(error);
       } else {
         resolve(results);
@@ -26,206 +28,208 @@ const queryPromise = (query, values) => {
 
 // Initialize Razorpay instance
 const razorpay = new Razorpay({
-  key_id: 'rzp_test_585ABTEGO5I2VY',
-  key_secret: 'B6a7MBIysMwXi25mMnztuYaS',
+  key_id: "rzp_test_585ABTEGO5I2VY",
+  key_secret: "B6a7MBIysMwXi25mMnztuYaS",
 });
 
 // Middleware
-app.use(cors()); // Enable Cross-Origin Resource Sharing
-app.use(express.json()); // Parse JSON payloads
-app.use(express.static('../build'));
-// Endpoint to fetch product data
-app.get("/api/data", (req, res) => {
-  const { ProductID } = req.query; // Extract `Pid` from query parameters
-  console.log(`Received request to /api/data with ProductID: ${ProductID}`);
+app.use(cors());
+app.use(express.json());
+app.use(express.static(path.join(__dirname, "../build")));
 
-  if (!ProductID) {
-    // If no Pid is provided, fetch all products
-    conn.query("SELECT * FROM Products", (err, results) => {
-      if (err) {
-        console.error("Error fetching data:", err);
-        res.status(500).json({ message: "Error fetching data" });
-      } else {
-        console.log("All data fetched:", results);
-        res.status(200).json(results);
+// JWT Secret
+const JWT_SECRET = "052ab6fa69d8d9a7bc1e629ab30884c3b4701d6d8afbf2d20ade7ed7ba5ce9fc"; // Replace with a more secure secret
+
+// Middleware to verify JWT
+const verifyToken = (req, res, next) => {
+  const token = req.headers['authorization']?.split(' ')[1]; // Extract token from Authorization header
+
+  if (!token) {
+    return res.status(403).json({ message: "Token is required" });
+  }
+
+  jwt.verify(token, JWT_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ message: "Invalid token" });
+    }
+    req.user = decoded; // Attach the decoded user information to the request
+    next();
+  });
+};
+
+// Route to initialize user and return JWT
+app.get("/initialize", (req, res) => {
+  const userId = uuidv4(); // Generate a new unique user_id
+
+  // Create JWT token with payload (user data) and expiration
+  const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: '1d' });
+
+  res.status(200).json({ message: "New user created", user_id: userId, token: token });
+  console.log(userId);
+});
+
+
+// Endpoint to fetch product data
+app.get("/api/data", async (req, res) => {
+  const { ProductID } = req.query;
+
+  try {
+    let results;
+    if (!ProductID) {
+      results = await queryPromise("SELECT * FROM Products");
+    } else if (isNaN(ProductID)) {
+      return res.status(400).json({ message: "Invalid ProductID" });
+    } else {
+      results = await queryPromise("SELECT * FROM Products WHERE ProductID = ?", [ProductID]);
+      if (results.length === 0) {
+        return res.status(404).json({ message: "Product not found" });
       }
-    });
-  } else if (isNaN(ProductID)) {
-    // Validate that Pid is a number
-    console.warn(`Invalid ProductID provided: ${ProductID}`);
-    res.status(400).json({ message: "Invalid ProductID" });
-  } else {
-    // Fetch product by Pid
-    conn.query("SELECT * FROM Products WHERE ProductID = ?", [ProductID], (err, results) => {
-      if (err) {
-        console.error("Error fetching data:", err);
-        res.status(500).json({ message: "Error fetching data" });
-      } else if (results.length === 0) {
-        console.warn(`No product found for ProductID: ${ProductID}`);
-        res.status(404).json({ message: "Product not found" });
-      } else {
-        console.log("Data fetched for ProductID:", results[0]);
-        res.status(200).json(results[0]);
-      }
-    });
+    }
+    res.status(200).json(results);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching data" });
   }
 });
 
-app.get('/api/product', (req, res) => {
+
+// Fetch product with size and stock details
+app.get("/api/product", async (req, res) => {
   const { ProductID } = req.query;
 
-  // Query to get product data
-  const productQuery = `
-    SELECT p.ProductID, p.Name, p.Price, p.ImageURL,  ps.ProductSizeID, 
-    ps.Stock, s.SizeName 
-    FROM Products p
-    LEFT JOIN ProductSizes ps ON p.ProductID = ps.ProductID
-    LEFT JOIN Sizes s ON ps.SizeID = s.SizeID
-    WHERE p.ProductID = ?
-  `;
+  if (!ProductID || isNaN(ProductID)) {
+    return res.status(400).json({ message: "Invalid ProductID" });
+  }
 
-  conn.query(productQuery, [ProductID], (err, result) => {
-    if (err) {
-      console.error('Error fetching product data:', err);
-      return res.status(500).json({ error: 'Failed to fetch product data' });
+  try {
+    const productQuery = `
+      SELECT p.ProductID, p.Name, p.Price, p.ImageURL, ps.ProductSizeID, 
+      ps.Stock, s.SizeName 
+      FROM Products p
+      LEFT JOIN ProductSizes ps ON p.ProductID = ps.ProductID
+      LEFT JOIN Sizes s ON ps.SizeID = s.SizeID
+      WHERE p.ProductID = ?
+    `;
+    const results = await queryPromise(productQuery, [ProductID]);
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: "Product not found" });
     }
-    
-    const product = result[0]; // Assuming only one product is returned
-    
-    // Group sizes and their stock
-    const sizes = result.map(item => ({
+
+    const product = results[0];
+    const sizes = results.map(item => ({
       size: item.SizeName,
-      stock: item.Stock
+      stock: item.Stock,
     }));
 
     res.status(200).json({
       Name: product.Name,
       Price: product.Price,
       ImageURL: product.ImageURL,
-      Sizes: sizes, // Send the available sizes and their stock
+      Sizes: sizes,
     });
-  });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch product data" });
+  }
 });
 
-app.post("/api/cart", (req, res) => {
-  const {  ProductSizeID, Quantity, UserID } = req.body;
+app.post("/api/cart", async (req, res) => {
+  const { ProductSizeID, Quantity, UserID } = req.body;
+  if (!ProductSizeID || !Quantity || !UserID || isNaN(UserID)) {
+    return res.status(400).json({ message: "Invalid input" });
+  }
+  try {
+    console.log("hello")
+    await queryPromise(
+      "INSERT INTO Cart (UserID, ProductSizeID, Quantity) VALUES (?, ?, ?)",
+      [UserID, ProductSizeID, Quantity]
+    );
+    res.status(200).json({ message: "Item added to cart successfully!" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to add item to cart" });
+  }
+});
 
-  console.log( ProductSizeID, Quantity, UserID);
+// Fetch cart items
+app.get("/api/cart_items", async (req, res) => {
+  const { UserID } = req.query;
 
-  const cartQuery = `
-      INSERT INTO Cart (UserID, ProductSizeID, Quantity)
-      VALUES (?, ?, ?)
+  if (!UserID || isNaN(UserID)) {
+    return res.status(400).json({ message: "Invalid UserID" });
+  }
+
+  try {
+    const query = `
+      SELECT 
+        Cart.CartID AS cart_id,
+        Cart.UserID,
+        Cart.ProductSizeID,
+        Cart.Quantity,
+        Products.ProductID,
+        Products.Name AS product_name,
+        Products.Price AS product_price,
+        Products.ImageURL AS product_image,
+        Sizes.SizeName AS product_size
+      FROM 
+        Cart
+      INNER JOIN 
+        Products ON Cart.ProductSizeID = Products.ProductID
+      INNER JOIN 
+        ProductSizes ON Cart.ProductSizeID = ProductSizes.ProductSizeID
+      INNER JOIN 
+        Sizes ON ProductSizes.SizeID = Sizes.SizeID
+      WHERE 
+        Cart.UserID = ?
     `;
 
-    conn.query(cartQuery, [UserID, ProductSizeID, Quantity], (err, result) => {
-      if (err) {
-        return res.status(500).json({ error: 'Failed to add item to cart' });
-      }
-      res.status(200).json({ message: 'Item added to cart successfully!' });
-    });
+    const results = await queryPromise(query, [UserID]);
 
-});
-
-app.get("/api/cart_items", (req, res) => {
-  const { UserID } = req.query; // Extract `UserID` from query parameters
-  console.log(`Received request to /api/cart_items with UserID: ${UserID}`);
-
-  if (!UserID) {
-    // If no UserID is provided, return an error
-    res.status(400).json({ message: "UserID is required" });
-    return;
-  }
-
-  if (isNaN(UserID)) {
-    // Validate that UserID is a number
-    console.warn(`Invalid UserID provided: ${UserID}`);
-    res.status(400).json({ message: "Invalid UserID" });
-    return;
-  }
-
-  // Query to fetch cart items for a specific UserID
-  const query = `
-    SELECT 
-      Cart.CartID AS cart_id,
-      Cart.UserID,
-      Cart.ProductSizeID,
-      Cart.Quantity,
-      Products.ProductID,
-      Products.Name AS product_name,
-      Products.Price AS product_price,
-      Products.ImageURL AS product_image,
-      Sizes.SizeName AS product_size
-    FROM 
-      Cart
-    INNER JOIN 
-      Products ON Cart.ProductSizeID = Products.ProductID
-    INNER JOIN 
-      ProductSizes ON Cart.ProductSizeID = ProductSizes.ProductSizeID
-    INNER JOIN 
-      Sizes ON ProductSizes.SizeID = Sizes.SizeID
-    WHERE 
-      Cart.UserID = ?
-  `;
-
-  // Execute the query
-  conn.query(query, [UserID], (err, results) => {
-    if (err) {
-      console.error("Error fetching data:", err);
-      res.status(500).json({ message: "Error fetching data" });
-    } else if (results.length === 0) {
-      console.warn(`No cart items found for UserID: ${UserID}`);
-      res.status(404).json({ message: "No cart items found" });
-    } else {
-      console.log("Cart items fetched for UserID:", results);
-      res.status(200).json(results);
+    if (results.length === 0) {
+      return res.status(404).json({ message: "No cart items found" });
     }
-  });
+
+    res.status(200).json(results);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching cart items" });
+  }
 });
 
-app.delete("/api/cart_items/:cart_id", (req, res) => {
+// Delete cart item
+app.delete("/api/cart_items/:cart_id", async (req, res) => {
   const { cart_id } = req.params;
 
-  // Query to delete the cart item based on cart_id
-  conn.query("DELETE FROM Cart WHERE CartID = ?", [cart_id], (err, results) => {
-    if (err) {
-      console.error("Error deleting cart item:", err);
-      res.status(500).json({ message: "Error deleting cart item" });
-    } else {
-      console.log(`Cart item with CartID: ${cart_id} deleted successfully`);
-      res.status(200).json({ message: "Cart item removed successfully" });
-    }
-  });
+  if (!cart_id || isNaN(cart_id)) {
+    return res.status(400).json({ message: "Invalid CartID" });
+  }
+
+  try {
+    await queryPromise("DELETE FROM Cart WHERE CartID = ?", [cart_id]);
+    res.status(200).json({ message: "Cart item removed successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting cart item" });
+  }
 });
 
+
 // Endpoint to create a Razorpay order
-app.post('/api/create-order', async (req, res) => {
-  const { amount } = req.body; // Extract amount from request body
-  console.log(`Received request to create order with amount: ${amount}`);
+app.post("/api/create-order", async (req, res) => {
+  const { amount } = req.body;
 
   if (!amount || isNaN(amount)) {
-    // Validate amount
-    console.error("Invalid amount provided");
     return res.status(400).json({ error: "Invalid amount" });
   }
 
   try {
-    // Create an order using Razorpay
     const order = await razorpay.orders.create({
-      amount: amount * 100, // Amount in paisa (smallest currency unit)
-      currency: 'INR',
-      receipt: `receipt_${new Date().getTime()}`, // Unique receipt ID
+      amount: amount * 100, // Amount in paisa
+      currency: "INR",
+      receipt: `receipt_${new Date().getTime()}`,
     });
-
-    console.log("Order created successfully:", order);
     res.json({ orderId: order.id });
   } catch (error) {
-    console.error("Error creating Razorpay order:", error);
     res.status(500).json({ error: "Failed to create order" });
   }
 });
 
-// Secret for JWT
-// const JWT_SECRET = "your_secret_key";
 
 app.post("/signup", async (req, res) => {
   const { username, email, password } = req.body;

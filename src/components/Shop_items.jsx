@@ -76,6 +76,9 @@ text-decoration: None;
 
 const ShopPage = () => {
     const [data, setData] = useState([]);
+    const [serverData, setServerData] = useState(null); // State to store server response
+    const [loading, setLoading] = useState(true); // State to handle loading state
+    const [error, setError] = useState(null); // State to handle errors
 
     useEffect(() => {
       // Fetch data from the backend API

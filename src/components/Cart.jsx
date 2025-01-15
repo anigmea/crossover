@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
+import useAuth from "../Pages/useAuth";
+
 
 // Styled Components (unchanged)
 const CartWrapper = styled.div`
@@ -107,10 +109,11 @@ const CheckoutButton = styled.button`
 // Main Component
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);  // Initialize with an empty array
-
+  const { serverData, loading, error, jwtToken, isTokenLoaded } = useAuth();
+  const userID = jwtToken
   useEffect(() => {
     // Fetch data from the backend API
-    axios.get('http://68.183.92.7:8080/api/cart_items?UserID=1')
+    axios.get(`http://68.183.92.7:8080/api/cart_items?UserID=${userID}`)
       .then((response) => {
         console.log(response.data);  // Log the response to check the data structure
         if (Array.isArray(response.data)) {

@@ -2,6 +2,8 @@ import { React, useState, useEffect } from "react";
 import { useLocation } from 'react-router-dom';
 import styled from "styled-components";
 import axios from "axios";
+import useAuth from "../Pages/useAuth";
+
 
 // Styled Components
 const PageWrapper = styled.div`
@@ -125,6 +127,7 @@ const AccordionContent = styled.div`
 
 // Main Component
 const Product = () => {
+  const [jwtToken, setJwtToken] = useState(localStorage.getItem("token") || null); // Retrieve the token from localStorage if it exists
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const value = queryParams.get('ProductID'); // Retrieve the value of a specific query parameter
@@ -154,7 +157,7 @@ const Product = () => {
     axios.post('http://68.183.92.7:8080/api/cart', {
       ProductSizeID: selectedSize, // Use the selected ProductSizeID
       Quantity: quantity,
-      UserID: 1 // Assuming UserID is 1 for testing, modify as needed
+      UserID: jwtToken // Assuming UserID is 1 for testing, modify as needed
     })
     .then(response => {
       console.log('Item added to cart:', response);
