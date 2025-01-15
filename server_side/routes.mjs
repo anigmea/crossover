@@ -195,7 +195,7 @@ app.get("/api/cart_items", async (req, res) => {
 
     res.status(200).json(results);
   } catch (error) {
-    res.status(500).json({ message: "Error fetching cart items" });
+    res.status(500).json({ message: error });
   }
 });
 
