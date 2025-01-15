@@ -40,32 +40,38 @@ app.use(express.static(path.join(__dirname, "../build")));
 // JWT Secret
 const JWT_SECRET = "052ab6fa69d8d9a7bc1e629ab30884c3b4701d6d8afbf2d20ade7ed7ba5ce9fc"; // Replace with a more secure secret
 
-// Middleware to verify JWT
-const verifyToken = (req, res, next) => {
-  const token = req.headers['authorization']?.split(' ')[1]; // Extract token from Authorization header
+app.post("/verify-token", (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1]; // Extract token from Authorization header
 
   if (!token) {
-    return res.status(403).json({ message: "Token is required" });
+    return res.status(400).json({ message: "Token is required" });
   }
 
-  jwt.verify(token, JWT_SECRET, (err, decoded) => {
-    if (err) {
-      return res.status(401).json({ message: "Invalid token" });
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET); // Verify the token
+    const { NewuserId } = decoded;
+
+    if (!NewuserId) {
+      return res.status(400).json({ message: "User ID is missing in the token" });
     }
-    req.user = decoded; // Attach the decoded user information to the request
-    next();
-  });
-};
+
+    // If you just need the user_id from the token
+    res.status(200).json({ NewuserId });
+
+  } catch (err) {
+    res.status(401).json({ message: "Invalid or expired token" });
+  }
+});
+
 
 // Route to initialize user and return JWT
 app.get("/initialize", (req, res) => {
-  const userId = uuidv4(); // Generate a new unique user_id
+  const NewuserId = uuidv4(); // Generate a new unique user_id
 
   // Create JWT token with payload (user data) and expiration
-  const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: '1d' });
+  const token = jwt.sign({ NewuserId }, JWT_SECRET, { expiresIn: '1d' });
 
-  res.status(200).json({ message: "New user created", user_id: userId, token: token });
-  console.log(userId);
+  res.status(200).json({ message: "New user created", user_id: NewuserId, token: token });
 });
 
 
@@ -133,15 +139,15 @@ app.get("/api/product", async (req, res) => {
 });
 
 app.post("/api/cart", async (req, res) => {
-  const { ProductSizeID, Quantity, UserID } = req.body;
-  if (!ProductSizeID || !Quantity || !UserID || isNaN(UserID)) {
+  const { ProductSizeID, Quantity} = req.body;
+  if (!ProductSizeID || !Quantity) {
     return res.status(400).json({ message: "Invalid input" });
   }
   try {
     console.log("hello")
     await queryPromise(
       "INSERT INTO Cart (UserID, ProductSizeID, Quantity) VALUES (?, ?, ?)",
-      [UserID, ProductSizeID, Quantity]
+      [jwtToken, ProductSizeID, Quantity]
     );
     res.status(200).json({ message: "Item added to cart successfully!" });
   } catch (error) {

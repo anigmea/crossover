@@ -1,19 +1,18 @@
-// Home.js
 import React from "react";
 import styled from "styled-components";
 import Navbar from "../components/navbar";
 import Carousel from "../components/carousel";
 import Footer from "../components/Footer";
 import POSTER from "../components/poster";
-import useAuth from "./useAuth"; // Import the custom hook for authentication and data fetching
+import useAuth from "./useAuth"; // Import the custom hook for authentication
 
 const DivWrapper = styled.div``;
 
 const Home = () => {
-  const { serverData, loading, error, jwtToken, isTokenLoaded } = useAuth(); // Use the custom hook
+  const { user, loading, error, jwtToken } = useAuth(); // Use the custom hook
 
   if (loading) {
-    return <div>Loading...</div>; // Show a loading message while fetching data
+    return <div>Loading...</div>; // Show a loading message while data is being fetched
   }
 
   if (error) {
@@ -25,6 +24,16 @@ const Home = () => {
       <Navbar style={{ position: "absolute", color: "white" }} />
       <Carousel />
       <POSTER />
+
+      {/* Example of displaying fetched user data
+      {user && (
+        <div>
+          <h2>Welcome, User ID: {user}</h2>
+        </div>
+      )}
+
+      {jwtToken && <p>JWT Token: {jwtToken}</p>} */}
+
       <Footer />
     </DivWrapper>
   );

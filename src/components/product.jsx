@@ -127,7 +127,8 @@ const AccordionContent = styled.div`
 
 // Main Component
 const Product = () => {
-  const [jwtToken, setJwtToken] = useState(localStorage.getItem("token") || null); // Retrieve the token from localStorage if it exists
+
+  const { user, loading, error, jwtToken } = useAuth(); // Use the custom hook
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const value = queryParams.get('ProductID'); // Retrieve the value of a specific query parameter
@@ -157,7 +158,7 @@ const Product = () => {
     axios.post('http://68.183.92.7:8080/api/cart', {
       ProductSizeID: selectedSize, // Use the selected ProductSizeID
       Quantity: quantity,
-      UserID: jwtToken // Assuming UserID is 1 for testing, modify as needed
+      UserID: user // Assuming UserID is 1 for testing, modify as needed
     })
     .then(response => {
       console.log('Item added to cart:', response);

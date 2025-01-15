@@ -3,8 +3,7 @@ import axios from "axios";
 import styled from "styled-components";
 import useAuth from "../Pages/useAuth";
 
-
-// Styled Components (unchanged)
+// Styled Components
 const CartWrapper = styled.div`
   font-family: "Yeezy", sans-serif;
   padding: 20px;
@@ -108,85 +107,93 @@ const CheckoutButton = styled.button`
 
 // Main Component
 const CartPage = () => {
-  const [cartItems, setCartItems] = useState([]);  // Initialize with an empty array
-  const { serverData, loading, error, jwtToken, isTokenLoaded } = useAuth();
-  const userID = jwtToken
+  const [cartItems, setCartItems] = useState([]);
+  const { user, loading, error, jwtToken } = useAuth(); // Use the custom hook
+
   useEffect(() => {
-    // Fetch data from the backend API
-    axios.get(`http://68.183.92.7:8080/api/cart_items?UserID=${userID}`)
-      .then((response) => {
-        console.log(response.data);  // Log the response to check the data structure
-        if (Array.isArray(response.data)) {
-          setCartItems(response.data);
-        } else if (typeof response.data === 'object') {
-          // If it's an object, wrap it in an array
-          setCartItems([response.data]);
-        } else {
-          console.error('Unexpected response format:', response.data);
-          setCartItems([]);  // Set empty array in case of unexpected data format
-        }
-      })
-      .catch((error) => {
-        console.error('There was an error fetching the data!', error);
-        setCartItems([]);  // Set empty array in case of error
-      });
-  }, []);
+    if (user) {
+      // Fetch cart items for the logged-in user
+      axios
+        .get(`http://68.183.92.7:8080/api/cart_items?UserID=${user}`, {
+          headers: { Authorization: `Bearer ${jwtToken}` },
+        })
+        .then((response) => {
+          setCartItems(response.data || []);
+        })
+        .catch((error) => {
+          console.error("Error fetching cart items:", error);
+        });
+    }
+  }, [user, jwtToken]);
 
   const updateQuantity = (ProductID, delta) => {
     setCartItems((prevItems) =>
       prevItems.map((item) =>
-        item.ProductID === ProductID ? { ...item, Quantity: Math.max(1, item.Quantity + delta) } : item
+        item.ProductID === ProductID
+          ? { ...item, Quantity: Math.max(1, item.Quantity + delta) }
+          : item
       )
     );
   };
 
   const removeItem = (ProductID, cartID) => {
-    // Send DELETE request to remove the item from the database
-    axios.delete(`http://68.183.92.7:8080/api/cart_items/${cartID}`)
-      .then((response) => {
-        console.log('Item removed from cart:', response.data);
-        // After removing from the database, update the UI by removing the item from the state
-        setCartItems((prevItems) => prevItems.filter((item) => item.cart_id !== cartID));
+    axios
+      .delete(`http://68.183.92.7:8080/api/cart_items/${cartID}`, {
+        headers: { Authorization: `Bearer ${jwtToken}` },
+      })
+      .then(() => {
+        setCartItems((prevItems) =>
+          prevItems.filter((item) => item.cart_id !== cartID)
+        );
       })
       .catch((error) => {
-        console.error('There was an error removing the item!', error);
+        console.error("Error removing item:", error);
       });
   };
 
-  // Calculate subtotal
-  const subtotal = cartItems.reduce((acc, item) => acc + parseFloat(item.product_price) * item.Quantity, 0).toFixed(2);
+  const subtotal = cartItems
+    .reduce(
+      (acc, item) => acc + parseFloat(item.product_price) * item.Quantity,
+      0
+    )
+    .toFixed(2);
 
   return (
+    
     <CartWrapper>
-      {/* Cart Header */}
       <CartHeader>Shopping Cart</CartHeader>
-
-      {/* Cart Items */}
       <CartItems>
         {cartItems.map((item) => (
           <CartItem key={item.cart_id}>
-            <ProductImage src={`/images/${item.product_image}`} alt={item.product_name} />
+            <ProductImage
+              src={`/images/${item.product_image}`}
+              alt={item.product_name}
+            />
             <ProductDetails>
               <ProductTitle>{item.product_name}</ProductTitle>
               <ProductPrice>₹{item.product_price}</ProductPrice>
-
-              {/* Quantity Controls */}
               <QuantityControls>
-                <button onClick={() => updateQuantity(item.ProductID, -1)}>-</button>
+                <button onClick={() => updateQuantity(item.ProductID, -1)}>
+                  -
+                </button>
                 <input type="text" value={item.Quantity} readOnly />
-                <button onClick={() => updateQuantity(item.ProductID, 1)}>+</button>
+                <button onClick={() => updateQuantity(item.ProductID, 1)}>
+                  +
+                </button>
               </QuantityControls>
-
-              {/* Remove Button */}
-              <RemoveButton onClick={() => removeItem(item.ProductID, item.cart_id)}>Remove</RemoveButton>
+              <RemoveButton
+                onClick={() => removeItem(item.ProductID, item.cart_id)}
+              >
+                Remove
+              </RemoveButton>
             </ProductDetails>
           </CartItem>
         ))}
       </CartItems>
-
-      {/* Cart Summary */}
       <CartSummary>
-        <Subtotal>Subtotal ({cartItems.length} items): ₹{subtotal}</Subtotal>
+        <Subtotal>
+          Subtotal ({cartItems.length} items): ₹{subtotal}
+        </Subtotal>
         <a href="/#/Checkout">
           <CheckoutButton>Proceed to Checkout</CheckoutButton>
         </a>
