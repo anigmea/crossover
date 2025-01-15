@@ -139,15 +139,15 @@ app.get("/api/product", async (req, res) => {
 });
 
 app.post("/api/cart", async (req, res) => {
-  const { ProductSizeID, Quantity} = req.body;
-  if (!ProductSizeID || !Quantity) {
+  const { ProductSizeID, Quantity, UserID} = req.body;
+  if (!ProductSizeID || !Quantity || !UserID) {
     return res.status(400).json({ message: "Invalid input" });
   }
   try {
     console.log("hello")
     await queryPromise(
       "INSERT INTO Cart (UserID, ProductSizeID, Quantity) VALUES (?, ?, ?)",
-      [user, ProductSizeID, Quantity]
+      [UserID, ProductSizeID, Quantity]
     );
     res.status(200).json({ message: "Item added to cart successfully!" });
   } catch (error) {
