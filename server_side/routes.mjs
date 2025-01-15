@@ -139,18 +139,21 @@ app.get("/api/product", async (req, res) => {
 });
 
 app.post("/api/cart", async (req, res) => {
-  const { ProductSizeID, Quantity, UserID} = req.body;
+  const { ProductSizeID, Quantity, UserID } = req.body;
+
   if (!ProductSizeID || !Quantity || !UserID) {
     return res.status(400).json({ message: "Invalid input" });
   }
+
   try {
-    console.log(UserID, ProductSizeID, Quantity)
+    console.log("Received Data:", { ProductSizeID, Quantity, UserID }); // Debug log
     await queryPromise(
       "INSERT INTO Cart (UserID, ProductSizeID, Quantity) VALUES (?, ?, ?)",
       [UserID, ProductSizeID, Quantity]
     );
     res.status(200).json({ message: "Item added to cart successfully!" });
   } catch (error) {
+    console.error("Database error:", error); // Log detailed error
     res.status(500).json({ error: "Failed to add item to cart" });
   }
 });
@@ -162,7 +165,7 @@ app.get("/api/cart_items", async (req, res) => {
   if (!UserID || isNaN(UserID)) {
     return res.status(400).json({ message: "Invalid UserID" });
   }
-
+  
   try {
     const query = `
       SELECT 

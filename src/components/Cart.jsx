@@ -114,9 +114,7 @@ const CartPage = () => {
     if (user) {
       // Fetch cart items for the logged-in user
       axios
-        .get(`http://68.183.92.7:8080/api/cart_items?UserID=${user}`, {
-          headers: { Authorization: `Bearer ${jwtToken}` },
-        })
+        .get(`http://68.183.92.7:8080/api/cart_items?UserID=${user}`)
         .then((response) => {
           setCartItems(response.data || []);
         })
@@ -124,7 +122,7 @@ const CartPage = () => {
           console.error("Error fetching cart items:", error);
         });
     }
-  }, [user, jwtToken]);
+  }, [user]);
 
   const updateQuantity = (ProductID, delta) => {
     setCartItems((prevItems) =>
