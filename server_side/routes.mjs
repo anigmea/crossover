@@ -144,7 +144,7 @@ app.post("/api/cart", async (req, res) => {
     return res.status(400).json({ message: "Invalid input" });
   }
   try {
-    console.log("hello")
+    console.log(UserID, ProductSizeID, Quantity)
     await queryPromise(
       "INSERT INTO Cart (UserID, ProductSizeID, Quantity) VALUES (?, ?, ?)",
       [UserID, ProductSizeID, Quantity]
