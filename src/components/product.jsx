@@ -153,7 +153,7 @@ const Product = () => {
       alert("Please select a size before adding to cart.");
       return;
     }
-    alert("hello");
+    alert(user);
     // Now use selectedSize (ProductSizeID) to add to cart
     axios.post('http://68.183.92.7:8080/api/cart', {
       ProductSizeID: selectedSize, // Use the selected ProductSizeID
