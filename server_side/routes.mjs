@@ -147,7 +147,7 @@ app.post("/api/cart", async (req, res) => {
     console.log("hello")
     await queryPromise(
       "INSERT INTO Cart (UserID, ProductSizeID, Quantity) VALUES (?, ?, ?)",
-      [jwtToken, ProductSizeID, Quantity]
+      [user, ProductSizeID, Quantity]
     );
     res.status(200).json({ message: "Item added to cart successfully!" });
   } catch (error) {
