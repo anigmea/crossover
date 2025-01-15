@@ -98,7 +98,7 @@ pool.getConnection((err, connection) => {
         console.error("Error connecting to the database:", err);
         return;
     }
-    console.log("Database Connected Successfully!1234567");
+    console.log("Database Connected Successfully!");
     connection.release(); // Release the connection back to the pool
 });
 
