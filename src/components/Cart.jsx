@@ -111,6 +111,7 @@ const CartPage = () => {
   const { user, loading, error, jwtToken } = useAuth(); // Use the custom hook
 
   useEffect(() => {
+    console.log(user);
     if (user) {
       // Fetch cart items for the logged-in user
       axios
