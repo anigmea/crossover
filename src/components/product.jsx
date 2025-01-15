@@ -153,7 +153,7 @@ const Product = () => {
       alert("Please select a size before adding to cart.");
       return;
     }
-    alert(user);
+    
     // Now use selectedSize (ProductSizeID) to add to cart
     axios.post('http://68.183.92.7:8080/api/cart', {
       ProductSizeID: selectedSize, // Use the selected ProductSizeID
@@ -162,6 +162,7 @@ const Product = () => {
     })
     .then(response => {
       console.log('Item added to cart:', response);
+      alert("Item Added to the Cart");
     })
     .catch(error => {
       console.error('Error adding item to cart:', error);
