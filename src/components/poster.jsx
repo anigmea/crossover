@@ -10,6 +10,10 @@ const PosterWrapper = styled.div`
     grid-gap: 2%;
     padding: 0% 1%;
     height: 100vh;
+
+    @media (max-width: 768px) {
+        height:  50vh;
+      }
 `;
 
 const ImageContainer = styled.div`
@@ -45,6 +49,10 @@ const TextOverlay = styled.div`
     border-radius: 5px;
     padding-top: 175%;
     background-color: rgba(0, 0, 0, 0.4); /* Black background with 70% opacity */
+
+    @media (max-width: 768px) {
+        font-size: 20px;
+      }
 `;
 
 const Poster = () => {

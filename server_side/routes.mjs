@@ -279,28 +279,52 @@ app.post("/api/create-order", async (req, res) => {
 });
 
 
-app.post("/signup", async (req, res) => {
-  const { username, email, password } = req.body;
 
-  if (!username || !email || !password) {
-    return res.status(400).json({ message: "All fields are required" });
-  }
+app.post('/signup', async (req, res) => {
+  const { firstName, lastName, email, password } = req.body;
 
-  const hashedPassword = await bcrypt.hash(password, 10);
+  // If NewuserId is not passed, return an error
 
-  conn.query(
-    "INSERT INTO users (username, email, password) VALUES (?, ?, ?)",
-    [username, email, hashedPassword],
-    (err) => {
+  try {
+    // Check if the email is already registered
+    const query = 'SELECT * FROM Users WHERE Email = ?';
+    conn.query(query, [email], (err, results) => {
       if (err) {
         console.error(err);
-        return res.status(500).json({ message: "Error creating user" });
+        return res.status(500).json({ message: 'Error checking email' });
       }
-      res.status(201).json({ message: "User created successfully" });
-    }
-  );
-});
 
+      if (results.length > 0) {
+        return res.status(400).json({ message: 'Email already in use.' });
+      }
+
+      // Hash the password before saving it
+      bcrypt.hash(password, 10, (err, hashedPassword) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).json({ message: 'Error hashing password' });
+        }
+
+        // Prepare the SQL query to insert the new user into the database
+        const insertQuery = `INSERT INTO Users (UserID, FirstName, LastName, Email, PasswordHash, NewUserId, CreatedAt, UpdatedAt) 
+                             VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())`;
+
+        // Insert the new user into the database
+        conn.query(insertQuery, [newUserId, firstName, lastName, email, hashedPassword], (err, result) => {
+          if (err) {
+            console.error(err);
+            return res.status(500).json({ message: 'Error signing up' });
+          }
+
+          res.status(201).json({ message: 'User signed up successfully!' });
+        });
+      });
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error signing up' });
+  }
+});
 // app.post("/login", (req, res) => {
 //   const { email, password } = req.body;
 

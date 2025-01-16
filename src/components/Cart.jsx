@@ -7,11 +7,17 @@ import useAuth from "../Pages/useAuth";
 const CartWrapper = styled.div`
   font-family: "Yeezy", sans-serif;
   padding: 20px;
+  @media (max-width: 768px) {
+    padding: 10px;
+  }
 `;
 
 const CartHeader = styled.h1`
   font-size: 24px;
   margin-bottom: 20px;
+  @media (max-width: 768px) {
+    font-size: 20px;
+  }
 `;
 
 const CartItems = styled.div`
@@ -23,29 +29,59 @@ const CartItems = styled.div`
 
 const CartItem = styled.div`
   display: flex;
-  gap: 20px;
+  justify-content: space-between; /* Fix alignment */
+  align-items: center; /* Align items vertically in center */
   border-bottom: 1px solid #ddd;
   padding-bottom: 20px;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
 `;
 
 const ProductImage = styled.img`
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
   object-fit: cover;
+  @media (max-width: 768px) {
+    width: 100px;
+    height: 100px;
+  }
 `;
 
 const ProductDetails = styled.div`
   flex: 1;
+  text-align: left; /* Default alignment for desktop */
+  @media (max-width: 768px) {
+    text-align: center;
+    margin-top: 10px;
+  }
 `;
 
 const ProductTitle = styled.h2`
   font-size: 18px;
   margin-bottom: 10px;
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
 `;
 
 const ProductPrice = styled.p`
   font-size: 16px;
   color: #b12704;
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
+`;
+
+const SizeSelector = styled.select`
+  margin-top: 10px;
+  padding: 5px;
+  font-size: 14px;
+  @media (max-width: 768px) {
+    font-size: 12px;
+  }
 `;
 
 const QuantityControls = styled.div`
@@ -64,6 +100,14 @@ const QuantityControls = styled.div`
     font-size: 14px;
     cursor: pointer;
   }
+
+  @media (max-width: 768px) {
+    gap: 5px;
+    button {
+      font-size: 12px;
+      padding: 5px;
+    }
+  }
 `;
 
 const RemoveButton = styled.button`
@@ -76,6 +120,9 @@ const RemoveButton = styled.button`
   &:hover {
     text-decoration: underline;
   }
+  @media (max-width: 768px) {
+    font-size: 12px;
+  }
 `;
 
 const CartSummary = styled.div`
@@ -85,10 +132,18 @@ const CartSummary = styled.div`
   padding: 20px;
   border-bottom: 2px solid #ddd;
   margin-bottom: 20px;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
+  }
 `;
 
 const Subtotal = styled.h2`
   font-size: 18px;
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
 `;
 
 const CheckoutButton = styled.button`
@@ -102,6 +157,10 @@ const CheckoutButton = styled.button`
 
   &:hover {
     background-color: #d48806;
+  }
+  @media (max-width: 768px) {
+    font-size: 14px;
+    padding: 12px 15px;
   }
 `;
 
@@ -125,22 +184,17 @@ const CartPage = () => {
   }, [user]);
 
   const updateQuantity = (ProductID, delta, cartID) => {
-    // Calculate the new quantity locally
     const updatedCartItems = cartItems.map((item) =>
       item.ProductID === ProductID
         ? { ...item, Quantity: Math.max(1, item.Quantity + delta) }
         : item
     );
-  
-    // Find the updated item
     const updatedItem = updatedCartItems.find(
       (item) => item.ProductID === ProductID
     );
   
-    // Update the state locally for instant feedback
     setCartItems(updatedCartItems);
   
-    // Send a PUT request to update the quantity in the database
     axios
       .put(
         `https://crossover.in.net:8080/api/cart_items/${cartID}`,
@@ -154,7 +208,6 @@ const CartPage = () => {
       })
       .catch((error) => {
         console.error("Error updating quantity:", error);
-        // Rollback local state if the update fails
         setCartItems(cartItems);
       });
   };
@@ -174,6 +227,27 @@ const CartPage = () => {
       });
   };
 
+  const updateSize = (cartID, newSizeID) => {
+    axios
+      .put(
+        `https://crossover.in.net:8080/api/cart_items/${cartID}`,
+        { ProductSizeID: newSizeID },
+        { headers: { Authorization: `Bearer ${jwtToken}` } }
+      )
+      .then((response) => {
+        const updatedCartItems = cartItems.map((item) =>
+          item.cart_id === cartID
+            ? { ...item, ProductSizeID: newSizeID }
+            : item
+        );
+        setCartItems(updatedCartItems);
+        console.log("Size updated successfully:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error updating size:", error);
+      });
+  };
+
   const subtotal = cartItems
     .reduce(
       (acc, item) => acc + parseFloat(item.product_price) * item.Quantity,
@@ -182,7 +256,6 @@ const CartPage = () => {
     .toFixed(2);
 
   return (
-    
     <CartWrapper>
       <CartHeader>Shopping Cart</CartHeader>
       <CartItems>
@@ -195,6 +268,16 @@ const CartPage = () => {
             <ProductDetails>
               <ProductTitle>{item.product_name}</ProductTitle>
               <ProductPrice>₹{item.product_price}</ProductPrice>
+              <SizeSelector
+                value={item.ProductSizeID || ""}
+                onChange={(e) => updateSize(item.cart_id, e.target.value)}
+              >
+                {item.available_sizes && item.available_sizes.map((size) => (
+                  <option key={size.ProductSizeID} value={size.ProductSizeID}>
+                    {size.size_name}
+                  </option>
+                ))}
+              </SizeSelector>
               <QuantityControls>
                 <button onClick={() => updateQuantity(item.ProductID, -1, item.cart_id)}>
                   -

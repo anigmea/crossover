@@ -4,12 +4,16 @@ import styled from "styled-components";
 import axios from "axios";
 import useAuth from "../Pages/useAuth";
 
-
 // Styled Components
 const PageWrapper = styled.div`
   font-family: "Yeezy", sans-serif;  
   padding: 20px;
   font-size: 20px;
+
+  @media (max-width: 768px) {
+    padding: 10px;
+    font-size: 16px;
+  }
 `;
 
 const Breadcrumbs = styled.div`
@@ -29,33 +33,66 @@ const Breadcrumbs = styled.div`
 const ProductSection = styled.div`
   display: flex;
   gap: 30px;
+  flex-wrap: wrap;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const ProductImage = styled.img`
   width: 30%;
   border-radius: 8px;
   object-fit: cover;
+
+  @media (max-width: 768px) {
+    width: 80%;
+    margin-bottom: 20px;
+  }
 `;
 
 const ProductDetails = styled.div`
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  @media (max-width: 768px) {
+    align-items: center;
+    text-align: center;
+  }
 `;
 
 const ProductTitle = styled.h1`
   font-size: 28px;
   margin-bottom: 10px;
+
+  @media (max-width: 768px) {
+    font-size: 24px;
+  }
 `;
 
 const ProductPrice = styled.p`
   font-size: 22px;
   color: #b12704;
   margin-bottom: 20px;
+
+  @media (max-width: 768px) {
+    font-size: 18px;
+  }
 `;
 
 const SizeSelector = styled.select`
   margin-bottom: 20px;
   padding: 10px;
   font-size: 14px;
+  width: 200px;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    font-size: 16px;
+  }
 `;
 
 const QuantitySelector = styled.div`
@@ -69,6 +106,10 @@ const QuantitySelector = styled.div`
     text-align: center;
     font-size: 14px;
   }
+
+  @media (max-width: 768px) {
+    gap: 5px;
+  }
 `;
 
 const AddToCartButton = styled.button`
@@ -79,14 +120,26 @@ const AddToCartButton = styled.button`
   border: none;
   border-radius: 5px;
   cursor: pointer;
-
+  width: 200px;
+  
   &:hover {
     background-color: #003593;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    font-size: 18px;
+    padding: 12px 15px;
   }
 `;
 
 const Accordion = styled.div`
   margin-top: 30px;
+  width: 100%;
+
+  @media (max-width: 768px) {
+    margin-top: 20px;
+  }
 `;
 
 const AccordionHeader = styled.div`
@@ -101,33 +154,45 @@ const AccordionHeader = styled.div`
   &:hover{
     text-decoration: underline;
   }
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
 `;
 
-const SwatchContainer = styled.div
-`  display: flex;
+const SwatchContainer = styled.div`
+  display: flex;
   gap: 10px;
-  margin-bottom: 20px;`
-;
+  margin-bottom: 20px;
 
-const Swatch = styled.button
-`  width: 30px;
+  @media (max-width: 768px) {
+    justify-content: center;
+    gap: 5px;
+  }
+`;
+
+const Swatch = styled.button`
+  width: 30px;
   height: 30px;
   border: 2px solid ${(props) => (props.active ? "#000" : "#ccc")};
   border-radius: 50%;
   background-color: ${(props) => props.color};
-  cursor: pointer;`
-;
+  cursor: pointer;
+`;
 
 const AccordionContent = styled.div`
   padding: 10px;
   display: ${(props) => (props.open ? "block" : "none")};
   font-size: 14px;
   color: #555;
+  
+  @media (max-width: 768px) {
+    font-size: 12px;
+  }
 `;
 
 // Main Component
 const Product = () => {
-
   const { user, loading, error, jwtToken } = useAuth(); // Use the custom hook
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -146,7 +211,7 @@ const Product = () => {
       .catch((error) => {
         console.error('There was an error fetching the data!', error);
       });
-  }, []);
+  }, [value]);
 
   const addItemtoCart = () => {
     if (!selectedSize) {
@@ -183,18 +248,18 @@ const Product = () => {
 
           {/* Size Selector */}
           <SizeSelector 
-  onChange={(e) => {
-    setSelectedSize(1); // Set the ProductSizeID here
-  }} 
-  defaultValue=""
->
-  <option value="" disabled>Select Size</option>
-  {data.Sizes && data.Sizes.map((size, index) => (
-    <option key={index} value={size.ProductSizeID}>
-      {size.size} {/* Display the size name, but the value is the ProductSizeID */}
-    </option>
-  ))}
-</SizeSelector>
+            onChange={(e) => {
+              setSelectedSize(e.target.value); // Set the ProductSizeID here
+            }} 
+            defaultValue=""
+          >
+            <option value="" disabled>Select Size</option>
+            {data.Sizes && data.Sizes.map((size, index) => (
+              <option key={index} value={size.ProductSizeID}>
+                {size.size} {/* Display the size name, but the value is the ProductSizeID */}
+              </option>
+            ))}
+          </SizeSelector>
 
           {/* Quantity Selector */}
           <QuantitySelector>

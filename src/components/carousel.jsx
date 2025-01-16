@@ -14,7 +14,11 @@ import { Autoplay } from 'swiper/modules';
 
 const IMAGE = styled.img`
 height: 86vh;
-width: 100%;`;
+width: 100%;
+
+@media (max-width: 768px) {
+  height:  50vh;
+}`;
 
 const Carousel = () => {
     return (

@@ -30,6 +30,10 @@ const Banner = styled.div`
     justify-content: center;
     font-size: 48px;
     font-weight: bold;
+
+    @media (max-width: 768px) {
+        height:  200px;
+      }
 `;
 
 const ProductGrid = styled.div`
@@ -37,6 +41,10 @@ const ProductGrid = styled.div`
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 20px;
     padding-top: 20px;
+
+    @media (max-width: 768px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
 `;
 
 const ProductCard = styled.div`
@@ -52,6 +60,10 @@ const ProductImage = styled.img`
     width: 100%;
     height: 500px;
     object-fit: cover;
+
+    @media (max-width: 768px) {
+        height:  250px;
+      }
 `;
 
 const ProductInfo = styled.div`

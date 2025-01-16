@@ -4,8 +4,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping, faUser } from "@fortawesome/free-solid-svg-icons";
 import { useLocation } from "react-router-dom";
 
-
-  
 const NavbarWrapper = styled.div`
   width: 94%;
   max-height: 200px;
@@ -13,12 +11,19 @@ const NavbarWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 3%;
+  flex-direction: row;
   background-color: ${(props) => (props.isHome ? "transparent" : "#f4f4f4")};
   color: ${(props) => (props.isHome ? "white" : "black")};
   box-shadow: ${(props) => (props.isHome ? "none" : "0px 2px 5px rgba(0, 0, 0, 0.1)")};
   position: ${(props) => (props.isHome ? "absolute" : "relative")};
   z-index: 10;
 
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    justify-content: left;
+    padding: 2%;
+  }
 `;
 
 const LOGO = styled.a`
@@ -26,6 +31,12 @@ const LOGO = styled.a`
   font-size: 40px;
   font-family: "Yeezy", sans-serif;
   text-decoration: none;
+  margin-bottom: 10px;
+
+  @media (max-width: 768px) {
+    font-size: 30px;
+    margin-bottom: 0px;
+  }
 `;
 
 const LINK_DIV = styled.div`
@@ -34,6 +45,12 @@ const LINK_DIV = styled.div`
   align-items: center;
   justify-content: center;
   padding-top: 15px;
+
+  @media (max-width: 768px) {
+    width: 30%;
+    justify-content: space-around;
+    margin-bottom: 15px;
+  }
 `;
 
 const LINK = styled.a`
@@ -46,6 +63,11 @@ const LINK = styled.a`
   &:hover {
     text-decoration: underline;
   }
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+    padding-left: 0;
+  }
 `;
 
 const SIGNIN_DIV = styled.div`
@@ -54,6 +76,12 @@ const SIGNIN_DIV = styled.div`
   grid-template-columns: 1fr 1fr;
   align-items: left;
   padding-top: 15px;
+
+  @media (max-width: 768px) {
+    width: 20%;
+    grid-template-columns: 1fr 1fr;
+    justify-content: center;
+  }
 `;
 
 const IconWrapper = styled.div`
@@ -63,6 +91,10 @@ const IconWrapper = styled.div`
   a {
     color: inherit; /* Ensures the link inherits the color from the IconWrapper */
     text-decoration: none; /* Removes the default underline */
+  }
+
+  @media (max-width: 768px) {
+    font-size: 18px;
   }
 `;
 
@@ -90,7 +122,7 @@ const Navbar = () => {
           </a>
         </IconWrapper>
         <IconWrapper isHome={isHome}>
-          <a href="/#/SignUp" style={{"textDecoration":"None"}}>
+          <a href="/#/SignUp" style={{ textDecoration: "none" }}>
             <FontAwesomeIcon icon={faUser} />
           </a>
         </IconWrapper>

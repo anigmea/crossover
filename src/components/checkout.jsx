@@ -10,17 +10,30 @@ const PageWrapper = styled.div`
   max-width: 800px;
   margin: 20px auto;
   padding: 20px;
+
+  @media (max-width: 600px) {
+    max-width: 100%;
+    padding: 15px;
+  }
 `;
 
 const Section = styled.div`
   margin-bottom: 20px;
   padding: 20px;
   border-radius: 8px;
+
+  @media (max-width: 600px) {
+    padding: 15px;
+  }
 `;
 
 const SectionTitle = styled.h2`
   font-size: 18px;
   margin-bottom: 15px;
+
+  @media (max-width: 600px) {
+    font-size: 16px;
+  }
 `;
 
 const FormField = styled.div`
@@ -32,7 +45,12 @@ const Input = styled.input`
   padding: 10px;
   font-size: 14px;
   border: 1px solid #ccc;
-  border-radius: 0px;
+  border-radius: 4px;
+
+  @media (max-width: 600px) {
+    padding: 8px;
+    font-size: 12px;
+  }
 `;
 
 const SummaryItem = styled.div`
@@ -46,12 +64,21 @@ const SummaryItem = styled.div`
     font-weight: bold;
     font-size: 16px;
   }
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `;
 
 const PaymentMethods = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
+
+  @media (max-width: 600px) {
+    gap: 8px;
+  }
 `;
 
 const PaymentOption = styled.label`
@@ -61,6 +88,10 @@ const PaymentOption = styled.label`
 
   input {
     margin-right: 10px;
+  }
+
+  @media (max-width: 600px) {
+    font-size: 16px;
   }
 `;
 
@@ -79,6 +110,11 @@ const PlaceOrderButton = styled.button`
   &:hover {
     background-color: #444;
   }
+
+  @media (max-width: 600px) {
+    padding: 12px;
+    font-size: 14px;
+  }
 `;
 
 const ShippingInformation = styled.section`
@@ -90,6 +126,19 @@ const ShippingInformation = styled.section`
     "address address"
     "city state";
   column-gap: 50px;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "firstName"
+      "lastName"
+      "email"
+      "contact"
+      "address"
+      "city"
+      "state";
+    column-gap: 0;
+  }
 `;
 
 const CardType = styled.div`
@@ -98,16 +147,14 @@ const CardType = styled.div`
   color: #555;
 `;
 
-
 // Main Component
 const Checkout = () => {
   const [cartItems, setCartItems] = useState([]);
   const [baseTotal, setBaseTotal] = useState(0);
-  const [total, setTotal] = useState(0); // Ensure it's a number by default
+  const [total, setTotal] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState('');
   const CODCharge = 50;
-  const { user, loading, error, jwtToken } = useAuth(); // Use the custom hook
-
+  const { user, loading, error, jwtToken } = useAuth();
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -123,35 +170,31 @@ const Checkout = () => {
   });
 
   useEffect(() => {
-    // Fetch data from the backend API
     if (user) {
-    const user_check = user.replace(/^"|"$/g, "");
-    axios.get(`https://crossover.in.net:8080/api/cart_items?UserID=${user_check}`)
-      .then((response) => {
-        console.log(response.data); // Log the response to check the data structure
-        if (Array.isArray(response.data)) {
-          setCartItems(response.data);
-        } else if (typeof response.data === 'object') {
-          // If it's an object, wrap it in an array
-          setCartItems([response.data]);
-        } else {
-          console.error('Unexpected response format:', response.data);
-          setCartItems([]); // Set empty array in case of unexpected data format
-        }
-      })
-      .catch((error) => {
-        console.error('There was an error fetching the data!', error);
-        setCartItems([]); // Set empty array in case of error
-      });
+      const user_check = user.replace(/^"|"$/g, "");
+      axios.get(`https://crossover.in.net:8080/api/cart_items?UserID=${user_check}`)
+        .then((response) => {
+          if (Array.isArray(response.data)) {
+            setCartItems(response.data);
+          } else if (typeof response.data === 'object') {
+            setCartItems([response.data]);
+          } else {
+            console.error('Unexpected response format:', response.data);
+            setCartItems([]);
+          }
+        })
+        .catch((error) => {
+          console.error('There was an error fetching the data!', error);
+          setCartItems([]);
+        });
     }
   }, [user]);
-  
+
   useEffect(() => {
     const calculatedTotal = cartItems.reduce((acc, item) => acc + (parseFloat(item.product_price * item.Quantity) || 0), 0);
     setBaseTotal(calculatedTotal);
     setTotal(calculatedTotal);
   }, [cartItems]);
-  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -159,7 +202,6 @@ const Checkout = () => {
       ...prev,
       [name]: value,
     }));
-
   };
 
   const handlePaymentMethodChange = (e) => {
@@ -168,19 +210,17 @@ const Checkout = () => {
 
     if (selectedMethod === 'Cash on Delivery') {
       setTotal(baseTotal + CODCharge);
-      // setCartItems([...cartItems, { id: 4, name: 'COD Charge', price: CODCharge }]);
     } else {
-      setTotal(baseTotal); // Reset to base total for other methods
+      setTotal(baseTotal);
     }
   };
 
   const handleRazorpayPayment = async () => {
     try {
-
       const response = await fetch('https://crossover.in.net:8080/api/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 'amount': total }), // Amount in paisa
+        body: JSON.stringify({ 'amount': total }),
       });
 
       const { orderId } = await response.json();
@@ -190,8 +230,8 @@ const Checkout = () => {
       razorpayScript.async = true;
       razorpayScript.onload = () => {
         const options = {
-          key: 'rzp_test_585ABTEGO5I2VY', // Replace with your Razorpay key
-          amount: total * 100, // Amount in paisa
+          key: 'rzp_test_585ABTEGO5I2VY', 
+          amount: total * 100, 
           currency: 'INR',
           name: 'Your Company Name',
           description: 'Purchase Description',
@@ -222,10 +262,9 @@ const Checkout = () => {
       alert('Please fill in all the required fields!');
       return;
     }
-  
-    // Create the order object
+
     const orderData = {
-      userId: 1, // You can replace this with the actual UserID from the logged-in user
+      userId: 1, 
       firstName: formData.firstName,
       lastName: formData.lastName,
       email: formData.email,
@@ -238,19 +277,17 @@ const Checkout = () => {
       totalAmount: total,
       paymentMethod: paymentMethod,
       cartItems: cartItems.map((item) => ({
-        productSizeID: item.ProductSizeID, // Assuming each cart item has a product_size_id
+        productSizeID: item.ProductSizeID,
         quantity: item.Quantity,
         price: item.product_price,
       })),
     };
-  
+
     try {
-      // Send the order data to the backend API
       const response = await axios.post('https://crossover.in.net:8080/api/place-order', orderData);
-  
+
       if (response.data.success) {
         alert('Order placed successfully!');
-        // Optionally redirect to order confirmation page or reset the cart
       } else {
         alert('Failed to place the order. Please try again.');
       }
@@ -258,8 +295,7 @@ const Checkout = () => {
       console.error('Error placing the order:', error);
       alert('There was an error placing your order. Please try again later.');
     }
-  
-    // If payment is through Razorpay, initiate the payment
+
     if (paymentMethod !== 'Cash on Delivery') {
       handleRazorpayPayment();
     }
@@ -274,23 +310,22 @@ const Checkout = () => {
         <SectionTitle>Order Summary</SectionTitle>
         {cartItems.map((item) => (
           <SummaryItem key={item.id}>
-          <span>{item.product_name}</span>
-          <span>Qty:{item.Quantity}</span>
-          <span>{(parseFloat(item.product_price * item.Quantity) || 0).toFixed(2)}</span>
-        </SummaryItem>
+            <span>{item.product_name}</span>
+            <span>Qty:{item.Quantity}</span>
+            <span>{(parseFloat(item.product_price * item.Quantity) || 0).toFixed(2)}</span>
+          </SummaryItem>
         ))}
-         {paymentMethod === 'Cash on Delivery' && (
-    <SummaryItem>
-      <span>Cash on Delivery Charge</span>
-      <span>${CODCharge.toFixed(2)}</span>
-    </SummaryItem>
-  )}
+        {paymentMethod === 'Cash on Delivery' && (
+          <SummaryItem>
+            <span>Cash on Delivery Charge</span>
+            <span>${CODCharge.toFixed(2)}</span>
+          </SummaryItem>
+        )}
         <SummaryItem>
           <span>Total</span>
           <span>${total.toFixed(2)}</span>
         </SummaryItem>
       </Section>
-     
 
       {/* Shipping Information Section */}
       <SectionTitle>Contact Information</SectionTitle>
@@ -302,7 +337,6 @@ const Checkout = () => {
             value={formData.firstName}
             onChange={handleInputChange}
             placeholder="First Name"
-            style={{ gridArea: 'firstName' }}
             required
           />
         </FormField>
@@ -313,7 +347,6 @@ const Checkout = () => {
             value={formData.lastName}
             onChange={handleInputChange}
             placeholder="Last Name"
-            style={{ gridArea: 'lastName' }}
             required
           />
         </FormField>
@@ -324,7 +357,6 @@ const Checkout = () => {
             value={formData.email}
             onChange={handleInputChange}
             placeholder="Email"
-            style={{ gridArea: 'email' }}
             required
           />
         </FormField>
@@ -335,7 +367,6 @@ const Checkout = () => {
             value={formData.contact}
             onChange={handleInputChange}
             placeholder="Contact No."
-            style={{ gridArea: 'contact' }}
             required
           />
         </FormField>
@@ -346,7 +377,6 @@ const Checkout = () => {
             value={formData.address}
             onChange={handleInputChange}
             placeholder="Street Address"
-            style={{ gridArea: 'address' }}
             required
           />
         </FormField>
@@ -357,7 +387,6 @@ const Checkout = () => {
             value={formData.city}
             onChange={handleInputChange}
             placeholder="City"
-            style={{ gridArea: 'city' }}
           />
         </FormField>
         <FormField>
@@ -367,7 +396,6 @@ const Checkout = () => {
             value={formData.state}
             onChange={handleInputChange}
             placeholder="State"
-            style={{ gridArea: 'state' }}
           />
         </FormField>
         <FormField>
