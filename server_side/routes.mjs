@@ -231,6 +231,32 @@ app.delete("/api/cart_items/:cart_id", async (req, res) => {
   }
 });
 
+// Update quantity in the cart
+app.put("/api/cart_items/:cart_id", async (req, res) => {
+  const { cart_id } = req.params; // Get CartID from URL
+  const { Quantity } = req.body; // Get the new quantity from request body
+
+  if (!Quantity || isNaN(Quantity) || Quantity < 1) {
+    return res.status(400).json({ message: "Invalid quantity" });
+  }
+
+  try {
+    // Query to update the quantity in the Cart table
+    const updateQuery = "UPDATE Cart SET Quantity = ? WHERE CartID = ?";
+    const result = await queryPromise(updateQuery, [Quantity, cart_id]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Cart item not found" });
+    }
+
+    // Respond with success
+    res.status(200).json({ message: "Quantity updated successfully" });
+  } catch (error) {
+    console.error("Error updating cart item:", error);
+    res.status(500).json({ message: "Error updating cart item" });
+  }
+});
+
 
 // Endpoint to create a Razorpay order
 app.post("/api/create-order", async (req, res) => {
