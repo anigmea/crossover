@@ -396,7 +396,7 @@ const httpsOptions = {
   cert: fs.readFileSync('/etc/letsencrypt/live/crossover.in.net/fullchain.pem'),
 };
 
-https.createServer(httpsOptions, app).listen(8080, () => {
+https.createServer(httpsOptions, app).listen(443, () => {
   console.log('Backend is running on HTTPS');
 });
 
