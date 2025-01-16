@@ -161,11 +161,9 @@ app.post("/api/cart", async (req, res) => {
 // Fetch cart items
 app.get("/api/cart_items", async (req, res) => {
   const { UserID } = req.query;
-  console.log("Hello: " + UserID)
-  if (!UserID || isNaN(UserID)) {
-    return res.status(400).json({ message: "Invalid UserID" });
-  }
-  
+  console.log("Hello: " + UserID);
+
+
   try {
     const query = `
       SELECT 
