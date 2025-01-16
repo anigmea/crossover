@@ -314,7 +314,7 @@ app.post('/signup', async (req, res) => {
 
         // Prepare the SQL query to insert the new user into the database
         const insertQuery = `INSERT INTO Users (UserID, FirstName, LastName, Email, PasswordHash, CreatedAt, UpdatedAt) 
-                             VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())`;
+                             VALUES (?, ?, ?, ?, ?, NOW(), NOW())`;
         
         // Insert the new user into the database
         conn.query(insertQuery, [userID, firstName, lastName, email, hashedPassword], (err, result) => {
