@@ -124,6 +124,7 @@ const Checkout = () => {
 
   useEffect(() => {
     // Fetch data from the backend API
+    if (user) {
     const user_check = user.replace(/^"|"$/g, "");
     axios.get(`http://68.183.92.7:8080/api/cart_items?UserID=${user_check}`)
       .then((response) => {
@@ -142,6 +143,7 @@ const Checkout = () => {
         console.error('There was an error fetching the data!', error);
         setCartItems([]); // Set empty array in case of error
       });
+    }
   }, [user]);
   
   useEffect(() => {
