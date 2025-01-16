@@ -59,6 +59,11 @@ const SIGNIN_DIV = styled.div`
 const IconWrapper = styled.div`
   color: ${(props) => (props.isHome ? "white" : "black")};
   font-size: 20px;
+
+  a {
+    color: inherit; /* Ensures the link inherits the color from the IconWrapper */
+    text-decoration: none; /* Removes the default underline */
+  }
 `;
 
 const Navbar = () => {
@@ -85,7 +90,7 @@ const Navbar = () => {
           </a>
         </IconWrapper>
         <IconWrapper isHome={isHome}>
-          <a href="/#/SignUp">
+          <a href="/#/SignUp" style={{"textDecoration":"None"}}>
             <FontAwesomeIcon icon={faUser} />
           </a>
         </IconWrapper>

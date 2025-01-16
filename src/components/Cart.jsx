@@ -124,14 +124,39 @@ const CartPage = () => {
     }
   }, [user]);
 
-  const updateQuantity = (ProductID, delta) => {
-    setCartItems((prevItems) =>
-      prevItems.map((item) =>
-        item.ProductID === ProductID
-          ? { ...item, Quantity: Math.max(1, item.Quantity + delta) }
-          : item
-      )
+  const updateQuantity = (ProductID, delta, cartID) => {
+    // Calculate the new quantity locally
+    const updatedCartItems = cartItems.map((item) =>
+      item.ProductID === ProductID
+        ? { ...item, Quantity: Math.max(1, item.Quantity + delta) }
+        : item
     );
+  
+    // Find the updated item
+    const updatedItem = updatedCartItems.find(
+      (item) => item.ProductID === ProductID
+    );
+  
+    // Update the state locally for instant feedback
+    setCartItems(updatedCartItems);
+  
+    // Send a PUT request to update the quantity in the database
+    axios
+      .put(
+        `http://68.183.92.7:8080/api/cart_items/${cartID}`,
+        { Quantity: updatedItem.Quantity },
+        {
+          headers: { Authorization: `Bearer ${jwtToken}` },
+        }
+      )
+      .then((response) => {
+        console.log("Quantity updated successfully:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error updating quantity:", error);
+        // Rollback local state if the update fails
+        setCartItems(cartItems);
+      });
   };
 
   const removeItem = (ProductID, cartID) => {
@@ -171,11 +196,11 @@ const CartPage = () => {
               <ProductTitle>{item.product_name}</ProductTitle>
               <ProductPrice>₹{item.product_price}</ProductPrice>
               <QuantityControls>
-                <button onClick={() => updateQuantity(item.ProductID, -1)}>
+                <button onClick={() => updateQuantity(item.ProductID, -1, item.cart_id)}>
                   -
                 </button>
                 <input type="text" value={item.Quantity} readOnly />
-                <button onClick={() => updateQuantity(item.ProductID, 1)}>
+                <button onClick={() => updateQuantity(item.ProductID, 1, item.cart_id)}>
                   +
                 </button>
               </QuantityControls>
