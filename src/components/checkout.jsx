@@ -142,7 +142,7 @@ const Checkout = () => {
         console.error('There was an error fetching the data!', error);
         setCartItems([]); // Set empty array in case of error
       });
-  }, []);
+  }, [user]);
   
   useEffect(() => {
     const calculatedTotal = cartItems.reduce((acc, item) => acc + (parseFloat(item.product_price * item.Quantity) || 0), 0);
