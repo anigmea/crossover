@@ -285,7 +285,7 @@ app.post('/signup', async (req, res) => {
 
   // Check if NewuserId is passed in the request body
   if (!userID) {
-    return res.status(400).json({ message: 'NewuserId is required' });
+    return res.status(400).json({ message: 'userID is required' });
   }
 
   try {
