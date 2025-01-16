@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import useAuth from "../Pages/useAuth";
 
 // Styled Components
 
@@ -105,6 +106,8 @@ const Checkout = () => {
   const [total, setTotal] = useState(0); // Ensure it's a number by default
   const [paymentMethod, setPaymentMethod] = useState('');
   const CODCharge = 50;
+  const { user, loading, error, jwtToken } = useAuth(); // Use the custom hook
+
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -121,7 +124,7 @@ const Checkout = () => {
 
   useEffect(() => {
     // Fetch data from the backend API
-    axios.get('http://68.183.92.7:8080/api/cart_items?UserID=1')
+    axios.get(`http://68.183.92.7:8080/api/cart_items?UserID=${user}`)
       .then((response) => {
         console.log(response.data); // Log the response to check the data structure
         if (Array.isArray(response.data)) {
