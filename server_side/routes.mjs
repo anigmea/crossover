@@ -281,7 +281,6 @@ app.post("/api/create-order", async (req, res) => {
 
 
 app.post('/signup', async (req, res) => {
-  console.log("hello");
   const { firstName, lastName, email, password } = req.body;
   const { userID } = req.query; 
  
@@ -292,7 +291,8 @@ app.post('/signup', async (req, res) => {
   }
 
   try {
-    console.log(userID);
+    console.log(email);
+
     // Check if the email is already registered
     const query = 'SELECT * FROM Users WHERE Email = ?';
     conn.query(query, [email], (err, results) => {
