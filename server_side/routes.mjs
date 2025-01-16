@@ -281,10 +281,10 @@ app.post("/api/create-order", async (req, res) => {
 
 
 app.post('/signup', async (req, res) => {
-  console.log("Hello" + formData['password']);
+  console.log("hello");
   const { firstName, lastName, email, password } = req.body;
   const { userID } = req.query; 
-
+ 
 
   // Check if NewuserId is passed in the request body
   if (!userID) {

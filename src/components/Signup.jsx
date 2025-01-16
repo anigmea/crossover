@@ -5,6 +5,7 @@ import styled from "styled-components";
 import Navbar from "./navbar";
 import Footer from "./Footer";
 import useAuth from "../Pages/useAuth";
+import { use } from "react";
 
 
 // Styled Components
@@ -159,8 +160,10 @@ const SignUp = () => {
     setError(""); // Clear any previous error messages
 
     try {
-      const user_check = user.replace(/^"|"$/g, "");;
+      const user_check = user.replace(/^"|"$/g, "");
       const response = await axios.post(`https://crossover.in.net:8080/signup?userID=${user_check}`, formData);
+
+
       alert(response.data.message);
     } catch (error) {
       console.error(error);
