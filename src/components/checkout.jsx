@@ -126,7 +126,7 @@ const Checkout = () => {
     // Fetch data from the backend API
     if (user) {
     const user_check = user.replace(/^"|"$/g, "");
-    axios.get(`https://68.183.92.7:8080/api/cart_items?UserID=${user_check}`)
+    axios.get(`https://crossover.in.net:8080/api/cart_items?UserID=${user_check}`)
       .then((response) => {
         console.log(response.data); // Log the response to check the data structure
         if (Array.isArray(response.data)) {
@@ -177,7 +177,7 @@ const Checkout = () => {
   const handleRazorpayPayment = async () => {
     try {
 
-      const response = await fetch('https://68.183.92.7:8080/api/create-order', {
+      const response = await fetch('https://crossover.in.net:8080/api/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 'amount': total }), // Amount in paisa
@@ -186,7 +186,7 @@ const Checkout = () => {
       const { orderId } = await response.json();
 
       const razorpayScript = document.createElement('script');
-      razorpayScript.src = 'httpss://checkout.razorpay.com/v1/checkout.js';
+      razorpayScript.src = 'https://checkout.razorpay.com/v1/checkout.js';
       razorpayScript.async = true;
       razorpayScript.onload = () => {
         const options = {
@@ -246,7 +246,7 @@ const Checkout = () => {
   
     try {
       // Send the order data to the backend API
-      const response = await axios.post('https://localhost:8080/api/place-order', orderData);
+      const response = await axios.post('https://crossover.in.net:8080/api/place-order', orderData);
   
       if (response.data.success) {
         alert('Order placed successfully!');

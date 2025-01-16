@@ -67,7 +67,7 @@ const Account = () => {
           alert("No user logged in!");
           return;
         }
-        const response = await axios.get(`https://68.183.92.7:8080/user-details/${userId}`);
+        const response = await axios.get(`https://crossover.in.net:8080/user-details/${userId}`);
         setUserDetails(response.data);
       } catch (error) {
         console.error("Error fetching user details:", error);
@@ -82,7 +82,7 @@ const Account = () => {
           alert("No user logged in!");
           return;
         }
-        const response = await axios.get(`https://68.183.92.7:8080/transactions/${userId}`);
+        const response = await axios.get(`https://crossover.in.net:8080/transactions/${userId}`);
         setTransactionHistory(response.data);
       } catch (error) {
         console.error("Error fetching transaction history:", error);
