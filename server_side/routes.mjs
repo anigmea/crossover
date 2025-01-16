@@ -281,9 +281,12 @@ app.post("/api/create-order", async (req, res) => {
 
 
 app.post('/signup', async (req, res) => {
-  const { firstName, lastName, email, password } = req.body;
+  const { firstName, lastName, email, password, NewuserId } = req.body;
 
-  // If NewuserId is not passed, return an error
+  // Check if NewuserId is passed in the request body
+  if (!NewuserId) {
+    return res.status(400).json({ message: 'NewuserId is required' });
+  }
 
   try {
     // Check if the email is already registered
@@ -310,7 +313,7 @@ app.post('/signup', async (req, res) => {
                              VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())`;
 
         // Insert the new user into the database
-        conn.query(insertQuery, [newUserId, firstName, lastName, email, hashedPassword], (err, result) => {
+        conn.query(insertQuery, [uuidv4(), firstName, lastName, email, hashedPassword, NewuserId], (err, result) => {
           if (err) {
             console.error(err);
             return res.status(500).json({ message: 'Error signing up' });
