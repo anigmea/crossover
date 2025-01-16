@@ -114,7 +114,7 @@ const CartPage = () => {
     if (user) {
       const user_check = user.replace(/^"|"$/g, "");
       // Fetch cart items for the logged-in user
-      axios.get(`http://68.183.92.7:8080/api/cart_items?UserID=${user_check}`)
+      axios.get(`https://68.183.92.7:8080/api/cart_items?UserID=${user_check}`)
         .then((response) => {
           setCartItems(response.data || []);
         })
@@ -143,7 +143,7 @@ const CartPage = () => {
     // Send a PUT request to update the quantity in the database
     axios
       .put(
-        `http://68.183.92.7:8080/api/cart_items/${cartID}`,
+        `https://68.183.92.7:8080/api/cart_items/${cartID}`,
         { Quantity: updatedItem.Quantity },
         {
           headers: { Authorization: `Bearer ${jwtToken}` },
@@ -161,7 +161,7 @@ const CartPage = () => {
 
   const removeItem = (ProductID, cartID) => {
     axios
-      .delete(`http://68.183.92.7:8080/api/cart_items/${cartID}`, {
+      .delete(`https://68.183.92.7:8080/api/cart_items/${cartID}`, {
         headers: { Authorization: `Bearer ${jwtToken}` },
       })
       .then(() => {

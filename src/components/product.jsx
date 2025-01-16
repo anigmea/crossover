@@ -139,7 +139,7 @@ const Product = () => {
 
   useEffect(() => {
     // Fetch data from the backend API
-    axios.get(`http://68.183.92.7:8080/api/product?ProductID=${value}`)
+    axios.get(`https://68.183.92.7:8080/api/product?ProductID=${value}`)
       .then((response) => {
         setData(response.data);
       })
@@ -155,7 +155,7 @@ const Product = () => {
     }
     
     // Now use selectedSize (ProductSizeID) to add to cart
-    axios.post('http://68.183.92.7:8080/api/cart', {
+    axios.post('https://68.183.92.7:8080/api/cart', {
       ProductSizeID: selectedSize, // Use the selected ProductSizeID
       Quantity: quantity,
       UserID: user // Assuming UserID is 1 for testing, modify as needed
