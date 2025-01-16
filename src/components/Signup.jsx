@@ -127,7 +127,7 @@ const ErrorMessage = styled.p`
 const SignUp = () => {
   const { user, loading, jwtToken } = useAuth(); // Use the custom hook
   const [formData, setFormData] = useState({
-    userID: user.replace(/^"|"$/g, ""),
+    userID: user,
     firstName: "",
     lastName: "",
     email: "",
