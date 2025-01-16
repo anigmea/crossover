@@ -33,9 +33,11 @@ const razorpay = new Razorpay({
 });
 
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');  // Allow all origins
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');  // Allow methods
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');  // Allow headers
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Max-Age", "1800");
+  res.setHeader("Access-Control-Allow-Headers", "content-type");
+  res.setHeader("Access-Control-Allow-Methods","PUT, POST, GET, DELETE, PATCH, OPTIONS");
   next();  // Proceed to the next middleware or route handler
 });
 
