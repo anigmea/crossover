@@ -281,7 +281,7 @@ app.post("/api/create-order", async (req, res) => {
 
 
 app.post('/signup', async (req, res) => {
-  const { firstName, lastName, email, password, NewuserId } = req.body;
+  const { firstName, lastName, email, password, userID } = req.body;
 
   // Check if NewuserId is passed in the request body
   if (!NewuserId) {
@@ -309,11 +309,11 @@ app.post('/signup', async (req, res) => {
         }
 
         // Prepare the SQL query to insert the new user into the database
-        const insertQuery = `INSERT INTO Users (UserID, FirstName, LastName, Email, PasswordHash, NewUserId, CreatedAt, UpdatedAt) 
+        const insertQuery = `INSERT INTO Users (UserID, FirstName, LastName, Email, PasswordHash, CreatedAt, UpdatedAt) 
                              VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())`;
 
         // Insert the new user into the database
-        conn.query(insertQuery, [uuidv4(), firstName, lastName, email, hashedPassword, NewuserId], (err, result) => {
+        conn.query(insertQuery, [userID, firstName, lastName, email, hashedPassword], (err, result) => {
           if (err) {
             console.error(err);
             return res.status(500).json({ message: 'Error signing up' });

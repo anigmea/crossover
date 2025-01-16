@@ -4,6 +4,8 @@ import axios from "axios";
 import styled from "styled-components";
 import Navbar from "./navbar";
 import Footer from "./Footer";
+import useAuth from "../Pages/useAuth";
+
 
 // Styled Components
 
@@ -123,14 +125,15 @@ const ErrorMessage = styled.p`
 `;
 
 const SignUp = () => {
+  const { user, loading, jwtToken } = useAuth(); // Use the custom hook
   const [formData, setFormData] = useState({
+    userID: user,
     firstName: "",
     lastName: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
-
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [error, setError] = useState(""); // For showing error messages
