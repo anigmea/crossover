@@ -424,10 +424,9 @@ app.get("*", (req, res) => {
 // Read SSL certificate files
 const certificate = fs.readFileSync('/etc/letsencrypt/live/crossover.in.net/fullchain.pem', 'utf8');
 const privateKey  = fs.readFileSync('/etc/letsencrypt/live/crossover.in.net/privkey.pem', 'utf8');
-const ca = fs.readFileSync('/etc/letsencrypt/live/crossover.in.net/ca.pem', 'utf8');
 
 // Create HTTPS service with the provided certificates
-const credentials = { key: privateKey, cert: certificate, ca: ca };
+const credentials = { key: privateKey, cert: certificate};
 
 // Create the HTTPS server
 // Start the server
