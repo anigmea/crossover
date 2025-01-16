@@ -284,11 +284,12 @@ app.post('/signup', async (req, res) => {
   const { firstName, lastName, email, password, userID } = req.body;
 
   // Check if NewuserId is passed in the request body
-  if (!NewuserId) {
+  if (!userID) {
     return res.status(400).json({ message: 'NewuserId is required' });
   }
 
   try {
+    console.log(userID);
     // Check if the email is already registered
     const query = 'SELECT * FROM Users WHERE Email = ?';
     conn.query(query, [email], (err, results) => {
