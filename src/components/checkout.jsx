@@ -124,6 +124,7 @@ const Checkout = () => {
 
   useEffect(() => {
     // Fetch data from the backend API
+    user = user.replace(/^"|"$/g, "");
     axios.get(`http://68.183.92.7:8080/api/cart_items?UserID=${user}`)
       .then((response) => {
         console.log(response.data); // Log the response to check the data structure
