@@ -32,10 +32,20 @@ const razorpay = new Razorpay({
   key_secret: "B6a7MBIysMwXi25mMnztuYaS",
 });
 
+const corsOptions = {
+  origin: ['http://your-frontend-domain.com'],  // Add your frontend domain(s) here
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,  // Allow sending cookies with requests
+};
+
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "../build")));
+
+app.options('*', cors()); // Enable preflight for all routes
+
 
 // JWT Secret
 const JWT_SECRET = "052ab6fa69d8d9a7bc1e629ab30884c3b4701d6d8afbf2d20ade7ed7ba5ce9fc"; // Replace with a more secure secret
