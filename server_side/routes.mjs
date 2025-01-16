@@ -303,7 +303,6 @@ app.post('/signup', async (req, res) => {
       if (results.length > 0) {
         return res.status(400).json({ message: 'Email already in use.' });
       }
-      return res.status(201).json({ message: userID });
 
       // Hash the password before saving it
       bcrypt.hash(password, 10, (err, hashedPassword) => {
@@ -311,6 +310,7 @@ app.post('/signup', async (req, res) => {
           console.error(err);
           return res.status(500).json({ message: 'Error hashing password' });
         }
+        return res.status(201).json({ message: password });
 
         // Prepare the SQL query to insert the new user into the database
         const insertQuery = `INSERT INTO Users (UserID, FirstName, LastName, Email, PasswordHash, CreatedAt, UpdatedAt) 
