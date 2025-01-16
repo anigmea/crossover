@@ -125,18 +125,17 @@ const ErrorMessage = styled.p`
 `;
 
 const SignUp = () => {
-  const { user, loading, jwtToken } = useAuth(); // Use the custom hook
+
   const [formData, setFormData] = useState({
-    userID: user,
     firstName: "",
     lastName: "",
     email: "",
     password: "",
-    confirmPassword: "",
   });
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [error, setError] = useState(""); // For showing error messages
+  const { user, loading, jwtToken } = useAuth();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -145,6 +144,7 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Password match validation
+    
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match!");
       return;
@@ -159,7 +159,8 @@ const SignUp = () => {
     setError(""); // Clear any previous error messages
 
     try {
-      const response = await axios.post("https://crossover.in.net:8080/signup", formData);
+      const user_check = user.replace(/^"|"$/g, "");;
+      const response = await axios.post(`https://crossover.in.net:8080/signup?userID=${user_check}`, formData);
       alert(response.data.message);
     } catch (error) {
       console.error(error);
