@@ -80,7 +80,7 @@ const Contact = () => {
     console.log("Form Data:", formData); // Log form data to make sure it's being captured
   
     try {
-      const response = await axios.post("http://localhost:8080/api/contact", formData);
+      const response = await axios.post("https://localhost:8080/api/contact", formData);
       console.log("API Response:", response); // Log response from backend
       if (response.data.success) {
         alert("Message sent successfully!");
