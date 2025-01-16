@@ -14,7 +14,7 @@ const useAuth = () => {
       try {
         if (!jwtToken && !initialized) {
           // If no jwtToken and the user hasn't been initialized yet, run the initialization
-          const response = await axios.get("https://68.183.92.7:8080/initialize");
+          const response = await axios.get("https://crossover.in.net:8080/initialize");
           console.log("Initialize response:", response.data);
 
           const { token, user_id } = response.data;
@@ -28,7 +28,7 @@ const useAuth = () => {
         } else if (jwtToken) {
           // If the token is present, verify the token and set user data
           const response = await axios.post(
-            "https://68.183.92.7:8080/verify-token",
+            "https://crossover.in.net:8080/verify-token",
             {},
             {
               headers: { Authorization: `Bearer ${jwtToken}` },
