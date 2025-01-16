@@ -8,8 +8,6 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import path from "path";
 import { fileURLToPath } from "url";
-import fs from "fs";
-import https from "https";
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
@@ -271,6 +269,33 @@ app.post("/signup", async (req, res) => {
   );
 });
 
+// app.post("/login", (req, res) => {
+//   const { email, password } = req.body;
+
+//   if (!email || !password) {
+//     return res.status(400).json({ message: "All fields are required" });
+//   }
+
+//   db.query("SELECT * FROM users WHERE email = ?", [email], async (err, results) => {
+//     if (err) throw err;
+
+//     if (results.length === 0) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+
+//     const user = results[0];
+//     const isPasswordValid = await bcrypt.compare(password, user.password);
+
+//     if (!isPasswordValid) {
+//       return res.status(401).json({ message: "Invalid credentials" });
+//     }
+
+//     // const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: "1h" });
+
+//     res.status(200).json({ message: "Login successful"});
+//   });
+// });
+
 app.post('/api/place-order', async (req, res) => {
   const {
     userId, firstName, lastName, email, contact, address, city, state, zipCode, country, totalAmount, paymentMethod, cartItems
@@ -391,12 +416,7 @@ app.get("*", (req, res) => {
 })
 
 // Start the server
-const httpsOptions = {
-  key: fs.readFileSync('/etc/letsencrypt/live/crossover.in.net/privkey.pem'),
-  cert: fs.readFileSync('/etc/letsencrypt/live/crossover.in.net/fullchain.pem'),
-};
-
-https.createServer(httpsOptions, app).listen(443, () => {
-  console.log('Backend is running on HTTPS');
+const PORT = 8080;
+app.listen(PORT, () => {
+  console.log(`Server started at port ${PORT}`);
 });
-
