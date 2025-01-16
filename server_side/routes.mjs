@@ -292,8 +292,6 @@ app.post('/signup', async (req, res) => {
   }
 
   try {
-    return res.status(201).json({ message: userID });
-
     // Check if the email is already registered
     const query = 'SELECT * FROM Users WHERE Email = ?';
     conn.query(query, [email], (err, results) => {
@@ -305,6 +303,7 @@ app.post('/signup', async (req, res) => {
       if (results.length > 0) {
         return res.status(400).json({ message: 'Email already in use.' });
       }
+      return res.status(201).json({ message: userID });
 
       // Hash the password before saving it
       bcrypt.hash(password, 10, (err, hashedPassword) => {
