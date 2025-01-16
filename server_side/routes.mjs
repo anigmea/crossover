@@ -32,15 +32,14 @@ const razorpay = new Razorpay({
   key_secret: "B6a7MBIysMwXi25mMnztuYaS",
 });
 
-const corsOptions = {
-  origin: ['http://your-frontend-domain.com'],  // Add your frontend domain(s) here
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,  // Allow sending cookies with requests
-};
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');  // Allow all origins
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');  // Allow methods
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');  // Allow headers
+  next();  // Proceed to the next middleware or route handler
+});
 
 // Middleware
-app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "../build")));
 
