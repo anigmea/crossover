@@ -8,6 +8,10 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import path from "path";
 import { fileURLToPath } from "url";
+import https from 'https';
+import fs from 'fs';
+
+
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
@@ -417,8 +421,20 @@ app.get("*", (req, res) => {
   res.sendFile(path.join('../build/index.html'));
 })
 
+// Read SSL certificate files
+const certificate = fs.readFileSync('/etc/letsencrypt/live/crossover.in.net/fullchain.pem', 'utf8');
+const privateKey  = fs.readFileSync('/etc/letsencrypt/live/crossover.in.net/privkey.pem', 'utf8');
+const ca = fs.readFileSync('/etc/letsencrypt/live/crossover.in.net/ca.pem', 'utf8');
+
+// Create HTTPS service with the provided certificates
+const credentials = { key: privateKey, cert: certificate, ca: ca };
+
+// Create the HTTPS server
 // Start the server
+
 const PORT = 8080;
-app.listen(PORT, () => {
+https.createServer(credentials, app).listen(PORT, () => {
   console.log(`Server started at port ${PORT}`);
 });
+
+
