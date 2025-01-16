@@ -112,9 +112,9 @@ const CartPage = () => {
 
   useEffect(() => {
     if (user) {
-      user = user.replace(/^"|"$/g, "");
+      user_check = user.replace(/^"|"$/g, "");
       // Fetch cart items for the logged-in user
-      axios.get(`http://68.183.92.7:8080/api/cart_items?UserID=${user}`)
+      axios.get(`http://68.183.92.7:8080/api/cart_items?UserID=${user_check}`)
         .then((response) => {
           setCartItems(response.data || []);
         })
