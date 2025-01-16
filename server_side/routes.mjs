@@ -361,13 +361,12 @@ app.post('/api/place-order', async (req, res) => {
     userId, firstName, lastName, email, contact, address, city, state, zipCode, country, totalAmount, paymentMethod, cartItems
   } = req.body;
 
-  let connection;
+  if (!userId || !totalAmount || !cartItems || cartItems.length === 0) {
+    return res.status(400).json({ message: "Invalid order data" });
+  }
 
   try {
-    // Get a connection from the pool
-
-
-    // Start a transaction to ensure data integrity
+    // Start a transaction
     await new Promise((resolve, reject) => {
       conn.beginTransaction((err) => {
         if (err) reject(err);
@@ -377,18 +376,18 @@ app.post('/api/place-order', async (req, res) => {
 
     // Insert order into the Orders table
     const orderQuery = 'INSERT INTO Orders (UserID, TotalAmount, PaymentStatus) VALUES (?, ?, ?)';
-    const orderResult = await queryPromise(orderQuery, [userId, totalAmount, paymentMethod === 'Cash on Delivery' ? 'Unpaid' : 'Paid']);
+    const orderResult = await queryPromise(conn, orderQuery, [userId, totalAmount, paymentMethod === 'Cash on Delivery' ? 'Unpaid' : 'Paid']);
     const orderId = orderResult.insertId;
 
     // Insert each cart item into the OrderDetails table
     const orderDetailsQuery = 'INSERT INTO OrderDetails (OrderID, ProductSizeID, Quantity, Price) VALUES (?, ?, ?, ?)';
     for (const item of cartItems) {
-      await queryPromise(orderDetailsQuery, [orderId, item.productSizeID, item.quantity, item.price]);
+      await queryPromise(conn, orderDetailsQuery, [orderId, item.productSizeID, item.quantity, item.price]);
     }
 
-    // Optionally insert or update user details (like shipping address) in the Users table
+    // Optionally, update user details (like shipping address) in the Users table
     const userQuery = 'UPDATE Users SET Address = ?, City = ?, State = ?, ZipCode = ?, Country = ? WHERE UserID = ?';
-    await queryPromise(userQuery, [address, city, state, zipCode, country, userId]);
+    await queryPromise(conn, userQuery, [address, city, state, zipCode, country, userId]);
 
     // Commit the transaction
     await new Promise((resolve, reject) => {
@@ -398,27 +397,23 @@ app.post('/api/place-order', async (req, res) => {
       });
     });
 
-    res.status(200).json({ success: true });
+    // Respond with success
+    res.status(200).json({ success: true, message: 'Order placed successfully' });
   } catch (error) {
     console.error('Error placing order:', error);
-    
-    // If there's any error, rollback the transaction
-    if (connection) {
-      await new Promise((resolve, reject) => {
-        conn.rollback((err) => {
-          if (err) reject(err);
-          resolve();
-        });
-      });
-    }
 
-    res.status(500).json({ success: false, error: 'Failed to place the order' });
-  } finally {
-    if (connection) {
-      conn.release(); // Release the connection back to the pool
-    }
+    // If there's an error, rollback the transaction
+    await new Promise((resolve, reject) => {
+      conn.rollback((err) => {
+        if (err) reject(err);
+        resolve();
+      });
+    });
+
+    res.status(500).json({ success: false, message: 'Failed to place the order' });
   }
 });
+
 
 app.post("/api/contact", (req, res) => {
   const { name, reason, email, message } = req.body;

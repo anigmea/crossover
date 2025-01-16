@@ -135,7 +135,7 @@ const Footer = () => {
         </Form>
       </SubscriptionWrapper>
       <LinksWrapper>
-        <FooterLink href="#">United States (USD $)</FooterLink>
+        <FooterLink href="#">India (INR ₹)</FooterLink>
         <FooterLink href="/#/Contact">Contact</FooterLink>
         <FooterLink href="#">Client Services</FooterLink>
         <FooterLink href="#">Legal Notices</FooterLink>
