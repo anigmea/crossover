@@ -252,7 +252,6 @@ const SignUp = () => {
 const Login = () => {
   const [jwtToken, setJwtToken] = useState(localStorage.getItem("token"));
   const [formData, setFormData] = useState({ email: "", password: "" });
-  const [user, setUser] = useState(null);
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   const handleChange = (e) => {
@@ -263,10 +262,8 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post(`https://crossover.in.net:8080/login`, formData);
-      const user = response.data.message;
+      alert(response.data.message);
       sessionStorage.setItem("isloggedin", 1);
-      setJwtToken(user.token);
-      setUser({ id: user.userID });
     } catch (error) {
       console.error(error);
       alert("Error logging in");
