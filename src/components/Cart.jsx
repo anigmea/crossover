@@ -75,13 +75,12 @@ const ProductPrice = styled.p`
   }
 `;
 
-const SizeSelector = styled.select`
-  margin-top: 2px;
-  padding: 5px;
+const ProductSize = styled.p`
+font-size: 15px;
+color: #003;
+@media (max-width: 768px) {
   font-size: 14px;
-  @media (max-width: 768px) {
-    font-size: 12px;
-  }
+}
 `;
 
 const QuantityControls = styled.div`
@@ -96,8 +95,7 @@ const QuantityControls = styled.div`
   }
 
   button {
-    padding: 5px 10px;
-    font-size: 14px;
+    font-size: 13px;
     cursor: pointer;
   }
 
@@ -278,7 +276,7 @@ const CartPage = () => {
                   </option>
                 ))}
               </SizeSelector> */}
-              <ProductPrice>{item.product_size}</ProductPrice>
+              <ProductSize>Size: {item.product_size}</ProductSize>
               <QuantityControls>
                 <button onClick={() => updateQuantity(item.ProductID, -1, item.cart_id)}>
                   -
