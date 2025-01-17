@@ -330,7 +330,7 @@ const Checkout = () => {
         )}
         <SummaryItem>
           <span>Total</span>
-          <span>${total.toFixed(2)}</span>
+          <span>₹{total.toFixed(2)}</span>
         </SummaryItem>
       </Section>
 
@@ -457,7 +457,7 @@ const Checkout = () => {
               checked={paymentMethod === 'Cash on Delivery'}
               onChange={handlePaymentMethodChange}
             />
-            Cash on Delivery (+${CODCharge.toFixed(2)})
+            Cash on Delivery (+₹{CODCharge.toFixed(2)})
           </PaymentOption>
         </PaymentMethods>
       </Section>
