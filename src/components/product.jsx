@@ -221,7 +221,7 @@ const Product = () => {
   };
 
   const handleImageLeave = () => {
-    setHoveredImage(data.ImageURL ? data.ImageURL[0] : ""); // Revert to the first image
+    setHoveredImage(data.ImageURL ? data.ImageURL : ""); // Revert to the first image
   };
 
   return (
@@ -232,7 +232,7 @@ const Product = () => {
 
       <ProductSection>
       <ProductImage 
-          src={`/images/${hoveredImage || data.ImageURL?.split(',')[0]}`} // Show hovered image or first image
+          src={`/images/${hoveredImage || data.ImageURL}`} // Show hovered image or first image
           alt="Product Image"
           onMouseEnter={handleImageHover} // Change image on hover
           onMouseLeave={handleImageLeave} // Revert back when hover leaves
