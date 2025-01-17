@@ -6,8 +6,6 @@ import useAuth from "../Pages/useAuth";
 import Navbar from "./navbar";
 import Footer from "./Footer";
 
-
-
 const AccountPage = styled.div`
 display: block;
 text-align: center;
@@ -65,7 +63,7 @@ const Account = () => {
   const [userDetails, setUserDetails] = useState({});
   const [transactionHistory, setTransactionHistory] = useState([]);
   const { user, loading, jwtToken } = useAuth();
-
+  alert(user);
 
   // Fetch user data and transaction history on component load
   useEffect(() => {
@@ -73,7 +71,7 @@ const Account = () => {
     
     const fetchUserDetails = async () => {
       try {
-        alert(user);
+        alert("hello" + user);
         // Assuming user details are stored in cookies
         if (!user) {
           alert("No user logged in!");
