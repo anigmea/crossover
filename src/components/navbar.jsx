@@ -19,9 +19,6 @@ const NavbarWrapper = styled.div`
   z-index: 10;
 
   @media (max-width: 768px) {
-    flex-direction: column;
-    align-items: center;
-    justify-content: left;
     padding: 2%;
   }
 `;
@@ -34,7 +31,7 @@ const LOGO = styled.a`
   margin-bottom: 10px;
 
   @media (max-width: 768px) {
-    font-size: 30px;
+    font-size: 20px;
     margin-bottom: 0px;
   }
 `;
@@ -65,7 +62,7 @@ const LINK = styled.a`
   }
 
   @media (max-width: 768px) {
-    font-size: 16px;
+    font-size: 12px;
     padding-left: 0;
   }
 `;
@@ -81,6 +78,7 @@ const SIGNIN_DIV = styled.div`
     width: 20%;
     grid-template-columns: 1fr 1fr;
     justify-content: center;
+    padding-top: 0px;
   }
 `;
 
