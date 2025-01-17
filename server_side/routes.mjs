@@ -335,7 +335,6 @@ app.post('/signup', async (req, res) => {
 
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  const { userID } = req.query;
 
   // Check if all required fields are provided
   if (!email || !password || !userID) {
@@ -357,10 +356,10 @@ app.post("/login", async (req, res) => {
 
       const user = results[0];
 
-      // Check if the provided userID matches the user's ID in the database
-      if (user.UserID !== userID) {
-        return res.status(401).json({ message: "Invalid user ID" });
-      }
+      // // Check if the provided userID matches the user's ID in the database
+      // if (user.UserID !== userID) {
+      //   return res.status(401).json({ message: "Invalid user ID" });
+      // }
 
       // Compare the provided password with the hashed password in the database
       const isPasswordValid = await bcrypt.compare(password, user.PasswordHash);

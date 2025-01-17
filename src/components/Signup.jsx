@@ -249,7 +249,6 @@ const SignUp = () => {
 };
 
 const Login = () => {
-  const { user, loading, jwtToken } = useAuth();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -260,8 +259,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const user_check = user.replace(/^"|"$/g, "");
-      const response = await axios.post(`https://crossover.in.net:8080/login?userID=${user_check}`, formData);
+      const response = await axios.post(`https://crossover.in.net:8080/login`, formData);
       alert(response.data.message);
     } catch (error) {
       console.error(error);
