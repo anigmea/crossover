@@ -287,12 +287,14 @@ const Checkout = () => {
   
     try {
       // First, initiate Razorpay payment if payment method is not 'Cash on Delivery'
+      const razorpayResponse = null;
       if (paymentMethod !== 'Cash on Delivery') {
-        const razorpayResponse = await handleRazorpayPayment();
+        razorpayResponse = await handleRazorpayPayment();
         if (!razorpayResponse) {
           alert('Payment failed or was cancelled. Please try again.');
           return; // If payment fails or is cancelled, stop the order placement process
         }
+        alert('order placed successfully');
       }
   
       // After successful Razorpay payment, place the order in the backend
@@ -310,10 +312,16 @@ const Checkout = () => {
         setCartItems([]);
   
         // Navigate to confirmation page
-        navigate("/confirmation", { state: { orderId: response.data.orderId } });
+        if (paymentMethod !== 'Cash on Delivery' && razorpayResponse) {
+          navigate("/confirmation", { state: { orderId: response.data.orderId } });
+        }
+        else if (paymentMethod === 'Cash on Delivery'){
+          navigate("/confirmation", { state: { orderId: response.data.orderId } });
+        }
       } else {
         alert('Failed to place the order. Please try again.');
       }
+
     } catch (error) {
       console.error('Error placing the order:', error);
       alert('There was an error placing your order. Please try again later.');
