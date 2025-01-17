@@ -196,11 +196,11 @@ app.get("/api/cart_items", async (req, res) => {
       FROM 
         Cart
       INNER JOIN 
-        Products ON Cart.ProductSizeID = Products.ProductID
-      INNER JOIN 
         ProductSizes ON Cart.ProductSizeID = ProductSizes.ProductSizeID
       INNER JOIN 
         Sizes ON ProductSizes.SizeID = Sizes.SizeID
+      INNER JOIN 
+        Products ON ProductSizes.ProductID = Products.ProductID
       WHERE 
         Cart.UserID = ?
     `;
