@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import Navbar from "./navbar";
@@ -151,6 +151,7 @@ const SignUp = () => {
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [error, setError] = useState(""); // For showing error messages
   const { user, loading, jwtToken } = useAuth();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -179,6 +180,8 @@ const SignUp = () => {
 
       alert(response.data.message);
       sessionStorage.setItem("isloggedin", 1);
+      navigate("/Account");
+
     } catch (error) {
       console.error(error);
       alert("Error signing up");
@@ -266,6 +269,7 @@ const Login = () => {
   const [jwtToken, setJwtToken] = useState(localStorage.getItem("token"));
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -277,6 +281,7 @@ const Login = () => {
       const response = await axios.post(`https://crossover.in.net:8080/login`, formData);
       alert(response.data.message);
       sessionStorage.setItem("isloggedin", 1);
+      navigate("/Account");
     } catch (error) {
       console.error(error);
       alert("Error logging in");
