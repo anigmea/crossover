@@ -272,7 +272,7 @@ const CartPage = () => {
                 value={item.ProductSizeID || ""}
                 onChange={(e) => updateSize(item.cart_id, e.target.value)}
               >
-                {item.available_sizes && item.available_sizes.map((size) => (
+                {item.Sizes && item.Sizes.map((size) => (
                   <option key={size.ProductSizeID} value={size.ProductSizeID}>
                     {size.size_name}
                   </option>
