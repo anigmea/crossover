@@ -129,7 +129,7 @@ const Navbar = () => {
           </a>
         </IconWrapper>
         <IconWrapper isHome={isHome}>
-          <a href={isLoggedIn ? "/#/AccountPage" : "/#/SignUp"} style={{ textDecoration: "none" }}>
+          <a href={isLoggedIn ? "/#/Account" : "/#/SignUp"} style={{ textDecoration: "none" }}>
             <FontAwesomeIcon icon={faUser} />
           </a>
         </IconWrapper>
