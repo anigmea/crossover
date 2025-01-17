@@ -137,8 +137,11 @@ const Footer = () => {
       <LinksWrapper>
         <FooterLink href="#">India (INR ₹)</FooterLink>
         <FooterLink href="/#/Contact">Contact</FooterLink>
-        <FooterLink href="#">Client Services</FooterLink>
-        <FooterLink href="#">Legal Notices</FooterLink>
+        <FooterLink href="https://merchant.razorpay.com/policy/PdhY2MxHzBpiTy/terms">Terms and Conditions</FooterLink>
+        <FooterLink href="https://merchant.razorpay.com/policy/PdhY2MxHzBpiTy/refund">Cancellation Policy</FooterLink>
+        <FooterLink href="https://merchant.razorpay.com/policy/PdhY2MxHzBpiTy/shipping">Shipping</FooterLink>
+        <FooterLink href="#/Privacy">Privacy Policy</FooterLink>
+
         <FooterLink href="#">Social</FooterLink>
       </LinksWrapper>
     </FooterContainer>

@@ -58,6 +58,17 @@ const CONTACTFORMBUTTON = styled.button`
   padding: 6px;
 `;
 
+const ContactInfo = styled.div`
+  font-size: 16px;
+  font-family: "Yeezy", sans-serif;
+  line-height: 1.6;
+
+  a {
+    color: blue;
+    text-decoration: underline;
+  }
+`;
+
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -132,6 +143,12 @@ const Contact = () => {
           />
           <CONTACTFORMBUTTON type="submit">SUBMIT</CONTACTFORMBUTTON>
         </CONTACTFORM>
+        <ContactInfo>
+          <p> Based In: B-801 Sangini Solitaire, Vesu Surat, Gujarat 395007 India</p>
+          <p>
+            For more information contact us at: <a href="mailto:aaravkanodia7@gmail.com" style={{"textDecoration": "underline", "color":"black"}}>aaravkanodia7@gmail.com</a>
+          </p>
+        </ContactInfo>
       </ContactText>
       <Footer />
     </ContactWrapper>
