@@ -402,13 +402,6 @@ app.post('/api/place-order', async (req, res) => {
   }
 
   try {
-    // Start a transaction
-    await new Promise((resolve, reject) => {
-      conn.beginTransaction((err) => {
-        if (err) reject(err);
-        resolve();
-      });
-    });
 
     // Insert order into the Orders table
     const orderQuery = 'INSERT INTO Orders (UserID, TotalAmount, PaymentStatus, Status) VALUES (?, ?, ?, ?)';
