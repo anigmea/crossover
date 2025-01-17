@@ -68,7 +68,21 @@ const Form = styled.form`
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  @media (max-width: 600px) {
+    max-width: 90%;
+    padding: 15px;
+  }
+`;
 
+const Form_login = styled.form`
+  max-width: 400px;
+  margin: 20px auto;
+  background: #f9f9f9;
+  padding: 30px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  height: 150px;
+  width: 350px;
   @media (max-width: 600px) {
     max-width: 90%;
     padding: 15px;
@@ -77,7 +91,6 @@ const Form = styled.form`
 
 const DivWrapper = styled.div`
   font-family: "Yeezy", sans-serif;
-  padding: 0;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -100,7 +113,7 @@ const NameWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 10px;
-
+  
   @media (max-width: 600px) {
     flex-direction: column;
   }
@@ -278,7 +291,7 @@ const Login = () => {
     <DivWrapper>
       <Navbar />
       <Label>Login</Label>
-      <Form onSubmit={handleSubmit}>
+      <Form_login onSubmit={handleSubmit}>
         <InputBox
           name="email"
           type="email"
@@ -299,7 +312,7 @@ const Login = () => {
           </EyeIcon>
         </PasswordWrapper>
         <Button type="submit">Login</Button>
-      </Form>
+      </Form_login>
       <ChangePage>
         <Link to="/signup">Don't have an account? Sign up</Link>
       </ChangePage>

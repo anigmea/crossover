@@ -5,7 +5,7 @@ import Carousel from "../components/carousel";
 import Footer from "../components/Footer";
 import POSTER from "../components/poster";
 import useAuth from "./useAuth"; // Import the custom hook for authentication
-
+import ReelVideoWrapper from "../components/Reel"
 const DivWrapper = styled.div``;
 
 const Home = () => {
@@ -24,7 +24,7 @@ const Home = () => {
       <Navbar style={{ position: "absolute", color: "white" }} />
       <Carousel />
       <POSTER />
-
+      <ReelVideoWrapper/>
       {/* Example of displaying fetched user data
       {user && (
         <div>
