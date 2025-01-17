@@ -18,14 +18,29 @@ a {
   text-decoration: none;
 }
   `;
+
+const Banner = styled.div`
+  width: 100%;
+  height: 300px;
+  background-color: #000; // Replace with actual banner image
+  background-size: cover;
+  background-position: center;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  font-weight: bold;
+
+  @media (max-width: 768px) {
+      height:  200px;
+    }
+`;
   
 const AccountDetails = styled.div`
 margin-bottom: 20px;
 `;
 
-const Labelh2 = styled.h2`
-    color: #333;
-  `;
 
 const Labelh3 = styled.h3`
 color: #333;
@@ -105,7 +120,7 @@ const Account = () => {
   return (
     <AccountPage>
       <Navbar/>
-      <Labelh2>Account Page</Labelh2>
+      <Banner>Account Page</Banner>
 
       <AccountDetails>
         <Labelh3>Personal Details</Labelh3>

@@ -341,6 +341,8 @@ app.post("/login", async (req, res) => {
     return res.status(400).json({ message: "Email, password are required." });
   }
 
+  
+
   try {
     // Check if the user exists with the provided email
     const query = "SELECT * FROM Users WHERE Email = ?";
@@ -355,6 +357,7 @@ app.post("/login", async (req, res) => {
       }
 
       const user = results[0];
+      const token = jwt.sign(user.UserID , JWT_SECRET, { expiresIn: '1d' });
 
       // // Check if the provided userID matches the user's ID in the database
       // if (user.UserID !== userID) {
@@ -367,6 +370,8 @@ app.post("/login", async (req, res) => {
         return res.status(401).json({ message: "Invalid credentials" });
       }
 
+      
+
       // Generate a success response (you could also include a token if necessary)
       res.status(200).json({
         message: "Login successful",
@@ -375,6 +380,7 @@ app.post("/login", async (req, res) => {
           email: user.Email,
           firstName: user.FirstName,
           lastName: user.LastName,
+          token: token
         },
       });
     });
