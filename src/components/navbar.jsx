@@ -1,4 +1,4 @@
-import React from "react";
+import {React,useEffect,useState} from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping, faUser } from "@fortawesome/free-solid-svg-icons";
