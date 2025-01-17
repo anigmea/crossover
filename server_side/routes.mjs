@@ -236,7 +236,7 @@ app.delete("/api/cart_items/:cart_id", async (req, res) => {
 app.delete("/api/cart_items", async (req, res) => {
   const { user_id } = req.query;
   
-  if (isNaN(user_id)) {
+  if (!user_id ) {
     return res.status(400).json({ message: "Invalid UserID" });
   }
 
