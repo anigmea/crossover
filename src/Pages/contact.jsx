@@ -84,6 +84,7 @@ const Contact = () => {
       console.log("API Response:", response); // Log response from backend
       if (response.data.success) {
         alert("Message sent successfully!");
+        window.location.reload();
       } else {
         alert("Failed to send message. Please try again.");
       }
