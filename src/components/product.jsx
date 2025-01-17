@@ -160,26 +160,6 @@ const AccordionHeader = styled.div`
   }
 `;
 
-const SwatchContainer = styled.div`
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-
-  @media (max-width: 768px) {
-    justify-content: center;
-    gap: 5px;
-  }
-`;
-
-const Swatch = styled.button`
-  width: 30px;
-  height: 30px;
-  border: 2px solid ${(props) => (props.active ? "#000" : "#ccc")};
-  border-radius: 50%;
-  background-color: ${(props) => props.color};
-  cursor: pointer;
-`;
-
 const AccordionContent = styled.div`
   padding: 10px;
   display: ${(props) => (props.open ? "block" : "none")};
@@ -193,7 +173,7 @@ const AccordionContent = styled.div`
 
 // Main Component
 const Product = () => {
-  const { user, loading, error, jwtToken } = useAuth(); // Use the custom hook
+  const { user} = useAuth(); // Use the custom hook
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const value = queryParams.get('ProductID'); // Retrieve the value of a specific query parameter
@@ -201,6 +181,8 @@ const Product = () => {
   const [quantity, setQuantity] = useState(1);
   const [data, setData] = useState([]);
   const [accordionOpen, setAccordionOpen] = useState({ "details": false, care: false });
+  const [hoveredImage, setHoveredImage] = useState(""); // New state for hovered image
+
 
   useEffect(() => {
     // Fetch data from the backend API
@@ -234,6 +216,14 @@ const Product = () => {
     });
   };
 
+  const handleImageHover = (image) => {
+    setHoveredImage(data.ImageURL); // Change the hovered image
+  };
+
+  const handleImageLeave = () => {
+    setHoveredImage(data.ImageURL ? data.ImageURL[0] : ""); // Revert to first image if hover leaves
+  };
+
   return (
     <PageWrapper>
       <Breadcrumbs>
@@ -241,7 +231,12 @@ const Product = () => {
       </Breadcrumbs>
 
       <ProductSection>
-        <ProductImage src={`/images/${data.ImageURL}`} alt={data.Name} />
+        <ProductImage 
+          src={`/images/${hoveredImage ||data.ImageURL?.[0]}`} // Show hovered image or first image
+          alt="Product Image"
+          onMouseEnter={() => handleImageHover(data.ImageURL?.[1])} // Change image on hover
+          onMouseLeave={handleImageLeave} // Revert back when hover leaves
+        />
         <ProductDetails>
           <ProductTitle>{data.Name}</ProductTitle>
           <ProductPrice>₹{data.Price}</ProductPrice>
