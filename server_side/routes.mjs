@@ -438,10 +438,10 @@ app.post('/api/place-order', async (req, res) => {
               }
               // Respond with success
              if (paymentMethod === 'Cash on Delivery'){
-              res.status(200).json({ success: true, message: 'Order Placed Successfully' });
+              res.status(200).json({ success: true, message: 'Order Placed Successfully', orderId: orderId });
              }
              else{
-              res.status(200).json({ success: true, message: 'Redirecting to payment gateway, may take a few moments.....' });
+              res.status(200).json({ success: true, message: 'Redirecting to payment gateway, may take a few moments.....', orderId: orderId});
              }
             });
           }

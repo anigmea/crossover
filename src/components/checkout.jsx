@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import useAuth from "../Pages/useAuth";
+import { useNavigate } from "react-router-dom";
 
 // Styled Components
 
@@ -149,6 +150,7 @@ const CardType = styled.div`
 
 // Main Component
 const Checkout = () => {
+  const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
   const [baseTotal, setBaseTotal] = useState(0);
   const [total, setTotal] = useState(0);
@@ -283,11 +285,16 @@ const Checkout = () => {
       })),
     };
 
+    if (paymentMethod !== 'Cash on Delivery') {
+      handleRazorpayPayment();
+    }
+
     try {
       const response = await axios.post('https://crossover.in.net:8080/api/place-order', orderData);
 
       if (response.data.success) {
         alert(response.data.message);
+        navigate("/confirmation", { state: { orderId: response.data.orderId } });
       } else {
         alert('Failed to place the order. Please try again.');
       }
@@ -296,9 +303,9 @@ const Checkout = () => {
       alert('There was an error placing your order. Please try again later.');
     }
 
-    if (paymentMethod !== 'Cash on Delivery') {
-      handleRazorpayPayment();
-    }
+    
+
+    
   };
 
   return (

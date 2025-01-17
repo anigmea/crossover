@@ -8,6 +8,7 @@ import Cart from "./Pages/CartPage";
 import CheckoutPage from "./Pages/Checkout";
 import {SignUp, Login} from "./components/Signup";
 import Account from "./components/Account";
+import ConfirmationPage from "./Pages/confirmation";
 import './App.css';
 
 export default function App() {
@@ -23,6 +24,7 @@ export default function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
         <Route path="/Account" element={<Account/>}/>
+        <Route path="/Confirmation" element={<ConfirmationPage/>}/>
       </Routes>
     </Router>
   );
