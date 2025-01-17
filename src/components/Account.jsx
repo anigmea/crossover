@@ -124,7 +124,7 @@ const Account = () => {
 
       <AccountDetails>
         <Labelh3>Personal Details</Labelh3>
-        <p><strong>Username:</strong> {userDetails.username}</p>
+        <p><strong>name:</strong> {userDetails.FirstName}</p>
         <p><strong>Email:</strong> {userDetails.email}</p>
       </AccountDetails>
 
