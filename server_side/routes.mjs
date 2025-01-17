@@ -402,46 +402,54 @@ app.post('/api/place-order', async (req, res) => {
   }
 
   try {
-
     // Insert order into the Orders table
     const orderQuery = 'INSERT INTO Orders (UserID, TotalAmount, PaymentStatus, Status) VALUES (?, ?, ?, ?)';
-    const orderResult = await queryPromise(conn, orderQuery, [userId, totalAmount, paymentMethod === 'Cash on Delivery' ? 'Unpaid' : 'Paid', 'Pending']);
-    const orderId = orderResult.insertId;
+    conn.query(orderQuery, [userId, totalAmount, paymentMethod === 'Cash on Delivery' ? 'Unpaid' : 'Paid', 'Pending'], (err, orderResult) => {
+      if (err) {
+        console.error('Error inserting into Orders table:', err);
+        return res.status(500).json({ success: false, message: 'Failed to place the order' });
+      }
 
-    // Insert each cart item into the OrderDetails table
-    const orderDetailsQuery = 'INSERT INTO OrderDetails (OrderID, ProductSizeID, Quantity, Price) VALUES (?, ?, ?, ?)';
-    for (const item of cartItems) {
-      await queryPromise(conn, orderDetailsQuery, [orderId, item.productSizeID, item.quantity, item.price]);
-    }
+      const orderId = orderResult.insertId;
 
-    // Optionally, update user details (like shipping address) in the Users table
-    const userQuery = 'UPDATE Users SET Address = ?, City = ?, State = ?, ZipCode = ?, Country = ? WHERE UserID = ?';
-    await queryPromise(conn, userQuery, [address, city, state, zipCode, country, userId]);
+      // Insert each cart item into the OrderDetails table
+      const orderDetailsQuery = 'INSERT INTO OrderDetails (OrderID, ProductSizeID, Quantity, Price) VALUES (?, ?, ?, ?)';
+      let errorOccurred = false;
 
-    // Commit the transaction
-    await new Promise((resolve, reject) => {
-      conn.commit((err) => {
-        if (err) reject(err);
-        resolve();
+      cartItems.forEach((item, index) => {
+        conn.query(orderDetailsQuery, [orderId, item.productSizeID, item.quantity, item.price], (err) => {
+          if (err) {
+            console.error('Error inserting into OrderDetails table:', err);
+            errorOccurred = true;
+          }
+
+          // When all items are processed
+          if (index === cartItems.length - 1) {
+            if (errorOccurred) {
+              return res.status(500).json({ success: false, message: 'Failed to insert order details' });
+            }
+
+            // Optionally, update user details (like shipping address) in the Users table
+            const userQuery = 'UPDATE Users SET Address = ?, City = ?, State = ?, ZipCode = ?, Country = ? WHERE UserID = ?';
+            conn.query(userQuery, [address, city, state, zipCode, country, userId], (err) => {
+              if (err) {
+                console.error('Error updating user details:', err);
+                return res.status(500).json({ success: false, message: 'Failed to update user details' });
+              }
+
+              // Respond with success
+              res.status(200).json({ success: true, message: 'Order placed successfully' });
+            });
+          }
+        });
       });
     });
-
-    // Respond with success
-    res.status(200).json({ success: true, message: 'Order placed successfully' });
   } catch (error) {
-    console.error('Error placing order:', error);
-
-    // If there's an error, rollback the transaction
-    await new Promise((resolve, reject) => {
-      conn.rollback((err) => {
-        if (err) reject(err);
-        resolve();
-      });
-    });
-
+    console.error('Unexpected error placing order:', error);
     res.status(500).json({ success: false, message: 'Failed to place the order' });
   }
 });
+
 
 
 app.post("/api/contact", (req, res) => {
