@@ -289,19 +289,25 @@ const Checkout = () => {
  
 
     try {
+      if (paymentMethod !== 'Cash on Delivery') {
+        await handleRazorpayPayment();
+      }
+
       const response = await axios.post('https://crossover.in.net:8080/api/place-order', orderData);
 
       if (response.data.success) {
         alert(response.data.message);
 
-        if (paymentMethod !== 'Cash on Delivery') {
-          await handleRazorpayPayment();
-        }
         
         for (const item of cartItems) {
           await axios.delete(`https://crossover.in.net:8080/api/cart_items/${item.CartID}`);
         }
+
+        if (paymentMethod === 'Cash on Delivery') {
+          navigate("/confirmation", { state: { orderId: response.data.orderId } });
+        }
         
+ 
       } else {
         alert('Failed to place the order. Please try again.');
       }
