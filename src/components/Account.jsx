@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import styled from "styled-components";
+import useAuth from "../Pages/useAuth";
+
 
 const AccountPage = styled.div`
     max-width: 800px;
@@ -55,6 +57,7 @@ const Tr = styled.tr`
 const Account = () => {
   const [userDetails, setUserDetails] = useState({});
   const [transactionHistory, setTransactionHistory] = useState([]);
+  const { user, loading, jwtToken } = useAuth();
 
   // Fetch user data and transaction history on component load
   useEffect(() => {
@@ -62,12 +65,11 @@ const Account = () => {
     const fetchUserDetails = async () => {
       try {
         // Assuming user details are stored in cookies
-        const userId = Cookies.get("userId");
-        if (!userId) {
+        if (!user) {
           alert("No user logged in!");
           return;
         }
-        const response = await axios.get(`https://crossover.in.net:8080/user-details/${userId}`);
+        const response = await axios.get(`https://crossover.in.net:8080/user-details/${user}`);
         setUserDetails(response.data);
       } catch (error) {
         console.error("Error fetching user details:", error);
@@ -77,12 +79,11 @@ const Account = () => {
     // Fetch transaction history
     const fetchTransactionHistory = async () => {
       try {
-        const userId = Cookies.get("userId");
-        if (!userId) {
+        if (!user) {
           alert("No user logged in!");
           return;
         }
-        const response = await axios.get(`https://crossover.in.net:8080/transactions/${userId}`);
+        const response = await axios.get(`https://crossover.in.net:8080/transactions/${user}`);
         setTransactionHistory(response.data);
       } catch (error) {
         console.error("Error fetching transaction history:", error);
