@@ -435,7 +435,7 @@ app.post('/api/place-order', async (req, res) => {
             conn.query(userQuery, [userId, firstName, lastName, email, contact, address, city, state, zipCode, country], (err) => {
               if (err) {
                 console.error('Error updating user details:', err);
-                return res.status(500).json({ success: false, message: 'Failed to update user details' });
+                return res.status(500).json({ success: false, message: err });
               }
               // Respond with success
              if (paymentMethod === 'Cash on Delivery'){
