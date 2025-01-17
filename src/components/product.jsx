@@ -216,12 +216,12 @@ const Product = () => {
     });
   };
 
-  const handleImageHover = (image) => {
-    setHoveredImage(image); // Change the hovered image
+  const handleImageHover = () => {
+    setHoveredImage(data.BackImageURL); // Change the hovered image to BackImageURL
   };
 
   const handleImageLeave = () => {
-    setHoveredImage(data.ImageURL ? data.ImageURL[0] : ""); // Revert to first image if hover leaves
+    setHoveredImage(data.ImageURL ? data.ImageURL[0] : ""); // Revert to the first image
   };
 
   return (
@@ -231,10 +231,10 @@ const Product = () => {
       </Breadcrumbs>
 
       <ProductSection>
-        <ProductImage 
-          src={`/images/${hoveredImage || data.ImageURL?.[0]}`} // Show hovered image or first image
+      <ProductImage 
+          src={`/images/${hoveredImage || data.ImageURL?.split(',')[0]}`} // Show hovered image or first image
           alt="Product Image"
-          onMouseEnter={() => handleImageHover(data.ImageURL?.[1])} // Change image on hover
+          onMouseEnter={handleImageHover} // Change image on hover
           onMouseLeave={handleImageLeave} // Revert back when hover leaves
         />
         <ProductDetails>
