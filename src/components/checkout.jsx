@@ -240,6 +240,7 @@ const Checkout = () => {
           order_id: orderId,
           handler: (response) => {
             alert(`Payment Successful! Payment ID: ${response.razorpay_payment_id}`);
+            navigate("/confirmation", { state: { orderId: response.data.orderId } });
           },
           prefill: {
             name: `${formData.firstName} ${formData.lastName}`,
@@ -300,7 +301,7 @@ const Checkout = () => {
         for (const item of cartItems) {
           await axios.delete(`https://crossover.in.net:8080/api/cart_items/${item.CartID}`);
         }
-        navigate("/confirmation", { state: { orderId: response.data.orderId } });
+        
       } else {
         alert('Failed to place the order. Please try again.');
       }
