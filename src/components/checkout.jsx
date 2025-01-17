@@ -299,7 +299,7 @@ const Checkout = () => {
         alert(response.data.message);
 
 
-        await axios.delete(`https://crossover.in.net:8080/api/cart_items?user_id = ${user}`);
+        await axios.delete(`https://crossover.in.net:8080/api/cart_items?user_id=${user}`);
 
 
         if (paymentMethod === 'Cash on Delivery') {
