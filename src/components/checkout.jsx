@@ -244,8 +244,9 @@ const Checkout = () => {
             console.log('Payment Response:', paymentResponse);
   
             // Navigate to confirmation page after successful payment
+            const user_check = user.replace(/^"|"$/g, "");
+            axios.delete(`https://crossover.in.net:8080/api/cart_items?user_id=${user_check}`);
             navigate("/confirmation", { state: { orderId: orderId } });
-  
             alert(`Payment Successful! Payment ID: ${paymentResponse.razorpay_payment_id}`);
           },
           prefill: {
@@ -305,12 +306,11 @@ const Checkout = () => {
       if (response.data.success) {
         alert(response.data.message);
 
-        const user_check = user.replace(/^"|"$/g, "");
-        await axios.delete(`https://crossover.in.net:8080/api/cart_items?user_id=${user_check}`);
-
-
+        
         if (paymentMethod === 'Cash on Delivery') {
           navigate("/confirmation", { state: { orderId: response.data.orderId } });
+          const user_check = user.replace(/^"|"$/g, "");
+          await axios.delete(`https://crossover.in.net:8080/api/cart_items?user_id=${user_check}`);
         }
         
         
