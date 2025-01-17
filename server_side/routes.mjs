@@ -161,7 +161,8 @@ app.post("/api/cart", async (req, res) => {
   }
 
   try {
-    console.log("Received Data:", { ProductSizeID, Quantity, UserID }); // Debug log
+    res.status(400).json({ message: { ProductSizeID, Quantity, UserID } });
+    // console.log("Received Data:", { ProductSizeID, Quantity, UserID }); // Debug log
     await queryPromise(
       "INSERT INTO Cart (UserID, ProductSizeID, Quantity) VALUES (?, ?, ?)",
       [UserID, ProductSizeID, Quantity]
