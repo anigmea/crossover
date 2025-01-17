@@ -163,8 +163,8 @@ const SignUp = () => {
       const user_check = user.replace(/^"|"$/g, "");
       const response = await axios.post(`https://crossover.in.net:8080/signup?userID=${user_check}`, formData);
 
-
       alert(response.data.message);
+      sessionStorage.setItem("isloggedin", 1);
     } catch (error) {
       console.error(error);
       alert("Error signing up");
@@ -261,6 +261,7 @@ const Login = () => {
     try {
       const response = await axios.post(`https://crossover.in.net:8080/login`, formData);
       alert(response.data.message);
+      sessionStorage.setItem("isloggedin", 1);
     } catch (error) {
       console.error(error);
       alert("Error logging in");

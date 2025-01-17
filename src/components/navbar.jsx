@@ -101,6 +101,13 @@ const IconWrapper = styled.div`
 const Navbar = () => {
   const location = useLocation();
   const isHome = location.pathname === "/" || location.pathname === "/#/Home";
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // Check if "isloggedin" is present in localStorage
+    const loggedInStatus = sessionStorage.getItem("isloggedin");
+    setIsLoggedIn(loggedInStatus === "1");
+  }, []);
 
   return (
     <NavbarWrapper isHome={isHome}>
@@ -122,7 +129,7 @@ const Navbar = () => {
           </a>
         </IconWrapper>
         <IconWrapper isHome={isHome}>
-          <a href="/#/SignUp" style={{ textDecoration: "none" }}>
+          <a href={isLoggedIn ? "/#/AccountPage" : "/#/SignUp"} style={{ textDecoration: "none" }}>
             <FontAwesomeIcon icon={faUser} />
           </a>
         </IconWrapper>
