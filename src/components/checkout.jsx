@@ -307,13 +307,11 @@ const Checkout = () => {
 
         const user_check = user.replace(/^"|"$/g, "");
         await axios.delete(`https://crossover.in.net:8080/api/cart_items?user_id=${user_check}`);
+        navigate("/confirmation", { state: { orderId: response.data.orderId } });
 
-
-        if (paymentMethod === 'Cash on Delivery') {
-          navigate("/confirmation", { state: { orderId: response.data.orderId } });
-        }
         
- 
+        
+        
       } else {
         alert('Failed to place the order. Please try again.');
       }
