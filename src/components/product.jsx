@@ -221,7 +221,7 @@ const Product = () => {
   };
 
   const handleImageLeave = () => {
-    setHoveredImage(""); // Revert to the first image
+    setHoveredImage(data.ImageURL); // Revert to the first image
   };
 
   return (
