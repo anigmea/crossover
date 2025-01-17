@@ -233,7 +233,7 @@ app.delete("/api/cart_items/:cart_id", async (req, res) => {
   }
 });
 
-app.delete("/api/cart_items/:user_id", async (req, res) => {
+app.delete("/api/cart_items", async (req, res) => {
   const { user_id } = req.params;
 
   if (!user_id || isNaN(user_id)) {
