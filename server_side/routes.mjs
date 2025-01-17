@@ -355,7 +355,7 @@ app.post("/login", async (req, res) => {
         return res.status(404).json({ message: "User not found" });
       }
 
-      // const user = results[0];
+      const user = results[0];
       // const token = jwt.sign(user.UserId , JWT_SECRET, { expiresIn: '1d' });
 
       // // Check if the provided userID matches the user's ID in the database
