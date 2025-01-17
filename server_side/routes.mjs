@@ -431,8 +431,7 @@ app.post('/api/place-order', async (req, res) => {
 
             // Optionally, update user details (like shipping address) in the Users table
             const userQuery = `INSERT INTO Users (UserID, FirstName, LastName, Email, Contact, Address, City, State, ZipCode, Country, CreatedAt, UpdatedAt) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
-            ON DUPLICATE KEY UPDATE Address = VALUES(Address), City = VALUES(City), State = VALUES(State), ZipCode = VALUES(ZipCode), Country = VALUES(Country)`;
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`;
             conn.query(userQuery, [userId, firstName, lastName, email, contact, address, city, state, zipCode, country], (err) => {
               if (err) {
                 console.error('Error updating user details:', err);
