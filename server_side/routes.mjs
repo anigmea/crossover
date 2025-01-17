@@ -147,6 +147,7 @@ app.get("/api/product", async (req, res) => {
       Name: product.Name,
       Price: product.Price,
       ImageURL: product.ImageURL,
+      BackImageURL: product.BackImageURL,
       Sizes: sizes,
     });
   } catch (error) {
