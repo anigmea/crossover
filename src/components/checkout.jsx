@@ -236,7 +236,7 @@ const Checkout = () => {
           key: 'rzp_test_585ABTEGO5I2VY', 
           amount: total * 100, 
           currency: 'INR',
-          name: 'Your Company Name',
+          name: 'Crossover',
           description: 'Purchase Description',
           order_id: orderId,
           handler: (paymentResponse) => {
