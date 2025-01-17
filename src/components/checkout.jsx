@@ -264,9 +264,9 @@ const Checkout = () => {
       alert('Please fill in all the required fields!');
       return;
     }
-  
+
     const orderData = {
-      userId: user,
+      userId: user, 
       firstName: formData.firstName,
       lastName: formData.lastName,
       email: formData.email,
@@ -284,50 +284,31 @@ const Checkout = () => {
         price: item.product_price,
       })),
     };
-  
+
+ 
+
     try {
-      // First, initiate Razorpay payment if payment method is not 'Cash on Delivery'
-      const razorpayResponse = null;
-      if (paymentMethod !== 'Cash on Delivery') {
-        razorpayResponse = await handleRazorpayPayment();
-        if (!razorpayResponse) {
-          alert('Payment failed or was cancelled. Please try again.');
-          return; // If payment fails or is cancelled, stop the order placement process
-        }
-        alert('order placed successfully');
-      }
-  
-      // After successful Razorpay payment, place the order in the backend
       const response = await axios.post('https://crossover.in.net:8080/api/place-order', orderData);
-  
+
       if (response.data.success) {
         alert(response.data.message);
-  
-        // Remove cart items from the backend
+
+        if (paymentMethod !== 'Cash on Delivery') {
+          await handleRazorpayPayment();
+        }
+        
         for (const item of cartItems) {
           await axios.delete(`https://crossover.in.net:8080/api/cart_items/${item.CartID}`);
         }
-  
-        // Clear cart items locally after successful order placement
-        setCartItems([]);
-  
-        // Navigate to confirmation page
-        if (paymentMethod !== 'Cash on Delivery' && razorpayResponse) {
-          navigate("/confirmation", { state: { orderId: response.data.orderId } });
-        }
-        else if (paymentMethod === 'Cash on Delivery'){
-          navigate("/confirmation", { state: { orderId: response.data.orderId } });
-        }
+        navigate("/confirmation", { state: { orderId: response.data.orderId } });
       } else {
         alert('Failed to place the order. Please try again.');
       }
-
     } catch (error) {
       console.error('Error placing the order:', error);
       alert('There was an error placing your order. Please try again later.');
-    }
+    }    
   };
-  
 
   return (
     <PageWrapper>
