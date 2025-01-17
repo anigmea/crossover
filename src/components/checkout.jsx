@@ -298,8 +298,8 @@ const Checkout = () => {
       if (response.data.success) {
         alert(response.data.message);
 
-
-        await axios.delete(`https://crossover.in.net:8080/api/cart_items?user_id=${user}`);
+        const user_check = user.replace(/^"|"$/g, "");
+        await axios.delete(`https://crossover.in.net:8080/api/cart_items?user_id=${user_check}`);
 
 
         if (paymentMethod === 'Cash on Delivery') {
