@@ -233,6 +233,21 @@ app.delete("/api/cart_items/:cart_id", async (req, res) => {
   }
 });
 
+app.delete("/api/cart_items/:user_id", async (req, res) => {
+  const { user_id } = req.params;
+
+  if (!user_id || isNaN(user_id)) {
+    return res.status(400).json({ message: "Invalid UserID" });
+  }
+
+  try {
+    await queryPromise("DELETE FROM Cart WHERE UserID = ?", [user_id]);
+    res.status(200).json({ message: "Cart item removed successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting cart item" });
+  }
+});
+
 // Update quantity in the cart
 app.put("/api/cart_items/:cart_id", async (req, res) => {
   const { cart_id } = req.params; // Get CartID from URL
