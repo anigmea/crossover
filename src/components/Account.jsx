@@ -3,6 +3,9 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import styled from "styled-components";
 import useAuth from "../Pages/useAuth";
+import Navbar from "./navbar";
+import Footer from "./Footer";
+
 
 
 const AccountPage = styled.div`
@@ -96,6 +99,7 @@ const Account = () => {
 
   return (
     <AccountPage>
+      <Navbar/>
       <Labelh2>Account Page</Labelh2>
 
       <AccountDetails>
@@ -142,6 +146,7 @@ const Account = () => {
           <p>No transaction history available.</p>
         )}
       </div>
+      <Footer/>
     </AccountPage>
   );
 };
