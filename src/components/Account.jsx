@@ -9,12 +9,16 @@ import Footer from "./Footer";
 
 
 const AccountPage = styled.div`
-    max-width: 800px;
-    margin: 0 auto;
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+display: block;
+text-align: center;
+margin-top: 10px;
+color: #000;
+text-decoration: none;
+margin-bottom: 90px;
+a {
+  color: inherit;
+  text-decoration: none;
+}
   `;
   
 const AccountDetails = styled.div`
@@ -60,13 +64,15 @@ const Tr = styled.tr`
 const Account = () => {
   const [userDetails, setUserDetails] = useState({});
   const [transactionHistory, setTransactionHistory] = useState([]);
-  const { user, loading, jwtToken } = useAuth();
 
   // Fetch user data and transaction history on component load
   useEffect(() => {
     // Fetch user details from backend or cookies
+    const { user, loading, jwtToken } = useAuth();
+
     const fetchUserDetails = async () => {
       try {
+        
         // Assuming user details are stored in cookies
         if (!user) {
           alert("No user logged in!");
