@@ -242,7 +242,7 @@ const Checkout = () => {
           handler: (paymentResponse) => {
             // Use Razorpay payment response data to handle success
             console.log('Payment Response:', paymentResponse);
-  
+            alert(paymentResponse);
             // Navigate to confirmation page after successful payment
             const user_check = user.replace(/^"|"$/g, "");
             axios.delete(`https://crossover.in.net:8080/api/cart_items?user_id=${user_check}`);
