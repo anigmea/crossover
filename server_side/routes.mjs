@@ -430,12 +430,12 @@ app.post('/api/place-order', async (req, res) => {
             }
 
             // Optionally, update user details (like shipping address) in the Users table
-            const userQuery = `INSERT INTO Users (UserID, FirstName, LastName, Email, Contact, Address, City, State, ZipCode, Country) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE UserID = UserID`;
-            conn.query(userQuery, [userId, firstName, lastName, email, contact, address, city, state, zipCode, country], (err) => {
+            const userQuery = `INSERT INTO Users (UserID, FirstName, LastName, Email, Contact, PasswordHash, Address, City, State, ZipCode, Country) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE UserID = UserID`;
+            conn.query(userQuery, [userId, firstName, lastName, email, contact, address, "tmp" , city, state, zipCode, country], (err) => {
               if (err) {
                 console.error('Error updating user details:', err);
-                return res.status(500).json({ success: false, message: err });
+                return res.status(500).json({ success: false, message: 'Failed to update user details' });
               }
               // Respond with success
              if (paymentMethod === 'Cash on Delivery'){
