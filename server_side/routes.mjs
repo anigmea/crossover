@@ -123,7 +123,7 @@ app.get("/api/product", async (req, res) => {
 
   try {
     const productQuery = `
-      SELECT p.ProductID, p.Name, p.Price, p.ImageURL, ps.ProductSizeID, 
+      SELECT p.ProductID, p.Name, p.Price, p.BackImageURL, p.ImageURL, ps.ProductSizeID, 
       ps.Stock, s.SizeName 
       FROM Products p
       LEFT JOIN ProductSizes ps ON p.ProductID = ps.ProductID
