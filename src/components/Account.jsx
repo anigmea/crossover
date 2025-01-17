@@ -33,7 +33,7 @@ const Banner = styled.div`
   font-weight: bold;
 
   @media (max-width: 768px) {
-      height:  200px;
+      height:  100px;
     }
 `;
   

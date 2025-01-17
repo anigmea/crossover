@@ -32,7 +32,7 @@ const Banner = styled.div`
     font-weight: bold;
 
     @media (max-width: 768px) {
-        height:  200px;
+        height:  150px;
       }
 `;
 
@@ -49,7 +49,6 @@ const ProductGrid = styled.div`
 
 const ProductCard = styled.div`
     background-color: #f4f4f4;
-    border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     text-align: center;
