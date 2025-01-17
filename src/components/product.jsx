@@ -217,11 +217,11 @@ const Product = () => {
   };
 
   const handleImageHover = (image) => {
-    setHoveredImage(data.ImageURL.split(',')[0]); // Change the hovered image
+    setHoveredImage(image); // Change the hovered image
   };
 
   const handleImageLeave = () => {
-    setHoveredImage(data.ImageURL.split(',')[1] ? data.ImageURL.split(',')[0] : ""); // Revert to first image if hover leaves
+    setHoveredImage(data.ImageURL ? data.ImageURL[0] : ""); // Revert to first image if hover leaves
   };
 
   return (
@@ -232,9 +232,9 @@ const Product = () => {
 
       <ProductSection>
         <ProductImage 
-          src={`/images/${data.ImageURL.split(',')[1] ||data.ImageURL.split(',')[0]?.[0]}`} // Show hovered image or first image
+          src={`/images/${hoveredImage || data.ImageURL?.[0]}`} // Show hovered image or first image
           alt="Product Image"
-          onMouseEnter={() => handleImageHover(data.ImageURL.split(',')[0]?.[1])} // Change image on hover
+          onMouseEnter={() => handleImageHover(data.ImageURL?.[1])} // Change image on hover
           onMouseLeave={handleImageLeave} // Revert back when hover leaves
         />
         <ProductDetails>
