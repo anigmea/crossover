@@ -234,7 +234,7 @@ app.delete("/api/cart_items/:cart_id", async (req, res) => {
 });
 
 app.delete("/api/cart_items", async (req, res) => {
-  const { user_id } = req.params;
+  const { user_id } = req.query;
   return res.status(200).json({ message: user_id });
   
 
