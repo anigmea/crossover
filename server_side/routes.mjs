@@ -436,9 +436,13 @@ app.post('/api/place-order', async (req, res) => {
                 console.error('Error updating user details:', err);
                 return res.status(500).json({ success: false, message: 'Failed to update user details' });
               }
-
               // Respond with success
-              res.status(200).json({ success: true, message: 'Order placed successfully' });
+             if (paymentMethod === 'Cash on Delivery'){
+              res.status(200).json({ success: true, message: 'Order Placed Successfully' });
+             }
+             else{
+              res.status(200).json({ success: true, message: 'Redirecting to payment gateway, may take a few moments.....' });
+             }
             });
           }
         });
