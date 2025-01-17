@@ -299,10 +299,10 @@ const Checkout = () => {
         alert(response.data.message);
 
         
-        for (const item of cartItems) {
-          alert(item.CartID);
-          await axios.delete(`https://crossover.in.net:8080/api/cart_items/${item.CartID}`);
-        }
+        // for (const item of cartItems) {
+        //   alert(item.CartID);
+        //   await axios.delete(`https://crossover.in.net:8080/api/cart_items/${item.CartID}`);
+        // }
 
         if (paymentMethod === 'Cash on Delivery') {
           navigate("/confirmation", { state: { orderId: response.data.orderId } });
