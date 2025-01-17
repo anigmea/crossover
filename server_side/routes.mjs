@@ -356,7 +356,7 @@ app.post("/login", async (req, res) => {
       }
 
       const user = results[0];
-      const token = jwt.sign(user.UserID , JWT_SECRET, { expiresIn: '1d' });
+      const token = jwt.sign(user.UserId , JWT_SECRET, { expiresIn: '1d' });
 
       // // Check if the provided userID matches the user's ID in the database
       // if (user.UserID !== userID) {
@@ -375,7 +375,7 @@ app.post("/login", async (req, res) => {
       res.status(200).json({
         message: "Login successful",
         user: {
-          userID: user.UserID,
+          userID: user.UserId,
           email: user.Email,
           firstName: user.FirstName,
           lastName: user.LastName,
