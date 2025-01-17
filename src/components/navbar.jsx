@@ -126,11 +126,11 @@ const Navbar = () => {
             <FontAwesomeIcon icon={faCartShopping} />
           </a>
         </IconWrapper>
-        <IconWrapper isHome={isHome}>
+        {/* <IconWrapper isHome={isHome}>
           <a href={isLoggedIn ? "/#/Account" : "/#/SignUp"} style={{ textDecoration: "none" }}>
             <FontAwesomeIcon icon={faUser} />
           </a>
-        </IconWrapper>
+        </IconWrapper> */}
       </SIGNIN_DIV>
     </NavbarWrapper>
   );

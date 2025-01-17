@@ -285,14 +285,16 @@ const Checkout = () => {
       })),
     };
 
-    if (paymentMethod !== 'Cash on Delivery') {
-      handleRazorpayPayment();
-    }
+ 
 
     try {
       const response = await axios.post('https://crossover.in.net:8080/api/place-order', orderData);
 
       if (response.data.success) {
+        if (paymentMethod !== 'Cash on Delivery') {
+          handleRazorpayPayment();
+        }
+        
         alert(response.data.message);
         navigate("/confirmation", { state: { orderId: response.data.orderId } });
       } else {
