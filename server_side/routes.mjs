@@ -332,32 +332,59 @@ app.post('/signup', async (req, res) => {
     res.status(500).json({ message: 'Error signing up' });
   }
 });
-// app.post("/login", (req, res) => {
-//   const { email, password } = req.body;
 
-//   if (!email || !password) {
-//     return res.status(400).json({ message: "All fields are required" });
-//   }
+app.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+  const { userID } = req.query;
 
-//   db.query("SELECT * FROM users WHERE email = ?", [email], async (err, results) => {
-//     if (err) throw err;
+  // Check if all required fields are provided
+  if (!email || !password || !userID) {
+    return res.status(400).json({ message: "Email, password, and userID are required." });
+  }
 
-//     if (results.length === 0) {
-//       return res.status(404).json({ message: "User not found" });
-//     }
+  try {
+    // Check if the user exists with the provided email
+    const query = "SELECT * FROM Users WHERE Email = ?";
+    conn.query(query, [email], async (err, results) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ message: "Error checking email" });
+      }
 
-//     const user = results[0];
-//     const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (results.length === 0) {
+        return res.status(404).json({ message: "User not found" });
+      }
 
-//     if (!isPasswordValid) {
-//       return res.status(401).json({ message: "Invalid credentials" });
-//     }
+      const user = results[0];
 
-//     // const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: "1h" });
+      // Check if the provided userID matches the user's ID in the database
+      if (user.UserID !== userID) {
+        return res.status(401).json({ message: "Invalid user ID" });
+      }
 
-//     res.status(200).json({ message: "Login successful"});
-//   });
-// });
+      // Compare the provided password with the hashed password in the database
+      const isPasswordValid = await bcrypt.compare(password, user.PasswordHash);
+      if (!isPasswordValid) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+
+      // Generate a success response (you could also include a token if necessary)
+      res.status(200).json({
+        message: "Login successful",
+        user: {
+          userID: user.UserID,
+          email: user.Email,
+          firstName: user.FirstName,
+          lastName: user.LastName,
+        },
+      });
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error logging in" });
+  }
+});
+
 
 app.post('/api/place-order', async (req, res) => {
   const {
