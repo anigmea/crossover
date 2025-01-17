@@ -41,9 +41,10 @@ const CartItem = styled.div`
 `;
 
 const ProductImage = styled.img`
-  width: 120px;
-  height: 120px;
+  width: 160px;
+  height: 160px;
   object-fit: cover;
+  margin-right: 10px;
   @media (max-width: 768px) {
     width: 100px;
     height: 100px;
@@ -61,7 +62,6 @@ const ProductDetails = styled.div`
 
 const ProductTitle = styled.h2`
   font-size: 18px;
-  margin-bottom: 10px;
   @media (max-width: 768px) {
     font-size: 16px;
   }
@@ -76,7 +76,7 @@ const ProductPrice = styled.p`
 `;
 
 const SizeSelector = styled.select`
-  margin-top: 10px;
+  margin-top: 2px;
   padding: 5px;
   font-size: 14px;
   @media (max-width: 768px) {
@@ -268,8 +268,8 @@ const CartPage = () => {
             <ProductDetails>
               <ProductTitle>{item.product_name}</ProductTitle>
               <ProductPrice>₹{item.product_price}</ProductPrice>
-              <SizeSelector
-                value={item.ProductSizeID || ""}
+              {/* <SizeSelector
+                value={item.ProductSizeID}
                 onChange={(e) => updateSize(item.cart_id, e.target.value)}
               >
                 {item.Sizes && item.Sizes.map((size) => (
@@ -277,7 +277,8 @@ const CartPage = () => {
                     {size.size_name}
                   </option>
                 ))}
-              </SizeSelector>
+              </SizeSelector> */}
+              <ProductPrice>{item.product_size}</ProductPrice>
               <QuantityControls>
                 <button onClick={() => updateQuantity(item.ProductID, -1, item.cart_id)}>
                   -

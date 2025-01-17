@@ -325,7 +325,7 @@ const Checkout = () => {
         {paymentMethod === 'Cash on Delivery' && (
           <SummaryItem>
             <span>Cash on Delivery Charge</span>
-            <span>${CODCharge.toFixed(2)}</span>
+            <span>₹{CODCharge.toFixed(2)}</span>
           </SummaryItem>
         )}
         <SummaryItem>
