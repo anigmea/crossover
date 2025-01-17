@@ -128,7 +128,7 @@ const Account = () => {
         <p><strong>Email:</strong> {userDetails.email}</p>
       </AccountDetails>
 
-      <div className="cookies-details">
+      {/* <div className="cookies-details">
         <h3>Cookies</h3>
         <ul>
           {Object.entries(Cookies.get() || {}).map(([key, value]) => (
@@ -137,7 +137,7 @@ const Account = () => {
             </li>
           ))}
         </ul>
-      </div>
+      </div> */}
 
       <div className="transaction-history">
         <h3>Transaction History</h3>
