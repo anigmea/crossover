@@ -218,15 +218,16 @@ const Checkout = () => {
   };
 
   const handleRazorpayPayment = async () => {
+  
     try {
       const response = await fetch('https://crossover.in.net:8080/api/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 'amount': total }),
       });
-
+  
       const { orderId } = await response.json();
-
+  
       const razorpayScript = document.createElement('script');
       razorpayScript.src = 'https://checkout.razorpay.com/v1/checkout.js';
       razorpayScript.async = true;
@@ -238,9 +239,14 @@ const Checkout = () => {
           name: 'Your Company Name',
           description: 'Purchase Description',
           order_id: orderId,
-          handler: (response) => {
-            navigate("/confirmation", { state: { orderId: response.data.orderId } });
-            alert(`Payment Successful! Payment ID: ${response.razorpay_payment_id}`);
+          handler: (paymentResponse) => {
+            // Use Razorpay payment response data to handle success
+            console.log('Payment Response:', paymentResponse);
+  
+            // Navigate to confirmation page after successful payment
+            navigate("/confirmation", { state: { orderId: paymentResponse.razorpay_payment_id } });
+  
+            alert(`Payment Successful! Payment ID: ${paymentResponse.razorpay_payment_id}`);
           },
           prefill: {
             name: `${formData.firstName} ${formData.lastName}`,
@@ -251,6 +257,7 @@ const Checkout = () => {
             color: '#000',
           },
         };
+  
         const paymentObject = new window.Razorpay(options);
         paymentObject.open();
       };
