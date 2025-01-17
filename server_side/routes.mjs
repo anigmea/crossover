@@ -341,7 +341,6 @@ app.post("/login", async (req, res) => {
     return res.status(400).json({ message: "Email, password are required." });
   }
 
-  
 
   try {
     // Check if the user exists with the provided email
