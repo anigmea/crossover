@@ -477,7 +477,7 @@ app.post("/api/contact", (req, res) => {
 
 app.get("/user-details/:userId", (req, res) => {
   const { userId } = req.params;
-  conn.query("SELECT username, email FROM Users WHERE id = ?", [userId], (err, results) => {
+  conn.query("SELECT username, email FROM Users WHERE UserID = ?", [userId], (err, results) => {
     if (err) {
       console.error("Error fetching user details:", err);
       res.status(500).json({ error: "Failed to fetch user details" });
