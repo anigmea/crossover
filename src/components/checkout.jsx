@@ -264,7 +264,7 @@ const Checkout = () => {
     }
 
     const orderData = {
-      userId: 1, 
+      userId: user, 
       firstName: formData.firstName,
       lastName: formData.lastName,
       email: formData.email,

@@ -411,8 +411,8 @@ app.post('/api/place-order', async (req, res) => {
     });
 
     // Insert order into the Orders table
-    const orderQuery = 'INSERT INTO Orders (UserID, TotalAmount, PaymentStatus) VALUES (?, ?, ?)';
-    const orderResult = await queryPromise(conn, orderQuery, [userId, totalAmount, paymentMethod === 'Cash on Delivery' ? 'Unpaid' : 'Paid']);
+    const orderQuery = 'INSERT INTO Orders (UserID, TotalAmount, PaymentStatus, Status) VALUES (?, ?, ?, ?)';
+    const orderResult = await queryPromise(conn, orderQuery, [userId, totalAmount, paymentMethod === 'Cash on Delivery' ? 'Unpaid' : 'Paid', 'Pending']);
     const orderId = orderResult.insertId;
 
     // Insert each cart item into the OrderDetails table
