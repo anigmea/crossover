@@ -138,6 +138,7 @@ app.get("/api/product", async (req, res) => {
 
     const product = results[0];
     const sizes = results.map(item => ({
+      ProductSizeID: item.ProductSizeID,
       size: item.SizeName,
       stock: item.Stock,
     }));
@@ -161,8 +162,8 @@ app.post("/api/cart", async (req, res) => {
   }
 
   try {
-    res.status(400).json({ message: { ProductSizeID, Quantity, UserID } });
-    // console.log("Received Data:", { ProductSizeID, Quantity, UserID }); // Debug log
+    
+    console.log("Received Data:", { ProductSizeID, Quantity, UserID }); // Debug log
     await queryPromise(
       "INSERT INTO Cart (UserID, ProductSizeID, Quantity) VALUES (?, ?, ?)",
       [UserID, ProductSizeID, Quantity]
