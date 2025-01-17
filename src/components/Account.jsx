@@ -64,15 +64,16 @@ const Tr = styled.tr`
 const Account = () => {
   const [userDetails, setUserDetails] = useState({});
   const [transactionHistory, setTransactionHistory] = useState([]);
+  const { user, loading, jwtToken } = useAuth();
+
 
   // Fetch user data and transaction history on component load
   useEffect(() => {
     // Fetch user details from backend or cookies
-    const { user, loading, jwtToken } = useAuth();
-
+    
     const fetchUserDetails = async () => {
       try {
-        
+        alert(user);
         // Assuming user details are stored in cookies
         if (!user) {
           alert("No user logged in!");
