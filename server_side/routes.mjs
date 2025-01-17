@@ -337,8 +337,8 @@ app.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   // Check if all required fields are provided
-  if (!email || !password || !userID) {
-    return res.status(400).json({ message: "Email, password, and userID are required." });
+  if (!email || !password) {
+    return res.status(400).json({ message: "Email, password are required." });
   }
 
   try {
