@@ -287,7 +287,7 @@ const Checkout = () => {
       const response = await axios.post('https://crossover.in.net:8080/api/place-order', orderData);
 
       if (response.data.success) {
-        alert('Order placed successfully!');
+        alert(response.data.message);
       } else {
         alert('Failed to place the order. Please try again.');
       }
