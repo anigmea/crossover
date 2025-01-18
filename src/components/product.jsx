@@ -48,8 +48,15 @@ const ProductImage = styled.img`
   width: 30%; /* Default for desktop */
   border-radius: 8px;
   object-fit: cover;
+  max-width: 100%;
+  height: auto; /* Maintain aspect ratio */
 
 
+  @media (max-width: 768px) {
+    width: 80%; /* Set to a responsive percentage */
+    max-width: 400px; /* Limit the maximum size on smaller screens */
+    margin-bottom: 20px;
+  }
 `;
 
 
