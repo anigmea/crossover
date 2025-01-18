@@ -50,9 +50,9 @@ const ProductImage = styled.img`
   object-fit: cover;
 
   @media (max-width: 768px) {
-    width: 20%;
+    width: 20px;
     margin-bottom: 20px;
-    height: 20%;
+    height: 20px;
   }
 `;
 
