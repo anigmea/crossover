@@ -52,6 +52,7 @@ const ProductImage = styled.img`
   @media (max-width: 768px) {
     width: 20%;
     margin-bottom: 20px;
+    height: 20%;
   }
 `;
 
