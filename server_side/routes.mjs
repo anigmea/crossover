@@ -32,8 +32,8 @@ const queryPromise = (query, values = []) => {
 
 // Initialize Razorpay instance
 const razorpay = new Razorpay({
-  key_id: "rzp_live_V7d3UJ1cUZwVkk",
-  key_secret: "dIYhAY6J1EnLqlXMjfkPmhhZ",
+  key_id: "rzp_live_bcDeF4tjfyF8sP",
+  key_secret: "iNzpbQaxrWj70cljpWDnLmVF",
 });
 
 app.use((req, res, next) => {
