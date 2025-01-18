@@ -233,7 +233,7 @@ const Checkout = () => {
       razorpayScript.async = true;
       razorpayScript.onload = () => {
         const options = {
-          key: 'rzp_test_585ABTEGO5I2VY', 
+          key: 'rzp_live_bcDeF4tjfyF8sP', 
           amount: total * 100, 
           currency: 'INR',
           name: 'Crossover',
