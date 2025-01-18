@@ -442,7 +442,7 @@ app.post('/api/place-order', async (req, res) => {
           // When all items are processed
           if (index === cartItems.length - 1) {
             if (errorOccurred) {
-              return res.status(500).json({ success: false, message: errorOccurred });
+              return res.status(500).json({ success: false, message: err });
             }
 
             // Optionally, update user details (like shipping address) in the Users table
