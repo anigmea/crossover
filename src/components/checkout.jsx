@@ -194,8 +194,8 @@ const Checkout = () => {
 
   useEffect(() => {
     const calculatedTotal = cartItems.reduce((acc, item) => acc + (parseFloat(item.product_price * item.Quantity) || 0), 0);
-    setBaseTotal(calculatedTotal);
-    setTotal(calculatedTotal);
+    setBaseTotal(calculatedTotal  * 0.75);
+    setTotal(calculatedTotal  * 0.75);
   }, [cartItems]);
 
   const handleInputChange = (e) => {
@@ -342,6 +342,12 @@ const Checkout = () => {
           <SummaryItem>
             <span>Cash on Delivery Charge</span>
             <span>₹{CODCharge.toFixed(2)}</span>
+          </SummaryItem>
+        )}
+        {cartItems.length >= 1  && (
+          <SummaryItem>
+            <span>First week 25% off</span>
+            <span>₹{(total * 0.25 * -1).toFixed(2)}</span>
           </SummaryItem>
         )}
         <SummaryItem>
