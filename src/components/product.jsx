@@ -49,11 +49,7 @@ const ProductImage = styled.img`
   border-radius: 8px;
   object-fit: cover;
 
-  @media (max-width: 768px) {
-    width: 80%; /* Set to a responsive percentage */
-    height: auto; /* Maintain aspect ratio */
-    margin-bottom: 20px;
-  }
+
 `;
 
 
