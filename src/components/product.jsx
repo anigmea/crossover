@@ -13,10 +13,6 @@ const PageWrapper = styled.div`
   padding: 20px;
   font-size: 20px;
 
-  @media (max-width: 768px) {
-    padding: 10px;
-    font-size: 16px;
-  }
 `;
 
 const Breadcrumbs = styled.div`
@@ -38,10 +34,6 @@ const ProductSection = styled.div`
   gap: 30px;
   flex-wrap: wrap;
   
-  @media (max-width: 768px) {
-    flex-direction: column;
-    align-items: center;
-  }
 `;
 
 const ProductImage = styled.img`
@@ -90,10 +82,6 @@ const SizeSelector = styled.select`
   font-size: 14px;
   width: 200px;
 
-  @media (max-width: 768px) {
-    width: 100%;
-    font-size: 16px;
-  }
 `;
 
 const QuantitySelector = styled.div`
@@ -132,9 +120,6 @@ const Accordion = styled.div`
   margin-top: 30px;
   width: 100%;
 
-  @media (max-width: 768px) {
-    margin-top: 20px;
-  }
 `;
 
 const AccordionHeader = styled.div`
