@@ -3,6 +3,9 @@ import { useLocation } from 'react-router-dom';
 import styled from "styled-components";
 import axios from "axios";
 import useAuth from "../Pages/useAuth";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import { Pagination } from 'swiper/modules';
 
 // Styled Components
 const PageWrapper = styled.div`
@@ -231,12 +234,32 @@ const Product = () => {
       </Breadcrumbs>
 
       <ProductSection>
-      <ProductImage 
+      <Swiper
+        autoHeight={true}
+        modules={[Pagination]}
+        // autoplay={{
+        //     delay: 2500, // Delay between transitions (in milliseconds)
+        //     disableOnInteraction: false, // Keep autoplaying even after user interaction
+        // }}
+        spaceBetween={0}
+        slidesPerView={1}
+      >
+        <ProductImage 
           src={`/images/${data.ImageURL}`} // Show hovered image or first image
           alt="Product Image"
           // onMouseEnter={handleImageHover} // Change image on hover
           // onMouseLeave={handleImageLeave} // Revert back when hover leaves
         />
+        <ProductImage 
+          src={`/images/${data.BackImageURL}`} // Show hovered image or first image
+          alt="Product Image"
+          // onMouseEnter={handleImageHover} // Change image on hover
+          // onMouseLeave={handleImageLeave} // Revert back when hover leaves
+        />
+        {/* <SwiperSlide><IMAGE src={Carousel4}></IMAGE></SwiperSlide> */}
+        ...
+      </Swiper>
+      
         <ProductDetails>
           <ProductTitle>{data.Name}</ProductTitle>
           <ProductPrice>₹{data.Price}</ProductPrice>
