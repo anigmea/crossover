@@ -347,7 +347,7 @@ const Checkout = () => {
         {cartItems.length >= 1  && (
           <SummaryItem>
             <span>First week 25% off</span>
-            <span>₹{(total * 0.25 * -1).toFixed(2)}</span>
+            <span>-₹{(total * 0.25).toFixed(2)}</span>
           </SummaryItem>
         )}
         <SummaryItem>

@@ -232,10 +232,10 @@ const Product = () => {
 
       <ProductSection>
       <ProductImage 
-          src={`/images/${hoveredImage}`} // Show hovered image or first image
+          src={`/images/${ImageURL}`} // Show hovered image or first image
           alt="Product Image"
-          onMouseEnter={handleImageHover} // Change image on hover
-          onMouseLeave={handleImageLeave} // Revert back when hover leaves
+          // onMouseEnter={handleImageHover} // Change image on hover
+          // onMouseLeave={handleImageLeave} // Revert back when hover leaves
         />
         <ProductDetails>
           <ProductTitle>{data.Name}</ProductTitle>
