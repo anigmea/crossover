@@ -45,16 +45,17 @@ const ProductSection = styled.div`
 `;
 
 const ProductImage = styled.img`
-  width: 30%;
+  width: 30%; /* Default for desktop */
   border-radius: 8px;
   object-fit: cover;
 
   @media (max-width: 768px) {
-    width: 20px;
+    width: 80%; /* Set to a responsive percentage */
+    height: auto; /* Maintain aspect ratio */
     margin-bottom: 20px;
-    height: 20px;
   }
 `;
+
 
 const ProductDetails = styled.div`
   flex: 1;
@@ -242,7 +243,7 @@ const Product = () => {
         //     delay: 2500, // Delay between transitions (in milliseconds)
         //     disableOnInteraction: false, // Keep autoplaying even after user interaction
         // }}
-        spaceBetween={0}
+        spaceBetween={10}
         slidesPerView={1}
       >
         <SwiperSlide><ProductImage 
