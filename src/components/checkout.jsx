@@ -237,7 +237,7 @@ const Checkout = () => {
           amount: total * 100, 
           currency: 'INR',
           name: 'Crossover',
-          description: 'Purchase Description',
+          description: 'Crossover Tshirts',
           order_id: orderId,
           handler: (paymentResponse) => {
             // Use Razorpay payment response data to handle success
