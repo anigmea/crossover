@@ -66,19 +66,14 @@ const ProductDetails = styled.div`
   flex-direction: column;
   align-items: flex-start;
 
-  @media (max-width: 768px) {
-    align-items: center;
-    text-align: center;
-  }
+
 `;
 
 const ProductTitle = styled.h1`
   font-size: 28px;
   margin-bottom: 10px;
 
-  @media (max-width: 768px) {
-    font-size: 24px;
-  }
+
 `;
 
 const ProductPrice = styled.p`
@@ -86,9 +81,7 @@ const ProductPrice = styled.p`
   color: #b12704;
   margin-bottom: 20px;
 
-  @media (max-width: 768px) {
-    font-size: 18px;
-  }
+
 `;
 
 const SizeSelector = styled.select`
@@ -115,9 +108,7 @@ const QuantitySelector = styled.div`
     font-size: 14px;
   }
 
-  @media (max-width: 768px) {
-    gap: 5px;
-  }
+
 `;
 
 const AddToCartButton = styled.button`
@@ -134,11 +125,7 @@ const AddToCartButton = styled.button`
     background-color: #003593;
   }
 
-  @media (max-width: 768px) {
-    width: 100%;
-    font-size: 18px;
-    padding: 12px 15px;
-  }
+
 `;
 
 const Accordion = styled.div`
@@ -163,9 +150,7 @@ const AccordionHeader = styled.div`
     text-decoration: underline;
   }
 
-  @media (max-width: 768px) {
-    font-size: 14px;
-  }
+
 `;
 
 const AccordionContent = styled.div`
@@ -174,9 +159,7 @@ const AccordionContent = styled.div`
   font-size: 14px;
   color: #555;
   
-  @media (max-width: 768px) {
-    font-size: 12px;
-  }
+
 `;
 
 // Main Component
