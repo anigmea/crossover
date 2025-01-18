@@ -244,18 +244,18 @@ const Product = () => {
         spaceBetween={0}
         slidesPerView={1}
       >
-        <ProductImage 
+        <SwiperSlide><ProductImage 
           src={`/images/${data.ImageURL}`} // Show hovered image or first image
           alt="Product Image"
           // onMouseEnter={handleImageHover} // Change image on hover
           // onMouseLeave={handleImageLeave} // Revert back when hover leaves
-        />
-        <ProductImage 
+        /></SwiperSlide>
+        <SwiperSlide><ProductImage 
           src={`/images/${data.BackImageURL}`} // Show hovered image or first image
           alt="Product Image"
           // onMouseEnter={handleImageHover} // Change image on hover
           // onMouseLeave={handleImageLeave} // Revert back when hover leaves
-        />
+        /></SwiperSlide>
         {/* <SwiperSlide><IMAGE src={Carousel4}></IMAGE></SwiperSlide> */}
         ...
       </Swiper>
