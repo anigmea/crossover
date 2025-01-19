@@ -614,7 +614,7 @@ app.put("/api/orders/:orderId/update-order-status", (req, res) => {
   const { orderId } = req.params;
   const { orderStatus } = req.body;  // Expected: 'Pending', 'Processing', 'Shipped', 'Completed'
 
-  const validStatuses = ['Pending', 'Processing', 'Shipped', 'Completed'];
+  const validStatuses = ['Pending', 'Shipped','Delivered'];
 
   // Check if the provided status is valid
   if (!validStatuses.includes(orderStatus)) {

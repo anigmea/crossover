@@ -94,7 +94,7 @@ const Admin = () => {
 
   const handleUpdateOrderStatus = async (orderId, currentStatus) => {
     // Define the order statuses
-    const statuses = ['Pending', 'Processing', 'Shipped', 'Completed'];
+    const statuses = ['Pending', 'Shipped', 'Delivered'];
     
     // Get the next status in the cycle
     const currentIndex = statuses.indexOf(currentStatus);
