@@ -609,6 +609,38 @@ app.get("/api/orders", async (req, res) => {
   }
 });
 
+// Update Order Status API
+app.put("/api/orders/:orderId/update-order-status", (req, res) => {
+  const { orderId } = req.params;
+  const { orderStatus } = req.body;  // Expected: 'Pending', 'Processing', 'Shipped', 'Completed'
+
+  const validStatuses = ['Pending', 'Processing', 'Shipped', 'Completed'];
+
+  // Check if the provided status is valid
+  if (!validStatuses.includes(orderStatus)) {
+    return res.status(400).json({ message: "Invalid order status." });
+  }
+
+  // Query to update OrderStatus in Orders table
+  const query = `
+    UPDATE Orders
+    SET Status = ?
+    WHERE OrderID = ?
+  `;
+  db.query(query, [orderStatus, orderId], (err, result) => {
+    if (err) {
+      console.error("Error updating order status:", err);
+      return res.status(500).json({ message: "Error updating order status." });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Order not found." });
+    }
+
+    res.status(200).json({ message: "Order status updated successfully." });
+  });
+});
+
 
 app.get("*", (req, res) => {
   res.sendFile(path.join('../build/index.html'));

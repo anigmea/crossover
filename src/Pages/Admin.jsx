@@ -93,6 +93,34 @@ const Admin = () => {
     }
   }, [isAuthenticated]);
 
+  const handleUpdateOrderStatus = async (orderId, currentStatus) => {
+    // Define the order statuses
+    const statuses = ['Pending', 'Processing', 'Shipped', 'Completed'];
+    
+    // Get the next status in the cycle
+    const currentIndex = statuses.indexOf(currentStatus);
+    const nextStatus = statuses[(currentIndex + 1) % statuses.length]; // Cycles through the statuses
+
+    try {
+      const response = await fetch(`/api/orders/${orderId}/update-order-status`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ orderStatus: nextStatus }), // Send the next status
+      });
+
+      if (response.ok) {
+        alert(`Order status updated to ${nextStatus}`);
+        fetchOrders(); // Refresh the orders after the update
+      } else {
+        alert("Error updating order status.");
+      }
+    } catch (error) {
+      console.error("Error updating order status:", error);
+    }
+  };
+
   return (
     <Wrapper>
       {isAuthenticated ? (
@@ -106,14 +134,14 @@ const Admin = () => {
                 <th>Name</th>
                 <th>Address</th>
                 <th>Email</th>
-                <th>Contact</th>
-                <th>Order Status</th>
-                <th>Payment Status</th>
                 <th>Product Name</th>
                 <th>Product Size</th>
                 <th>Quantity</th>
                 <th>Price</th>
                 <th>Total Amount</th>
+                <th>Payment Status</th>
+                <th>Order Status</th>
+                <th>Update Order Status</th>
               </tr>
             </thead>
             <tbody>
@@ -123,14 +151,18 @@ const Admin = () => {
                   <td>{order.FirstName} {order.LastName}</td>
                   <td>{order.Address}</td>
                   <td>{order.Email}</td>
-                  <td>{order.Contact}</td>
-                  <td>{order.order_status}</td>
                   <td>{order.product_name}</td>
                   <td>{order.product_size}</td>
                   <td>{order.Quantity}</td>
                   <td>{order.product_price}</td>
                   <td>{order.TotalAmount}</td>
                   <td>{order.PaymentStatus}</td>
+                  <td>{order.order_status}</td>
+                  <td>
+                    <Button onClick={() => handleUpdateOrderStatus(order.order_id, order.order_status)}>
+                      Update Order Status
+                    </Button>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -145,13 +177,14 @@ const Admin = () => {
                 <th>Address</th>
                 <th>Email</th>
                 <th>Contact</th>
-                <th>Order Status</th>
-                <th>Payment Status</th>
                 <th>Product Name</th>
                 <th>Product Size</th>
                 <th>Quantity</th>
                 <th>Price</th>
                 <th>Total Amount</th>
+                <th>Payment Status</th>
+                <th>Order Status</th>
+                <th>Update Order Status</th>
               </tr>
             </thead>
             <tbody>
@@ -162,13 +195,18 @@ const Admin = () => {
                   <td>{order.Address}</td>
                   <td>{order.Email}</td>
                   <td>{order.Contact}</td>
-                  <td>{order.order_status}</td>
                   <td>{order.product_name}</td>
                   <td>{order.product_size}</td>
                   <td>{order.Quantity}</td>
                   <td>{order.product_price}</td>
                   <td>{order.TotalAmount}</td>
                   <td>{order.PaymentStatus}</td>
+                  <td>{order.order_status}</td>
+                  <td>
+                    <Button onClick={() => handleUpdateOrderStatus(order.order_id, order.order_status)}>
+                      Update Order Status
+                    </Button>
+                  </td>
                 </tr>
               ))}
             </tbody>
