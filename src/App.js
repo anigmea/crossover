@@ -10,6 +10,7 @@ import {SignUp, Login} from "./components/Signup";
 import Account from "./components/Account";
 import ConfirmationPage from "./Pages/confirmation";
 import PrivacyPolicy from "./Pages/Privacy";
+import Admin from "./Pages/Admin";
 import './App.css';
 
 export default function App() {
@@ -27,6 +28,8 @@ export default function App() {
         <Route path="/Account" element={<Account/>}/>
         <Route path="/Confirmation" element={<ConfirmationPage/>}/>
         <Route path="/Privacy" element={<PrivacyPolicy/>}/>
+
+        <Route path="admin" element={<Admin />}/>
       </Routes>
     </Router>
   );

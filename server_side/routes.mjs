@@ -524,6 +524,78 @@ app.get("/transactions/:userId", (req, res) => {
   });
 });
 
+app.get("/api/orders", async (req, res) => {
+  try {
+    // Query to fetch current orders (e.g., orders with 'Pending' or 'Processing' status)
+    const currentOrdersQuery = `
+      SELECT 
+        Orders.OrderID AS order_id,
+        Orders.UserID,
+        Orders.TotalAmount,
+        Orders.Status AS order_status,
+        Orders.PaymentStatus,
+        OrderDetails.Quantity,
+        OrderDetails.Price,
+        Products.Name AS product_name,
+        Products.Price AS product_price,
+        Sizes.SizeName AS product_size
+      FROM 
+        Orders
+      INNER JOIN 
+        OrderDetails ON Orders.OrderID = OrderDetails.OrderID
+      INNER JOIN 
+        ProductSizes ON OrderDetails.ProductSizeID = ProductSizes.ProductSizeID
+      INNER JOIN 
+        Products ON ProductSizes.ProductID = Products.ProductID
+      INNER JOIN 
+        Sizes ON ProductSizes.SizeID = Sizes.SizeID
+      WHERE 
+        Orders.Status IN ('Pending', 'Processing')
+    `;
+
+    // Query to fetch past orders (e.g., orders with 'Completed' or 'Shipped' status)
+    const pastOrdersQuery = `
+      SELECT 
+        Orders.OrderID AS order_id,
+        Orders.UserID,
+        Orders.TotalAmount,
+        Orders.Status AS order_status,
+        Orders.PaymentStatus,
+        OrderDetails.Quantity,
+        OrderDetails.Price,
+        Products.Name AS product_name,
+        Products.Price AS product_price,
+        Sizes.SizeName AS product_size
+      FROM 
+        Orders
+      INNER JOIN 
+        OrderDetails ON Orders.OrderID = OrderDetails.OrderID
+      INNER JOIN 
+        ProductSizes ON OrderDetails.ProductSizeID = ProductSizes.ProductSizeID
+      INNER JOIN 
+        Products ON ProductSizes.ProductID = Products.ProductID
+      INNER JOIN 
+        Sizes ON ProductSizes.SizeID = Sizes.SizeID
+      WHERE 
+        Orders.Status IN ('Completed', 'Shipped')
+    `;
+
+    const currentOrders = await queryPromise(currentOrdersQuery);  // No need for UserID
+    const pastOrders = await queryPromise(pastOrdersQuery);  // No need for UserID
+
+    // If no orders found
+    if (currentOrders.length === 0 && pastOrders.length === 0) {
+      return res.status(404).json({ message: "No orders found" });
+    }
+
+    // Sending back both current and past orders
+    res.status(200).json({ currentOrders, pastOrders });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+
 app.get("*", (req, res) => {
   res.sendFile(path.join('../build/index.html'));
 })
