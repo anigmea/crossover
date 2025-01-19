@@ -75,19 +75,18 @@ const Admin = () => {
     }
   };
 
-  useEffect(() => {
-    // Fetch orders when the user is authenticated
-    const fetchOrders = async () => {
-      try {
-        const response = await fetch("/api/orders"); // Fetching orders for all users
-        const data = await response.json();
-        setCurrentOrders(data.currentOrders);  // Set current orders
-        setPastOrders(data.pastOrders);  // Set past orders
-      } catch (error) {
-        console.error("Error fetching orders:", error);
-      }
-    };
+  const fetchOrders = async () => {
+    try {
+      const response = await fetch("/api/orders"); // Fetching orders for all users
+      const data = await response.json();
+      setCurrentOrders(data.currentOrders);  // Set current orders
+      setPastOrders(data.pastOrders);  // Set past orders
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    }
+  };
 
+  useEffect(() => {
     if (isAuthenticated) {
       fetchOrders();  // Call fetchOrders only when authenticated
     }
