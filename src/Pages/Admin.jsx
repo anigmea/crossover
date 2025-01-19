@@ -103,7 +103,10 @@ const Admin = () => {
             <thead>
               <tr>
                 <th>Order ID</th>
-                <th>User ID</th>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Email</th>
+                <th>Contact</th>
                 <th>Order Status</th>
                 <th>Payment Status</th>
                 <th>Product Name</th>
@@ -117,14 +120,17 @@ const Admin = () => {
               {currentOrders.map((order) => (
                 <tr key={order.order_id}>
                   <td>{order.order_id}</td>
-                  <td>{order.user_id}</td>
+                  <td>{order.FirstName} {order.LastName}</td>
+                  <td>{order.Address}</td>
+                  <td>{order.Email}</td>
+                  <td>{order.Contact}</td>
                   <td>{order.order_status}</td>
-                  <td>{order.payment_status}</td>
                   <td>{order.product_name}</td>
                   <td>{order.product_size}</td>
-                  <td>{order.quantity}</td>
+                  <td>{order.Quantity}</td>
                   <td>{order.product_price}</td>
-                  <td>{order.totalamount}</td>
+                  <td>{order.TotalAmount}</td>
+                  <td>{order.PaymentStatus}</td>
                 </tr>
               ))}
             </tbody>
@@ -135,7 +141,10 @@ const Admin = () => {
             <thead>
               <tr>
                 <th>Order ID</th>
-                <th>User ID</th>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Email</th>
+                <th>Contact</th>
                 <th>Order Status</th>
                 <th>Payment Status</th>
                 <th>Product Name</th>
@@ -149,14 +158,17 @@ const Admin = () => {
               {pastOrders.map((order) => (
                 <tr key={order.order_id}>
                   <td>{order.order_id}</td>
-                  <td>{order.user_id}</td>
+                  <td>{order.FirstName} {order.LastName}</td>
+                  <td>{order.Address}</td>
+                  <td>{order.Email}</td>
+                  <td>{order.Contact}</td>
                   <td>{order.order_status}</td>
-                  <td>{order.payment_status}</td>
                   <td>{order.product_name}</td>
                   <td>{order.product_size}</td>
-                  <td>{order.quantity}</td>
+                  <td>{order.Quantity}</td>
                   <td>{order.product_price}</td>
-                  <td>{order.totalamount}</td>
+                  <td>{order.TotalAmount}</td>
+                  <td>{order.PaymentStatus}</td>
                 </tr>
               ))}
             </tbody>

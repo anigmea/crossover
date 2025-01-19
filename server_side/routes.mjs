@@ -532,6 +532,11 @@ app.get("/api/orders", async (req, res) => {
         Orders.OrderID AS order_id,
         Orders.UserID,
         Orders.TotalAmount,
+        Users.FirstName AS FirstName,
+        Users.LastName AS LastName,           
+        Users.Address AS Address,
+        Users.Email AS Email,         
+        Users.Contact AS Contact,
         Orders.Status AS order_status,
         Orders.PaymentStatus,
         OrderDetails.Quantity,
@@ -549,6 +554,8 @@ app.get("/api/orders", async (req, res) => {
         Products ON ProductSizes.ProductID = Products.ProductID
       INNER JOIN 
         Sizes ON ProductSizes.SizeID = Sizes.SizeID
+      INNER JOIN 
+        Users ON Orders.UserID = Users.UserID 
       WHERE 
         Orders.Status IN ('Pending', 'Processing')
     `;
@@ -556,6 +563,11 @@ app.get("/api/orders", async (req, res) => {
     // Query to fetch past orders (e.g., orders with 'Completed' or 'Shipped' status)
     const pastOrdersQuery = `
       SELECT 
+        Users.FirstName AS FirstName, 
+        Users.LastName AS LastName,         
+        Users.Address AS Address,
+        Users.Email AS Email,         
+        Users.Contact AS Contact
         Orders.OrderID AS order_id,
         Orders.UserID,
         Orders.TotalAmount,
@@ -576,6 +588,8 @@ app.get("/api/orders", async (req, res) => {
         Products ON ProductSizes.ProductID = Products.ProductID
       INNER JOIN 
         Sizes ON ProductSizes.SizeID = Sizes.SizeID
+      INNER JOIN 
+      Users ON Orders.UserID = Users.UserID 
       WHERE 
         Orders.Status IN ('Completed', 'Shipped')
     `;
