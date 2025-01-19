@@ -567,7 +567,7 @@ app.get("/api/orders", async (req, res) => {
         Users.LastName AS LastName,         
         Users.Address AS Address,
         Users.Email AS Email,         
-        Users.Contact AS Contact
+        Users.Contact AS Contact,
         Orders.OrderID AS order_id,
         Orders.UserID,
         Orders.TotalAmount,
