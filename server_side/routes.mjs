@@ -627,7 +627,7 @@ app.put("/api/orders/:orderId/update-order-status", (req, res) => {
     SET Status = ?
     WHERE OrderID = ?
   `;
-  db.query(query, [orderStatus, orderId], (err, result) => {
+  conn.query(query, [orderStatus, orderId], (err, result) => {
     if (err) {
       console.error("Error updating order status:", err);
       return res.status(500).json({ message: "Error updating order status." });
